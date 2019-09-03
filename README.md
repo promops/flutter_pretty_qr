@@ -2,6 +2,10 @@
 
 Pretty QR code with round edges.
 
+## Features
+
+* Created with [QR dart](https://github.com/kevmoo/qr.dart)
+
 ## Getting Started
 
 This project is a starting point for a Dart
