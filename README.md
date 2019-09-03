@@ -1,6 +1,6 @@
 # pretty_qr_code
 
-Pretty QR code with round edges.
+Pretty QR code for Flutter. You can round the edges with parameter or use the standard view.
 
 ## Features
 
@@ -8,7 +8,7 @@ Pretty QR code with round edges.
 
 ## Screenshots
 
-![example](https://github.com/promops/flutter_pretty_qr/blob/master/images/Scr1.png)
+  <img src="https://github.com/promops/flutter_pretty_qr/blob/master/images/Scr1.png" width="250"> 
 
 ## Getting Started
 
