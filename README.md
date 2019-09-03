@@ -6,6 +6,10 @@ Pretty QR code with round edges.
 
 * Created with [QR dart](https://github.com/kevmoo/qr.dart)
 
+## Screenshots
+
+![example](https://github.com/promops/flutter_pretty_qr/blob/master/images/Scr1.png)
+
 ## Getting Started
 
 This project is a starting point for a Dart
