@@ -10,6 +10,33 @@ Pretty QR code for Flutter. You can round the edges with parameter or use the st
 
   <img src="https://github.com/promops/flutter_pretty_qr/blob/master/images/Scr1.png" width="250"> 
 
+
+## Example
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:qr/qr.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+            child: PrettyQr(
+                size: 200,
+                data: '12423577',
+                errorCorrectLevel: QrErrorCorrectLevel.M,
+                roundEdges: true)),
+      ),
+    );
+  }
+}
+```
+
 ## Getting Started
 
 This project is a starting point for a Dart
