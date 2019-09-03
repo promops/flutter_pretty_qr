@@ -1,6 +1,6 @@
 name: pretty_qr_code
-description: Pretty QR code with round edges.
-version: 0.0.1
+description: Pretty QR code for Flutter. You can round the edges with parameter or use the standard view.
+version: 0.0.3
 author: Oleg Lobkov <flip.oleg@gmail.com>
 homepage: https://github.com/promops/flutter_pretty_qr
 
