@@ -17,7 +17,10 @@ class PrettyQr extends StatelessWidget {
   final int errorCorrectLevel;
 
   ///Round the corners
-  bool roundEdges;
+  final bool roundEdges;
+
+  ///Number of type generation (1 to 40)
+  final int typeNumber;
 
   PrettyQr(
       {Key key,
@@ -25,7 +28,8 @@ class PrettyQr extends StatelessWidget {
       @required this.data,
       this.elementColor = Colors.black,
       this.errorCorrectLevel = QrErrorCorrectLevel.M,
-      this.roundEdges = false})
+      this.roundEdges = false,
+      this.typeNumber = 1})
       : super(key: key);
 
   @override
@@ -37,7 +41,8 @@ class PrettyQr extends StatelessWidget {
             data: this.data,
             errorCorrectLevel: this.errorCorrectLevel,
             elementColor: this.elementColor,
-            roundEdges: this.roundEdges),
+            roundEdges: this.roundEdges,
+            typeNumber: this.typeNumber),
       ),
     );
   }
@@ -47,15 +52,17 @@ class PrettyQrCodePainter extends CustomPainter {
   final String data;
   final Color elementColor;
   final int errorCorrectLevel;
-  bool roundEdges;
+  final int typeNumber;
+  final bool roundEdges;
   QrCode _qrCode;
 
   PrettyQrCodePainter(
       {this.data,
       this.elementColor = Colors.black,
       this.errorCorrectLevel = QrErrorCorrectLevel.M,
-      this.roundEdges = false}) {
-    _qrCode = QrCode(1, errorCorrectLevel);
+      this.roundEdges = false,
+      this.typeNumber = 1}) {
+    _qrCode = QrCode(typeNumber, errorCorrectLevel);
     _qrCode.addData(data);
     _qrCode.make();
   }
@@ -74,7 +81,8 @@ class PrettyQrCodePainter extends CustomPainter {
     var _paintBackground = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.white
-      ..isAntiAlias = true;
+      ..isAntiAlias = true
+      ..blendMode = BlendMode.plus;
 
     List<List> matrix = List<List>(_qrCode.moduleCount + 2);
     for (var i = 0; i < _qrCode.moduleCount + 2; i++) {
@@ -126,14 +134,12 @@ class PrettyQrCodePainter extends CustomPainter {
   }
 
   //Скругляем внутренние углы (фоновым цветом)
-  void _setShapeInner(
-      int x, int y, Rect squareRect, Paint paint, List matrix, Canvas canvas, double pixelSize) {
+  void _setShapeInner(int x, int y, Rect squareRect, Paint paint, List matrix,
+      Canvas canvas, double pixelSize) {
     bool bottomRight = false;
     bool bottomLeft = false;
     bool topRight = false;
     bool topLeft = false;
-
-    
 
     //bottom right check
     if (matrix[y + 1][x] && matrix[y][x + 1] && matrix[y + 1][x + 1]) {
@@ -186,15 +192,13 @@ class PrettyQrCodePainter extends CustomPainter {
         !matrix[y][x + 1] &&
         !matrix[y - 1][x] &&
         !matrix[y][x - 1]) {
-     canvas.drawRRect(
-        RRect.fromRectAndCorners(
-          squareRect,
-          bottomRight:  Radius.circular(2.5),
-          bottomLeft:  Radius.circular(2.5),
-          topLeft:  Radius.circular(2.5),
-          topRight:  Radius.circular(2.5) 
-        ),
-        paint);
+      canvas.drawRRect(
+          RRect.fromRectAndCorners(squareRect,
+              bottomRight: Radius.circular(2.5),
+              bottomLeft: Radius.circular(2.5),
+              topLeft: Radius.circular(2.5),
+              topRight: Radius.circular(2.5)),
+          paint);
       return;
     }
 
