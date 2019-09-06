@@ -8,7 +8,10 @@ Pretty QR code for Flutter. You can round the edges with parameter or use the st
 
 ## Screenshots
 
-  <img src="https://github.com/promops/flutter_pretty_qr/blob/master/images/Scr1.png" width="250"> 
+  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/images/Scr2.png" width="250"> 
+
+  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/images/Scr3.png" width="250"> 
+
 
 
 ## Example
