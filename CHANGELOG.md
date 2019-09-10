@@ -9,3 +9,5 @@
 ## [0.0.4] - Add inner rounding
 
 ## [0.0.5] - Transparent background
+
+## [0.0.6] - Bug fix
