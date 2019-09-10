@@ -7,3 +7,5 @@
 ## [0.0.3] - Update description
 
 ## [0.0.4] - Add inner rounding
+
+## [0.0.5] - Transparent background
