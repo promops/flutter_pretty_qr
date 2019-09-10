@@ -138,7 +138,7 @@ class PrettyQrCodePainter extends CustomPainter {
         path,
         Paint()
           ..style = PaintingStyle.fill
-          ..color = Colors.black);
+          ..color = this.elementColor);
   }
 
   //Скругляем внутренние углы (фоновым цветом)
