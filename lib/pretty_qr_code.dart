@@ -1,7 +1,10 @@
 library pretty_qr_code;
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:qr/qr.dart';
+
 
 class PrettyQr extends StatelessWidget {
   ///Widget size
@@ -81,8 +84,7 @@ class PrettyQrCodePainter extends CustomPainter {
     var _paintBackground = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.white
-      ..isAntiAlias = true
-      ..blendMode = BlendMode.plus;
+      ..isAntiAlias = true;
 
     List<List> matrix = List<List>(_qrCode.moduleCount + 2);
     for (var i = 0; i < _qrCode.moduleCount + 2; i++) {
@@ -116,66 +118,84 @@ class PrettyQrCodePainter extends CustomPainter {
           _setShape(x + 1, y + 1, squareRect, _paint, matrix, canvas,
               _qrCode.moduleCount);
         } else {
-          canvas.drawRect(
-              Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize),
-              _paint);
-
           _setShapeInner(
-              x + 1,
-              y + 1,
-              Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize),
-              _paintBackground,
-              matrix,
-              canvas,
-              size.width);
+              x + 1, y + 1, _paintBackground, matrix, canvas, pixelSize);
         }
       }
     }
   }
 
+  void _drawCurve(Offset p1, Offset p2, Offset p3, Canvas canvas) {
+    Path path = Path();
+
+    path.moveTo(p1.dx, p1.dy);
+    path.quadraticBezierTo(p2.dx, p2.dy, p3.dx, p3.dy);
+    path.lineTo(p2.dx, p2.dy);
+    path.lineTo(p1.dx, p1.dy);
+    path.close();
+
+    canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = Colors.black);
+  }
+
   //Скругляем внутренние углы (фоновым цветом)
-  void _setShapeInner(int x, int y, Rect squareRect, Paint paint, List matrix,
-      Canvas canvas, double pixelSize) {
+  void _setShapeInner(
+      int x, int y, Paint paint, List matrix, Canvas canvas, double pixelSize) {
     bool bottomRight = false;
     bool bottomLeft = false;
     bool topRight = false;
     bool topLeft = false;
 
+    double widthY = pixelSize * (y - 1);
+    double heightX = pixelSize * (x - 1);
+
     //bottom right check
     if (matrix[y + 1][x] && matrix[y][x + 1] && matrix[y + 1][x + 1]) {
       bottomRight = true;
+
+      Offset p1 =
+          Offset(heightX + pixelSize - (0.25 * pixelSize), widthY + pixelSize);
+      Offset p2 = Offset(heightX + pixelSize, widthY + pixelSize);
+      Offset p3 =
+          Offset(heightX + pixelSize, widthY + pixelSize - (0.25 * pixelSize));
+
+      _drawCurve(p1, p2, p3, canvas);
     }
 
     //top left check
     if (matrix[y - 1][x] && matrix[y][x - 1] && matrix[y - 1][x - 1]) {
       topLeft = true;
+
+      Offset p1 = Offset(heightX, widthY + (0.25 * pixelSize));
+      Offset p2 = Offset(heightX, widthY);
+      Offset p3 = Offset(heightX + (0.25 * pixelSize), widthY);
+
+      _drawCurve(p1, p2, p3, canvas);
     }
 
     //bottom left check
     if (matrix[y + 1][x] && matrix[y][x - 1] && matrix[y + 1][x - 1]) {
       bottomLeft = true;
+
+      Offset p1 = Offset(heightX, widthY + pixelSize - (0.25 * pixelSize));
+      Offset p2 = Offset(heightX, widthY + pixelSize);
+      Offset p3 = Offset(heightX + (0.25 * pixelSize), widthY + pixelSize);
+
+      _drawCurve(p1, p2, p3, canvas);
     }
 
     //top right check
     if (matrix[y - 1][x] && matrix[y][x + 1] && matrix[y - 1][x + 1]) {
       topRight = true;
-    }
 
-    canvas.drawRRect(
-        RRect.fromRectAndCorners(
-          squareRect,
-          bottomRight: bottomRight ? Radius.circular(3.0) : Radius.zero,
-          bottomLeft: bottomLeft ? Radius.circular(3.0) : Radius.zero,
-          topLeft: topLeft ? Radius.circular(3.0) : Radius.zero,
-          topRight: topRight ? Radius.circular(3.0) : Radius.zero,
-        ),
-        paint);
+      Offset p1 = Offset(heightX + pixelSize - (0.25 * pixelSize), widthY);
+      Offset p2 = Offset(heightX + pixelSize, widthY);
+      Offset p3 = Offset(heightX + pixelSize, widthY + (0.25 * pixelSize));
 
-    //if it is dot (arount an empty place)
-    if (!bottomLeft && !bottomRight && !topLeft && !topRight) {
-      canvas.drawRect(
-          Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize),
-          paint);
+      _drawCurve(p1, p2, p3, canvas);
     }
   }
 
@@ -249,7 +269,7 @@ class PrettyQrCodePainter extends CustomPainter {
 
     for (int x = 0; x < _qrCode.moduleCount; x++) {
       for (int y = 0; y < _qrCode.moduleCount; y++) {
-        if (_qrCode.isDark(x, y)) {
+        if (_qrCode.isDark(y, x)) {
           canvas.drawRect(
               Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize),
               _paint);
@@ -259,5 +279,5 @@ class PrettyQrCodePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
