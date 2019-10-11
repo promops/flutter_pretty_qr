@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         body: Center(
             child: PrettyQr(
                 image: AssetImage('images/twitter.png'),
+                typeNumber: 3,
                 size: 200,
                 data: 'https://www.google.ru',
                 errorCorrectLevel: QrErrorCorrectLevel.M,
