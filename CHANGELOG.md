@@ -11,3 +11,5 @@
 ## [0.0.5] - Transparent background
 
 ## [0.0.6] - Bug fix
+
+## [0.0.7] - Add logo to center
