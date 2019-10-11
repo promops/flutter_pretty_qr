@@ -13,3 +13,5 @@
 ## [0.0.6] - Bug fix
 
 ## [0.0.7] - Add logo to center
+
+## [0.0.8] - Add example
