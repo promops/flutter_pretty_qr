@@ -17,3 +17,5 @@
 ## [0.0.8] - Add example
 
 ## [1.0.0] - Bug fix
+
+## [1.0.1] - Bug fix

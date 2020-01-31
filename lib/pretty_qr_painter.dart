@@ -36,8 +36,6 @@ class PrettyQrCodePainter extends CustomPainter {
         deletePixelCount = this.typeNumber + 9;
       }
 
-      print(roundEdges);
-
       var imageSize = Size(image.width.toDouble(), image.height.toDouble());
 
       var src = Alignment.center.inscribe(imageSize,
