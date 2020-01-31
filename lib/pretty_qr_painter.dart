@@ -36,7 +36,7 @@ class PrettyQrCodePainter extends CustomPainter {
         deletePixelCount = this.typeNumber + 9;
       }
 
-      roundEdges ? _paintRound(canvas, size) : _paintDefault(canvas, size);
+      print(roundEdges);
 
       var imageSize = Size(image.width.toDouble(), image.height.toDouble());
 
@@ -50,6 +50,8 @@ class PrettyQrCodePainter extends CustomPainter {
 
       canvas.drawImageRect(image, src, dst, Paint());
     }
+
+    roundEdges ? _paintRound(canvas, size) : _paintDefault(canvas, size);
   }
 
   void _paintRound(Canvas canvas, Size size) {
