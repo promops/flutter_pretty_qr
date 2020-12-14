@@ -258,5 +258,6 @@ class PrettyQrCodePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(PrettyQrCodePainter oldDelegate) =>
+      oldDelegate.data != data;
 }
