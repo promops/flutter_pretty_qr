@@ -28,12 +28,12 @@ class PrettyQr extends StatefulWidget {
   ///Number of type generation (1 to 40)
   final int typeNumber;
 
-  final ImageProvider image;
+  final ImageProvider? image;
 
   PrettyQr(
-      {Key key,
+      {Key? key,
       this.size = 100,
-      @required this.data,
+      required this.data,
       this.elementColor = Colors.black,
       this.errorCorrectLevel = QrErrorCorrectLevel.M,
       this.roundEdges = false,
@@ -49,7 +49,7 @@ class _PrettyQrState extends State<PrettyQr> {
   Future<ui.Image> _loadImage(BuildContext buildContext) async {
     final completer = Completer<ui.Image>();
 
-    final stream = widget.image.resolve(ImageConfiguration(
+    final stream = widget.image!.resolve(ImageConfiguration(
       devicePixelRatio: MediaQuery.of(buildContext).devicePixelRatio,
     ));
 

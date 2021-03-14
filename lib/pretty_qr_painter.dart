@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:qr/qr.dart';
 
 class PrettyQrCodePainter extends CustomPainter {
-  final String data;
+  final String? data;
   final Color elementColor;
   final int errorCorrectLevel;
   final int typeNumber;
   final bool roundEdges;
-  ui.Image image;
-  QrCode _qrCode;
+  ui.Image? image;
+  late QrCode _qrCode;
   int deletePixelCount = 0;
 
   PrettyQrCodePainter(
@@ -21,7 +21,7 @@ class PrettyQrCodePainter extends CustomPainter {
       this.typeNumber = 1,
       this.image}) {
     _qrCode = QrCode(typeNumber, errorCorrectLevel);
-    _qrCode.addData(data);
+    _qrCode.addData(data!);
     _qrCode.make();
   }
 
@@ -36,17 +36,19 @@ class PrettyQrCodePainter extends CustomPainter {
         deletePixelCount = this.typeNumber + 9;
       }
 
-      var imageSize = Size(image.width.toDouble(), image.height.toDouble());
+      var imageSize = Size(image!.width.toDouble(), image!.height.toDouble());
 
-      var src = Alignment.center.inscribe(imageSize,
-          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()));
+      var src = Alignment.center.inscribe(
+          imageSize,
+          Rect.fromLTWH(
+              0, 0, image!.width.toDouble(), image!.height.toDouble()));
 
       var dst = Alignment.center.inscribe(
           Size(size.height / 4, size.height / 4),
           Rect.fromLTWH(size.width / 3, size.height / 3, size.height / 3,
               size.height / 3));
 
-      canvas.drawImageRect(image, src, dst, Paint());
+      canvas.drawImageRect(image!, src, dst, Paint());
     }
 
     roundEdges ? _paintRound(canvas, size) : _paintDefault(canvas, size);
@@ -63,14 +65,15 @@ class PrettyQrCodePainter extends CustomPainter {
       ..color = Colors.white
       ..isAntiAlias = true;
 
-    List<List> matrix = List<List>(_qrCode.moduleCount + 2);
+    List<List?> matrix =
+        List<List?>.filled(_qrCode.moduleCount + 2, null, growable: false);
     for (var i = 0; i < _qrCode.moduleCount + 2; i++) {
-      matrix[i] = List(_qrCode.moduleCount + 2);
+      matrix[i] = List.filled(_qrCode.moduleCount + 2, null, growable: false);
     }
 
     for (int x = 0; x < _qrCode.moduleCount + 2; x++) {
       for (int y = 0; y < _qrCode.moduleCount + 2; y++) {
-        matrix[x][y] = false;
+        matrix[x]![y] = false;
       }
     }
 
@@ -81,14 +84,14 @@ class PrettyQrCodePainter extends CustomPainter {
             y >= deletePixelCount &&
             x < _qrCode.moduleCount - deletePixelCount &&
             y < _qrCode.moduleCount - deletePixelCount) {
-          matrix[y + 1][x + 1] = false;
+          matrix[y + 1]![x + 1] = false;
           continue;
         }
 
         if (_qrCode.isDark(y, x)) {
-          matrix[y + 1][x + 1] = true;
+          matrix[y + 1]![x + 1] = true;
         } else {
-          matrix[y + 1][x + 1] = false;
+          matrix[y + 1]![x + 1] = false;
         }
       }
     }
@@ -97,7 +100,7 @@ class PrettyQrCodePainter extends CustomPainter {
 
     for (int x = 0; x < _qrCode.moduleCount; x++) {
       for (int y = 0; y < _qrCode.moduleCount; y++) {
-        if (matrix[y + 1][x + 1]) {
+        if (matrix[y + 1]![x + 1]) {
           final Rect squareRect =
               Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
 
