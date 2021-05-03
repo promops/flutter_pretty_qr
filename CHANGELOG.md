@@ -21,3 +21,5 @@
 ## [1.0.1] - Bug fix
 
 ## [2.0.0] - Null safety
+
+## [2.0.1] - Rework imports
