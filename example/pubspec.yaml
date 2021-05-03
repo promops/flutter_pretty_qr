@@ -25,7 +25,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   pretty_qr_code: ^2.0.0
 
-  qr: ^2.0.0
 
 dev_dependencies:
   flutter_test:

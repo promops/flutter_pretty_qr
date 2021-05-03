@@ -38,8 +38,10 @@ class PrettyQrCodePainter extends CustomPainter {
 
       var imageSize = Size(image!.width.toDouble(), image!.height.toDouble());
 
-      var src = Alignment.center.inscribe(imageSize,
-          Rect.fromLTWH(0, 0, image!.width.toDouble(), image!.height.toDouble()));
+      var src = Alignment.center.inscribe(
+          imageSize,
+          Rect.fromLTWH(
+              0, 0, image!.width.toDouble(), image!.height.toDouble()));
 
       var dst = Alignment.center.inscribe(
           Size(size.height / 4, size.height / 4),
@@ -63,7 +65,7 @@ class PrettyQrCodePainter extends CustomPainter {
       ..color = Colors.white
       ..isAntiAlias = true;
 
-    List<List?> matrix = []..length =_qrCode.moduleCount + 2;
+    List<List?> matrix = []..length = _qrCode.moduleCount + 2;
     for (var i = 0; i < _qrCode.moduleCount + 2; i++) {
       matrix[i] = []..length = _qrCode.moduleCount + 2;
     }
@@ -127,7 +129,6 @@ class PrettyQrCodePainter extends CustomPainter {
           ..color = this.elementColor);
   }
 
-  //Скругляем внутренние углы (фоновым цветом)
   void _setShapeInner(
       int x, int y, Paint paint, List matrix, Canvas canvas, double pixelSize) {
     double widthY = pixelSize * (y - 1);

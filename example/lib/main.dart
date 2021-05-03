@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:qr/qr.dart';
+
 
 void main() => runApp(MyApp());
 
