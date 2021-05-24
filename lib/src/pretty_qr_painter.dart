@@ -4,36 +4,44 @@ import 'package:flutter/material.dart';
 import 'package:qr/qr.dart';
 
 class PrettyQrCodePainter extends CustomPainter {
-  final String? data;
+  final String data;
   final Color elementColor;
   final int errorCorrectLevel;
-  final int typeNumber;
   final bool roundEdges;
   ui.Image? image;
   late QrCode _qrCode;
   int deletePixelCount = 0;
 
   PrettyQrCodePainter(
-      {this.data,
+      {required this.data,
       this.elementColor = Colors.black,
       this.errorCorrectLevel = QrErrorCorrectLevel.M,
       this.roundEdges = false,
-      this.typeNumber = 1,
-      this.image}) {
-    _qrCode = QrCode(typeNumber, errorCorrectLevel);
-    _qrCode.addData(data!);
+      this.image,
+      int? typeNumber,
+  }) {
+    if (typeNumber == null) {
+      _qrCode = QrCode.fromData(
+        data: data, 
+        errorCorrectLevel: errorCorrectLevel,
+      );
+    } else {
+      _qrCode = QrCode(typeNumber, errorCorrectLevel);
+      _qrCode.addData(data);
+    }
+
     _qrCode.make();
   }
 
   @override
   paint(Canvas canvas, Size size) {
     if (image != null) {
-      if (this.typeNumber <= 2) {
-        deletePixelCount = this.typeNumber + 7;
-      } else if (this.typeNumber <= 4) {
-        deletePixelCount = this.typeNumber + 8;
+      if (this._qrCode.typeNumber <= 2) {
+        deletePixelCount = this._qrCode.typeNumber + 7;
+      } else if (this._qrCode.typeNumber <= 4) {
+        deletePixelCount = this._qrCode.typeNumber + 8;
       } else {
-        deletePixelCount = this.typeNumber + 9;
+        deletePixelCount = this._qrCode.typeNumber + 9;
       }
 
       var imageSize = Size(image!.width.toDouble(), image!.height.toDouble());
