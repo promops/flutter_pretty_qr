@@ -23,3 +23,5 @@
 ## [2.0.0] - Null safety
 
 ## [2.0.1] - Rework imports
+
+## [2.0.2] - Auto typeNumber when null

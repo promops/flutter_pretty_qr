@@ -31,18 +31,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-            child: PrettyQr(
-                image: AssetImage('images/twitter.png'),
-                typeNumber: 3,
-                size: 200,
-                data: 'https://www.google.ru',
-                errorCorrectLevel: QrErrorCorrectLevel.M,
-                roundEdges: true)),
+          child: PrettyQr(
+            image: AssetImage('images/twitter.png'),
+            typeNumber: 3,
+            size: 200,
+            data: 'https://www.google.ru',
+            errorCorrectLevel: QrErrorCorrectLevel.M,
+            roundEdges: true,
+          ),
+        ),
       ),
     );
   }
 }
 ```
+
+`typeNumber` is null by default. It means that it will be automatically chosen based on `data` length
 
 ## Getting Started
 

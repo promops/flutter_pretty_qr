@@ -23,8 +23,8 @@ class PrettyQr extends StatefulWidget {
   ///Round the corners
   final bool roundEdges;
 
-  ///Number of type generation (1 to 40)
-  final int typeNumber;
+  ///Number of type generation (1 to 40 or null for auto)
+  final int? typeNumber;
 
   final ImageProvider? image;
 
@@ -35,7 +35,7 @@ class PrettyQr extends StatefulWidget {
       this.elementColor = Colors.black,
       this.errorCorrectLevel = QrErrorCorrectLevel.M,
       this.roundEdges = false,
-      this.typeNumber = 1,
+      this.typeNumber,
       this.image})
       : super(key: key);
 
