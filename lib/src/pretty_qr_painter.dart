@@ -10,19 +10,20 @@ class PrettyQrCodePainter extends CustomPainter {
   final bool roundEdges;
   ui.Image? image;
   late QrCode _qrCode;
+  late QrImage _qrImage;
   int deletePixelCount = 0;
 
-  PrettyQrCodePainter(
-      {required this.data,
-      this.elementColor = Colors.black,
-      this.errorCorrectLevel = QrErrorCorrectLevel.M,
-      this.roundEdges = false,
-      this.image,
-      int? typeNumber,
+  PrettyQrCodePainter({
+    required this.data,
+    this.elementColor = Colors.black,
+    this.errorCorrectLevel = QrErrorCorrectLevel.M,
+    this.roundEdges = false,
+    this.image,
+    int? typeNumber,
   }) {
     if (typeNumber == null) {
       _qrCode = QrCode.fromData(
-        data: data, 
+        data: data,
         errorCorrectLevel: errorCorrectLevel,
       );
     } else {
@@ -30,18 +31,18 @@ class PrettyQrCodePainter extends CustomPainter {
       _qrCode.addData(data);
     }
 
-    _qrCode.make();
+    _qrImage = QrImage(_qrCode);
   }
 
   @override
   paint(Canvas canvas, Size size) {
     if (image != null) {
-      if (this._qrCode.typeNumber <= 2) {
-        deletePixelCount = this._qrCode.typeNumber + 7;
-      } else if (this._qrCode.typeNumber <= 4) {
-        deletePixelCount = this._qrCode.typeNumber + 8;
+      if (this._qrImage.typeNumber <= 2) {
+        deletePixelCount = this._qrImage.typeNumber + 7;
+      } else if (this._qrImage.typeNumber <= 4) {
+        deletePixelCount = this._qrImage.typeNumber + 8;
       } else {
-        deletePixelCount = this._qrCode.typeNumber + 9;
+        deletePixelCount = this._qrImage.typeNumber + 9;
       }
 
       var imageSize = Size(image!.width.toDouble(), image!.height.toDouble());
@@ -73,29 +74,29 @@ class PrettyQrCodePainter extends CustomPainter {
       ..color = Colors.white
       ..isAntiAlias = true;
 
-    List<List?> matrix = []..length = _qrCode.moduleCount + 2;
-    for (var i = 0; i < _qrCode.moduleCount + 2; i++) {
-      matrix[i] = []..length = _qrCode.moduleCount + 2;
+    List<List?> matrix = []..length = _qrImage.moduleCount + 2;
+    for (var i = 0; i < _qrImage.moduleCount + 2; i++) {
+      matrix[i] = []..length = _qrImage.moduleCount + 2;
     }
 
-    for (int x = 0; x < _qrCode.moduleCount + 2; x++) {
-      for (int y = 0; y < _qrCode.moduleCount + 2; y++) {
+    for (int x = 0; x < _qrImage.moduleCount + 2; x++) {
+      for (int y = 0; y < _qrImage.moduleCount + 2; y++) {
         matrix[x]![y] = false;
       }
     }
 
-    for (int x = 0; x < _qrCode.moduleCount; x++) {
-      for (int y = 0; y < _qrCode.moduleCount; y++) {
+    for (int x = 0; x < _qrImage.moduleCount; x++) {
+      for (int y = 0; y < _qrImage.moduleCount; y++) {
         if (image != null &&
             x >= deletePixelCount &&
             y >= deletePixelCount &&
-            x < _qrCode.moduleCount - deletePixelCount &&
-            y < _qrCode.moduleCount - deletePixelCount) {
+            x < _qrImage.moduleCount - deletePixelCount &&
+            y < _qrImage.moduleCount - deletePixelCount) {
           matrix[y + 1]![x + 1] = false;
           continue;
         }
 
-        if (_qrCode.isDark(y, x)) {
+        if (_qrImage.isDark(y, x)) {
           matrix[y + 1]![x + 1] = true;
         } else {
           matrix[y + 1]![x + 1] = false;
@@ -103,16 +104,16 @@ class PrettyQrCodePainter extends CustomPainter {
       }
     }
 
-    double pixelSize = size.width / _qrCode.moduleCount;
+    double pixelSize = size.width / _qrImage.moduleCount;
 
-    for (int x = 0; x < _qrCode.moduleCount; x++) {
-      for (int y = 0; y < _qrCode.moduleCount; y++) {
+    for (int x = 0; x < _qrImage.moduleCount; x++) {
+      for (int y = 0; y < _qrImage.moduleCount; y++) {
         if (matrix[y + 1]![x + 1]) {
           final Rect squareRect =
               Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
 
           _setShape(x + 1, y + 1, squareRect, _paint, matrix, canvas,
-              _qrCode.moduleCount);
+              _qrImage.moduleCount);
         } else {
           _setShapeInner(
               x + 1, y + 1, _paintBackground, matrix, canvas, pixelSize);
@@ -247,17 +248,17 @@ class PrettyQrCodePainter extends CustomPainter {
       ..isAntiAlias = true;
 
     ///size of point
-    double pixelSize = size.width / _qrCode.moduleCount;
+    double pixelSize = size.width / _qrImage.moduleCount;
 
-    for (int x = 0; x < _qrCode.moduleCount; x++) {
-      for (int y = 0; y < _qrCode.moduleCount; y++) {
+    for (int x = 0; x < _qrImage.moduleCount; x++) {
+      for (int y = 0; y < _qrImage.moduleCount; y++) {
         if (image != null &&
             x >= deletePixelCount &&
             y >= deletePixelCount &&
-            x < _qrCode.moduleCount - deletePixelCount &&
-            y < _qrCode.moduleCount - deletePixelCount) continue;
+            x < _qrImage.moduleCount - deletePixelCount &&
+            y < _qrImage.moduleCount - deletePixelCount) continue;
 
-        if (_qrCode.isDark(y, x)) {
+        if (_qrImage.isDark(y, x)) {
           canvas.drawRect(
               Rect.fromLTWH(x * pixelSize, y * pixelSize, pixelSize, pixelSize),
               _paint);
