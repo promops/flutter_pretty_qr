@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   pretty_qr_code:
-  qr: ^2.0.0
+  qr: ^3.0.0
 
 dependency_overrides:
   pretty_qr_code:
