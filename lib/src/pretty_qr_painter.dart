@@ -67,12 +67,12 @@ class PrettyQrCodePainter extends CustomPainter {
     var _paint = Paint()
       ..style = PaintingStyle.fill
       ..color = this.elementColor
-      ..isAntiAlias = true;
+      ..isAntiAlias = false;
 
     var _paintBackground = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.white
-      ..isAntiAlias = true;
+      ..isAntiAlias = false;
 
     List<List?> matrix = []..length = _qrImage.moduleCount + 2;
     for (var i = 0; i < _qrImage.moduleCount + 2; i++) {
@@ -245,7 +245,7 @@ class PrettyQrCodePainter extends CustomPainter {
     var _paint = Paint()
       ..style = PaintingStyle.fill
       ..color = this.elementColor
-      ..isAntiAlias = true;
+      ..isAntiAlias = false;
 
     ///size of point
     double pixelSize = size.width / _qrImage.moduleCount;
