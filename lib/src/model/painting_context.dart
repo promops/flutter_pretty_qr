@@ -1,19 +1,17 @@
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
-import 'package:qr/qr.dart';
+import 'package:pretty_qr_code/src/model/modules_matrix.dart';
 
 @immutable
 class QrPointPaintingContext {
   final Canvas canvas;
-  final QrImage image;
-
+  final ModulesMatrix modules;
   final Color color;
-  final double dimension;
 
   QrPointPaintingContext({
     required this.canvas,
-    required this.image,
+    required this.modules,
     required this.color,
-    required this.dimension,
   });
 }

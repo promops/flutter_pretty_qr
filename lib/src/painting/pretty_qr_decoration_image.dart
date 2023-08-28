@@ -16,12 +16,6 @@ class PrettyQrDecorationImage {
   @nonVirtual
   final EdgeInsetsGeometry? padding;
 
-  /// Used to combine QR dots with this image.
-  /// TODO: Идея в том, чтобы можно было управлять, как изображение
-  ///  накладывается на точки, но надо подумать какие варианты есть вообще
-  // @nonVirtual
-  // final PrettyQrDecorationImageBlendMode blendMode;
-
   /// Creates an image to show in a [PrettyQrDecoration].
   @literal
   const PrettyQrDecorationImage({
@@ -32,7 +26,7 @@ class PrettyQrDecorationImage {
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ Object.hash(scale, padding, image);
+    return runtimeType.hashCode ^ Object.hash(scale, image, padding);
   }
 
   @override
@@ -41,8 +35,8 @@ class PrettyQrDecorationImage {
     if (other.runtimeType != runtimeType) return false;
 
     return other is PrettyQrDecorationImage &&
-        scale == other.scale &&
-        image == other.image &&
-        padding == other.padding;
+        other.scale == scale &&
+        other.image == image &&
+        other.padding == padding;
   }
 }

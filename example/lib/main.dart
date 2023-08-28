@@ -18,38 +18,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late QrCode _qr;
+
+  @override
+  void initState() {
+    _qr = QrCode(
+      4,
+      QrErrorCorrectLevel.M,
+    )..addData('https://www.');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //TODO: Кэш
+      //TODO: Передавать ли размер
+
       body: Center(
         child: Container(
           height: 300,
           width: 300,
-          child: Center(
-            child: PrettyQr(
-              decoration: const PrettyQrDecoration(
-                image: PrettyQrDecorationImage(
-                  image: AssetImage('images/twitter.png'),
-                  scale: 0.18,
-                ),
-                color: Colors.black,
-                shape: PrettyQrPrettyDots(
-                  roundFactor: 0.7,
-                ),
+          child: PrettyQrView(
+            decoration: const PrettyQrDecoration(
+              image: PrettyQrDecorationImage(
+                image: AssetImage('images/twitter.png'),
+                scale: 0.2,
               ),
-              code: QrCode.fromData(
-                data: 'https://www.google.ru',
-                errorCorrectLevel: QrErrorCorrectLevel.M,
+              color: Colors.black,
+              // shape: PrettyQrDefaultDots(),
+              shape: PrettyQrPrettyDots(
+                roundFactor: 1,
               ),
-              // image: AssetImage('images/twitter.png'),
-              // size: 300,
-              // data: 'https://www.google.ru',
-              // errorCorrectLevel: QrErrorCorrectLevel.M,
-              // typeNumber: null,
-              // roundEdges: true,
             ),
+            qrImage: QrImage(_qr),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _qr.addData('xxss');
+          });
+        },
       ),
     );
   }

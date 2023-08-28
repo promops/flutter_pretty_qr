@@ -1,29 +1,34 @@
-import 'dart:async';
-
-import 'package:pretty_qr_code/src/interface/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/pretty_qr_painter.dart';
 import 'package:qr/qr.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
 
+import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/rendering/render_pretty_qr_view.dart';
+
+/// {@macro pretty_qr_code.PrettyQrView}
+@Deprecated('Use `PrettyQrView` instead')
 typedef PrettyQr = PrettyQrView;
 
+/// {@template pretty_qr_code.PrettyQrView}
+/// TODO: `PrettyQrView` description
+/// {@endtemplate}
 @sealed
-class PrettyQrView extends StatefulWidget {
-  /// The QR to display.
+class PrettyQrView extends SingleChildRenderObjectWidget {
+  /// {@macro pretty_qr_code.RenderPrettyQrView.qrImage}
   @protected
-  final QrCode code;
+  final QrImage qrImage;
 
-  /// What decoration to paint.
+  /// {@macro pretty_qr_code.RenderPrettyQrView.decoration}
   @protected
   final PrettyQrDecoration decoration;
 
   /// Creates a widget that displays an QR image obtained from a [code].
   @literal
   const PrettyQrView({
-    required this.code,
+    required this.qrImage,
     super.key,
+    super.child,
     this.decoration = const PrettyQrDecoration(),
   });
 
@@ -31,85 +36,48 @@ class PrettyQrView extends StatefulWidget {
   factory PrettyQrView.data({
     required final String data,
     final Key? key,
+    final Widget? child,
     final int errorCorrectLevel = QrErrorCorrectLevel.L,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
   }) {
-    final code = QrCode.fromData(
+    final qrCode = QrCode.fromData(
       data: data,
       errorCorrectLevel: errorCorrectLevel,
     );
-    return PrettyQrView(code: code, key: key, decoration: decoration);
-  }
 
-  @override
-  State<PrettyQrView> createState() => _PrettyQrViewState();
-}
-
-@sealed
-class _PrettyQrViewState extends State<PrettyQrView> {
-  @protected
-  late QrImage qrImage;
-  Completer<ui.Image>? imageCompleter;
-
-  @override
-  void initState() {
-    super.initState();
-
-    qrImage = QrImage(widget.code);
-    imageCompleter = resolveImage();
-  }
-
-  @override
-  void didUpdateWidget(covariant PrettyQrView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.code != widget.code) {
-      qrImage = QrImage(widget.code);
-    }
-    if (oldWidget.decoration == widget.decoration) return;
-    if (oldWidget.decoration.image != widget.decoration.image) {
-      imageCompleter = resolveImage();
-    }
-  }
-
-  @protected
-  Completer<ui.Image>? resolveImage() {
-    final image = widget.decoration.image?.image;
-    if (image == null) return null;
-
-    final completer = Completer<ui.Image>();
-
-    final stream = image.resolve(ImageConfiguration(
-      devicePixelRatio: ui.window.devicePixelRatio,
-    ));
-
-    stream.addListener(ImageStreamListener(
-      (imageInfo, error) {
-        completer.complete(imageInfo.image);
-      },
-      onError: (dynamic error, _) {
-        completer.completeError(error);
-      },
-    ));
-
-    return completer;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ui.Image>(
-      future: imageCompleter?.future,
-      builder: (context, snapshot) {
-        return CustomPaint(
-          //TODO: Не передавать размер для кэша
-          size: Size.square(300),
-          painter: PrettyQrCodePainter(
-            qrImage: qrImage,
-            image: snapshot.data,
-            decoration: widget.decoration,
-          ),
-        );
-      },
+    return PrettyQrView(
+      key: key,
+      qrImage: QrImage(qrCode),
+      decoration: decoration,
+      child: child,
     );
+  }
+
+  @override
+  RenderPrettyQrView createRenderObject(BuildContext context) {
+    return RenderPrettyQrView(
+      qrImage: qrImage,
+      decoration: decoration,
+    );
+  }
+
+  @override
+  void updateRenderObject(
+    final BuildContext context,
+    final RenderPrettyQrView renderObject,
+  ) {
+    renderObject
+      ..qrImage = qrImage
+      ..decoration = decoration;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+
+    properties.add(DiagnosticsProperty<PrettyQrDecoration>(
+      'decoration',
+      decoration,
+    ));
   }
 }
