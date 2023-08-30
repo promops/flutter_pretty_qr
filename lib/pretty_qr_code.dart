@@ -1,13 +1,20 @@
-/// TODO: `pretty_qr_code` package description
+/// Flutter widgets that make it easy to rendering QR code.
 library pretty_qr_code;
 
 export 'package:qr/qr.dart';
-
 export 'src/pretty_qr_view.dart';
+
+export 'src/base/pretty_qr_matrix.dart';
+export 'src/base/pretty_qr_neighbour_direction.dart';
 
 export 'src/painting/pretty_qr_shape.dart';
 export 'src/painting/pretty_qr_decoration.dart';
 export 'src/painting/pretty_qr_decoration_image.dart';
 
-export 'src/painting/shapes/pretty_qr_default_dots.dart';
-export 'src/painting/shapes/pretty_qr_rounded_dots.dart';
+export 'src/painting/shapes/pretty_qr_smooth_modules.dart';
+export 'src/painting/shapes/pretty_qr_rounded_rectangle_modules.dart';
+
+export 'src/painting/animation/pretty_qr_decoration_tween.dart';
+
+export 'src/painting/extensions/pretty_qr_module_extensions.dart';
+export 'src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/rendering/render_pretty_qr_view.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 
 /// {@macro pretty_qr_code.PrettyQrView}
 @Deprecated('Use `PrettyQrView` instead')
@@ -15,11 +15,11 @@ typedef PrettyQr = PrettyQrView;
 /// {@endtemplate}
 @sealed
 class PrettyQrView extends SingleChildRenderObjectWidget {
-  /// {@macro pretty_qr_code.RenderPrettyQrView.qrImage}
+  /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
   @protected
   final QrImage qrImage;
 
-  /// {@macro pretty_qr_code.RenderPrettyQrView.decoration}
+  /// {@macro pretty_qr_code.PrettyQrRenderView.decoration}
   @protected
   final PrettyQrDecoration decoration;
 
@@ -54,27 +54,28 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   }
 
   @override
-  RenderPrettyQrView createRenderObject(BuildContext context) {
-    return RenderPrettyQrView(
+  PrettyQrRenderView createRenderObject(BuildContext context) {
+    return PrettyQrRenderView(
       qrImage: qrImage,
       decoration: decoration,
+      configuration: createLocalImageConfiguration(context),
     );
   }
 
   @override
   void updateRenderObject(
     final BuildContext context,
-    final RenderPrettyQrView renderObject,
+    final PrettyQrRenderView renderObject,
   ) {
     renderObject
       ..qrImage = qrImage
-      ..decoration = decoration;
+      ..decoration = decoration
+      ..configuration = createLocalImageConfiguration(context);
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-
     properties.add(DiagnosticsProperty<PrettyQrDecoration>(
       'decoration',
       decoration,
