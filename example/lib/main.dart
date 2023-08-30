@@ -18,48 +18,88 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late QrCode _qr;
+  @protected
+  late QrCode qrCode;
+
+  @protected
+  late PrettyQrDecoration beginDecoration;
+
+  @protected
+  late PrettyQrDecoration endDecoration;
 
   @override
   void initState() {
-    _qr = QrCode(
-      4,
-      QrErrorCorrectLevel.M,
-    )..addData('https://www.');
-
     super.initState();
+
+    qrCode = QrCode(
+      5,
+      QrErrorCorrectLevel.H,
+    )..addData(' ');
+
+    beginDecoration = const PrettyQrDecoration(
+      shape: PrettyQrRoundedRectangleModules(),
+      image: PrettyQrDecorationImage(
+        image: AssetImage('images/twitter.png'),
+        scale: 0.2,
+      ),
+    );
+
+    endDecoration = const PrettyQrDecoration(
+      shape: PrettyQrRoundedRectangleModules(
+        color: Colors.deepPurple,
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+      ),
+      image: PrettyQrDecorationImage(
+        image: AssetImage('images/twitter.png'),
+        scale: 0.3,
+      ),
+    );
+  }
+
+  @protected
+  void swapDecorations() {
+    final decoration = beginDecoration;
+    beginDecoration = endDecoration;
+    endDecoration = decoration;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO: Кэш
-      //TODO: Передавать ли размер
-
       body: Center(
-        child: Container(
-          height: 300,
-          width: 300,
-          child: PrettyQrView(
-            decoration: const PrettyQrDecoration(
-              image: PrettyQrDecorationImage(
-                image: AssetImage('images/twitter.png'),
-                scale: 0.2,
-              ),
-              color: Colors.black,
-              // shape: PrettyQrDefaultDots(),
-              shape: PrettyQrPrettyDots(
-                roundFactor: 1,
-              ),
+        child: SizedBox.square(
+          dimension: 300,
+          child: TweenAnimationBuilder<PrettyQrDecoration>(
+            tween: PrettyQrDecorationTween(
+              begin: beginDecoration,
+              end: endDecoration,
             ),
-            qrImage: QrImage(_qr),
+            duration: const Duration(
+              milliseconds: 240,
+            ),
+            onEnd: () => setState(() {
+              // swapDecorations();
+            }),
+            builder: (context, decoration, child) {
+              return GestureDetector(
+                onTap: () => setState(() {
+                  swapDecorations();
+                }),
+                child: PrettyQrView(
+                  qrImage: QrImage(qrCode),
+                  decoration: decoration,
+                ),
+              );
+            },
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _qr.addData('xxss');
+            qrCode.addData('X');
           });
         },
       ),
