@@ -71,10 +71,12 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty<PrettyQrDecoration>(
-        'decoration',
-        decoration,
-      ))
+      ..add(
+        DiagnosticsProperty<PrettyQrDecoration>(
+          'decoration',
+          decoration,
+        ),
+      )
       ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage));
   }
 }

@@ -164,10 +164,12 @@ class PrettyQrRenderView extends RenderProxyBox {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty<ImageConfiguration>(
-        'configuration',
-        configuration,
-      ))
+      ..add(
+        DiagnosticsProperty<ImageConfiguration>(
+          'configuration',
+          configuration,
+        ),
+      )
       ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage))
       ..add(decoration.toDiagnosticsNode(name: 'decoration'));
   }

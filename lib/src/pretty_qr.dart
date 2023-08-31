@@ -41,6 +41,7 @@ class PrettyQr extends StatefulWidget {
   final ImageProvider? image;
 
   @literal
+  @Deprecated('Use `PrettyQrView.data` instead')
   const PrettyQr({
     required this.data,
     super.key,

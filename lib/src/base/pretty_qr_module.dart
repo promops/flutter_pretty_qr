@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 /// The QR code module.
 /// {@endtemplate}
 @sealed
+@immutable
 class PrettyQrModule extends Point<int> {
   /// Returns `true` if the point is dark.
   @nonVirtual

@@ -72,16 +72,20 @@ class PrettyQrDecoration with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty<PrettyQrShape>(
-        'shape',
-        shape,
-        defaultValue: const PrettyQrSmoothModules(),
-      ))
-      ..add(DiagnosticsProperty<PrettyQrDecorationImage>(
-        'image',
-        image,
-        defaultValue: null,
-      ));
+      ..add(
+        DiagnosticsProperty<PrettyQrShape>(
+          'shape',
+          shape,
+          defaultValue: const PrettyQrSmoothModules(),
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<PrettyQrDecorationImage>(
+          'image',
+          image,
+          defaultValue: null,
+        ),
+      );
   }
 
   @override

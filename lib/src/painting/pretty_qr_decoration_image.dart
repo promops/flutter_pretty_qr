@@ -27,7 +27,7 @@ class PrettyQrDecorationImage extends DecorationImage {
   /// {@macro pretty_qr_code.PrettyQrDecorationImagePosition}
   final PrettyQrDecorationImagePosition position;
 
-  /// Creates an image to show in a [PrettyQrDecoration].
+  /// Creates an image to show into QR code.
   ///
   /// Not recommended to use scale over `0.2`, see the
   /// [qr code error correction feature](https://www.qrcode.com/en/about/error_correction.html).
