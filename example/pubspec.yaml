@@ -1,5 +1,5 @@
-name: example
-description: A new Flutter project.
+name: pretty_qr_code_example
+description: Pretty QR code example app.
 
 version: 1.0.0+1
 publish_to: 'none'
@@ -14,6 +14,9 @@ dependencies:
 
   pretty_qr_code:
     path: ../
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

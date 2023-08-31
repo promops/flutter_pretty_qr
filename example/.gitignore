@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -15,7 +16,9 @@
 *.iws
 .idea/
 
-# Visual Studio Code related
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
 .vscode/
 
 # Flutter/Dart/Pub related
@@ -30,11 +33,6 @@
 /build/
 /coverage/
 untranslated_messages.txt
-
-# packages
-/packages/**/build/
-/packages/**/coverage/
-/packages/**/pubspec.lock
 
 # Web related
 lib/generated_plugin_registrant.dart
