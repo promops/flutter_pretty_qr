@@ -11,7 +11,7 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 typedef PrettyQr = PrettyQrView;
 
 /// {@template pretty_qr_code.PrettyQrView}
-/// TODO: `PrettyQrView` description
+/// A widget that displays a QR code image.
 /// {@endtemplate}
 @sealed
 class PrettyQrView extends SingleChildRenderObjectWidget {
@@ -23,7 +23,7 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   @protected
   final PrettyQrDecoration decoration;
 
-  /// Creates a widget that displays an QR image obtained from a [code].
+  /// Creates a widget that displays an QR image obtained from a [qrImage].
   @literal
   const PrettyQrView({
     required this.qrImage,

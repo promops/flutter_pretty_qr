@@ -1,160 +1,168 @@
-import 'dart:math';
+import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
+import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
-/// TODO: `PrettyQrSmoothModules` description
+/// A rectangular modules with smoothed flow.
 @sealed
 class PrettyQrSmoothModules extends PrettyQrShape {
   /// The color of QR dots.
-  @protected
+  @nonVirtual
   final Color color;
 
   /// The corners of dots are rounded by this [BorderRadiusGeometry] value.
-  @protected
+  @nonVirtual
   final double roundFactor;
 
-  /// TODO: docs
-  @visibleForTesting
-  static const gap = 0.5;
-
+  /// Creates a pretty QR shape.
   @literal
   const PrettyQrSmoothModules({
-    this.roundFactor = 0.5,
+    this.roundFactor = 1,
     this.color = const Color(0xFF000000),
   })  : assert(roundFactor <= 1, 'roundFactor must be less than 1'),
         assert(roundFactor >= 0, 'roundFactor must be greater than 0');
 
   @override
   void paint(PrettyQrPaintingContext context) {
+    final path = Path();
     final paint = Paint()
       ..color = color
-      ..style = PaintingStyle.fill
-      ..isAntiAlias = true;
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill;
 
     for (final module in context.matrix) {
       final moduleRect = module.resolve(context);
+      final moduleNeighbours = context.matrix.getNeighboursDirections(module);
 
-      if (!module.isDark) {
-        drawInnerShape(point: module, context: context, rect: moduleRect);
+      if (module.isDark) {
+        path.addRRect(
+          transformDarkModuleRect(moduleRect, moduleNeighbours),
+        );
       } else {
-        drawModuleItem(
-          point: module,
-          context: context,
-          paint: paint,
-          squareRect: moduleRect,
+        path.addPath(
+          transformWhiteModuleRect(moduleRect, moduleNeighbours),
+          Offset.zero,
         );
       }
     }
+
+    context.canvas.drawPath(path, paint);
   }
 
-  void drawCurve(
-    Offset p1,
-    Offset p2,
-    Offset p3,
-    Canvas canvas,
+  @protected
+  RRect transformDarkModuleRect(
+    final Rect moduleRect,
+    final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
-    final path = Path()
+    final cornersRadius = Radius.circular(
+      moduleRect.shortestSide / 2 * roundFactor.clamp(0.0, 1.0),
+    );
+
+    if (!neighbours.hasClosest) {
+      return RRect.fromRectAndRadius(moduleRect, cornersRadius / 2);
+    }
+
+    return RRect.fromRectAndCorners(
+      moduleRect,
+      topLeft: neighbours.atTopOrLeft ? Radius.zero : cornersRadius,
+      topRight: neighbours.atTopOrRight ? Radius.zero : cornersRadius,
+      bottomLeft: neighbours.atBottomOrLeft ? Radius.zero : cornersRadius,
+      bottomRight: neighbours.atBottomOrRight ? Radius.zero : cornersRadius,
+    );
+  }
+
+  @protected
+  Path transformWhiteModuleRect(
+    final Rect moduleRect,
+    final Set<PrettyQrNeighbourDirection> neighbours,
+  ) {
+    final padding = (roundFactor / 2).clamp(0.0, 0.5) * moduleRect.longestSide;
+
+    if (neighbours.atTopAndLeft && neighbours.atToptLeft) {
+      return buildInnerCornerShape(
+        moduleRect.topLeft.translate(0, padding),
+        moduleRect.topLeft,
+        moduleRect.topLeft.translate(padding, 0),
+      );
+    }
+
+    if (neighbours.atTopAndRight && neighbours.atToptRight) {
+      return buildInnerCornerShape(
+        moduleRect.topRight.translate(-padding, 0),
+        moduleRect.topRight,
+        moduleRect.topRight.translate(0, padding),
+      );
+    }
+
+    if (neighbours.atBottomAndLeft && neighbours.atBottomLeft) {
+      return buildInnerCornerShape(
+        moduleRect.bottomLeft.translate(0, -padding),
+        moduleRect.bottomLeft,
+        moduleRect.bottomLeft.translate(padding, 0),
+      );
+    }
+
+    if (neighbours.atBottomAndRight && neighbours.atBottomRight) {
+      return buildInnerCornerShape(
+        moduleRect.bottomRight.translate(-padding, 0),
+        moduleRect.bottomRight,
+        moduleRect.bottomRight.translate(0, -padding),
+      );
+    }
+
+    return Path();
+  }
+
+  @protected
+  Path buildInnerCornerShape(Offset p1, Offset p2, Offset p3) {
+    return Path()
       ..moveTo(p1.dx, p1.dy)
       ..quadraticBezierTo(p2.dx, p2.dy, p3.dx, p3.dy)
       ..lineTo(p2.dx, p2.dy)
       ..lineTo(p1.dx, p1.dy)
       ..close();
+  }
 
-    canvas.drawPath(
-      path,
-      // FIXME: дублирование Paint
-      Paint()
-        ..color = color
-        ..style = PaintingStyle.fill,
+  @override
+  PrettyQrSmoothModules? lerpFrom(PrettyQrShape? a, double t) {
+    if (identical(a, this)) {
+      return this;
+    }
+
+    if (a == null) return this;
+    if (a is! PrettyQrSmoothModules) return null;
+
+    if (t == 0.0) return a;
+    if (t == 1.0) return this;
+
+    return PrettyQrSmoothModules(
+      color: Color.lerp(a.color, color, t)!,
+      roundFactor: lerpDouble(a.roundFactor, roundFactor, t)!,
     );
   }
 
-  void drawInnerShape({
-    required Point<int> point,
-    required PrettyQrPaintingContext context,
-    required Rect rect,
-  }) {
-    final padding = (roundFactor / 2).clamp(0.0, 0.5) * rect.longestSide;
-    final neighbours = context.matrix.getNeighboursDirections(point);
-
-    if (neighbours.atTopAndLeft && neighbours.atToptLeft) {
-      drawCurve(
-        rect.topLeft.translate(0, padding),
-        rect.topLeft.translate(-gap, -gap),
-        rect.topLeft.translate(padding, 0),
-        context.canvas,
-      );
+  @override
+  PrettyQrSmoothModules? lerpTo(PrettyQrShape? b, double t) {
+    if (identical(this, b)) {
+      return this;
     }
 
-    if (neighbours.atTopAndRight && neighbours.atToptRight) {
-      drawCurve(
-        rect.topRight.translate(-padding, 0),
-        rect.topRight.translate(gap, -gap),
-        rect.topRight.translate(0, padding),
-        context.canvas,
-      );
-    }
+    if (b == null) return this;
+    if (b is! PrettyQrSmoothModules) return null;
 
-    if (neighbours.atBottomAndLeft && neighbours.atBottomLeft) {
-      drawCurve(
-        rect.bottomLeft.translate(0, -padding),
-        rect.bottomLeft.translate(-gap, gap),
-        rect.bottomLeft.translate(padding, 0),
-        context.canvas,
-      );
-    }
+    if (t == 0.0) return this;
+    if (t == 1.0) return b;
 
-    if (neighbours.atBottomAndRight && neighbours.atBottomRight) {
-      drawCurve(
-        rect.bottomRight.translate(-padding, 0),
-        rect.bottomRight.translate(gap, gap),
-        rect.bottomRight.translate(0, -padding),
-        context.canvas,
-      );
-    }
-  }
-
-  // Round the corners and paint it
-  void drawModuleItem({
-    required Point<int> point,
-    required Paint paint,
-    required PrettyQrPaintingContext context,
-    required Rect squareRect,
-  }) {
-    final radius = Radius.circular(
-      squareRect.height / 2 * roundFactor.clamp(0.0, 1.0),
+    return PrettyQrSmoothModules(
+      color: Color.lerp(color, b.color, t)!,
+      roundFactor: lerpDouble(roundFactor, b.roundFactor, t)!,
     );
-
-    final neighbours = context.matrix.getNeighboursDirections(point);
-    if (!neighbours.hasClosest) {
-      return context.canvas.drawRRect(
-        RRect.fromRectAndRadius(squareRect, radius / 2),
-        paint,
-      );
-    }
-
-    final rect = Rect.fromLTRB(
-      neighbours.atLeft ? squareRect.left - gap : squareRect.left,
-      neighbours.atTop ? squareRect.top - gap : squareRect.top,
-      neighbours.atRight ? squareRect.right + gap : squareRect.right,
-      neighbours.atBottom ? squareRect.bottom + gap : squareRect.bottom,
-    );
-
-    final withCorners = RRect.fromRectAndCorners(
-      rect,
-      topLeft: neighbours.atTopOrLeft ? Radius.zero : radius,
-      topRight: neighbours.atTopOrRight ? Radius.zero : radius,
-      bottomLeft: neighbours.atBottomOrLeft ? Radius.zero : radius,
-      bottomRight: neighbours.atBottomOrRight ? Radius.zero : radius,
-    );
-
-    context.canvas.drawRRect(withCorners, paint);
   }
 
   @override

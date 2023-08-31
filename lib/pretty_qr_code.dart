@@ -5,6 +5,7 @@ export 'package:qr/qr.dart';
 export 'src/pretty_qr_view.dart';
 
 export 'src/base/pretty_qr_matrix.dart';
+export 'src/base/pretty_qr_module.dart';
 export 'src/base/pretty_qr_neighbour_direction.dart';
 
 export 'src/painting/pretty_qr_shape.dart';

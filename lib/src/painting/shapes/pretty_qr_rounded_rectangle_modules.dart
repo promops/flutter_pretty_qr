@@ -14,53 +14,73 @@ class PrettyQrRoundedRectangleModules extends PrettyQrShape {
 
   /// If non-null, the corners of QR modules are rounded by this [BorderRadius].
   @nonVirtual
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadiusGeometry borderRadius;
 
+  /// The default value for [borderRadius].
+  static const kDefaultBorderRadius = BorderRadius.all(
+    Radius.circular(8),
+  );
+
+  /// Creates a basic QR shape.
   @literal
   const PrettyQrRoundedRectangleModules({
-    this.borderRadius,
     this.color = const Color(0xFF000000),
+    this.borderRadius = kDefaultBorderRadius,
   });
 
   @override
   void paint(PrettyQrPaintingContext context) {
+    final path = Path();
     final paint = Paint()
       ..color = color
+      ..isAntiAlias = true
       ..style = PaintingStyle.fill;
 
-    final borderRadius = this.borderRadius?.resolve(context.textDirection);
+    final borderRadius = this.borderRadius.resolve(context.textDirection);
 
     for (final module in context.matrix) {
       if (!module.isDark) continue;
       final moduleRect = module.resolve(context);
 
-      if (borderRadius == null) {
-        context.canvas.drawRect(moduleRect, paint);
-      } else {
-        context.canvas.drawRRect(borderRadius.toRRect(moduleRect), paint);
-      }
+      path.addRRect(borderRadius.toRRect(moduleRect));
     }
+
+    context.canvas.drawPath(path, paint);
   }
 
   @override
   PrettyQrRoundedRectangleModules? lerpFrom(PrettyQrShape? a, double t) {
+    if (identical(a, this)) {
+      return this;
+    }
+
     if (a == null) return this;
     if (a is! PrettyQrRoundedRectangleModules) return null;
 
+    if (t == 0.0) return a;
+    if (t == 1.0) return this;
+
     return PrettyQrRoundedRectangleModules(
       color: Color.lerp(a.color, color, t)!,
-      borderRadius: BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t),
+      borderRadius: BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t)!,
     );
   }
 
   @override
   PrettyQrRoundedRectangleModules? lerpTo(PrettyQrShape? b, double t) {
+    if (identical(this, b)) {
+      return this;
+    }
+
     if (b == null) return this;
     if (b is! PrettyQrRoundedRectangleModules) return null;
 
+    if (t == 0.0) return this;
+    if (t == 1.0) return b;
+
     return PrettyQrRoundedRectangleModules(
       color: Color.lerp(color, b.color, t)!,
-      borderRadius: BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t),
+      borderRadius: BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t)!,
     );
   }
 
