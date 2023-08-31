@@ -72,7 +72,7 @@ class PrettyQrDecoration with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<PrettyQrShape>(
+      ..add(DiagnosticsProperty<PrettyQrShape>(
         'shape',
         shape,
         defaultValue: const PrettyQrSmoothModules(),
