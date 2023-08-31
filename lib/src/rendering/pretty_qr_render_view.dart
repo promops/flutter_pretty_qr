@@ -6,7 +6,9 @@ import 'package:flutter/rendering.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// {@template pretty_qr_code.PrettyQrRenderView}
 /// Paints a [PrettyQrDecoration] either before its child paints.
@@ -111,60 +113,51 @@ class PrettyQrRenderView extends RenderProxyBox {
       canvas.translate(offset.dx, offset.dy);
     }
 
-    final matrix = PrettyQrMatrix.fromQrImage(
-      qrImage,
-    );
     final paintingContext = PrettyQrPaintingContext(
       canvas: canvas,
-      matrix: matrix,
       bounds: Offset.zero & size,
+      matrix: PrettyQrMatrix.fromQrImage(qrImage),
       textDirection: configuration.textDirection,
     );
 
-    try {
-      final decorationImage = _decoration.image;
-      if (decorationImage != null) {
-        // if (qrImage.errorCorrectLevel != QrErrorCorrectLevel.H) {
-        //   throw ArgumentError('Error correct level "H" required to add image');
-        // }
+    final image = decoration.image;
+    if (image != null) {
+      final imageRect = Rect.fromCenter(
+        center: size.center(Offset.zero),
+        width: size.width * image.scale,
+        height: size.height * image.scale,
+      );
 
-        final imageRect = Rect.fromCenter(
-          center: size.center(Offset.zero),
-          width: size.width * decorationImage.scale,
-          height: size.height * decorationImage.scale,
-        );
-        final imagePadding = decorationImage.padding.resolve(
-          configuration.textDirection,
-        );
+      final imagePadding = image.padding.resolve(
+        configuration.textDirection,
+      );
 
-        final clippedRect = imagePadding.inflateRect(imageRect);
-        final clippedSpace = clippedRect.width * clippedRect.height;
-        final availableSpace = matrix.dimension * matrix.dimension * 0.3;
+      // clear space for the embedded image
+      if (image.position == PrettyQrDecorationImagePosition.embedded) {
+        final imageClippedRect = imagePadding.inflateRect(imageRect);
+        for (final module in paintingContext.matrix) {
+          final moduleRect = module.resolve(paintingContext);
 
-        // TODO: https://www.qrcode.com/en/about/error_correction.html
-        if (clippedSpace > availableSpace.floor()) {
-          // throw StateError(
-          //   'Image space exceeds the maximum error correction capacity',
-          // );
+          if (imageClippedRect.overlaps(moduleRect)) {
+            paintingContext.matrix.removeDarkAt(module.x, module.y);
+          }
         }
-
-        _decorationImagePainter ??= decorationImage.createPainter(
-          markNeedsPaint,
-        );
-
-        // paintingContext.matrix.clipRect(
-        //   clippedRect,
-        //   size.shortestSide / qrImage.moduleCount,
-        // );
-
-        _decorationImagePainter?.paint(canvas, imageRect, null, configuration);
       }
-    } finally {
-      decoration.shape.paint(paintingContext);
-      canvas.restore();
 
-      super.paint(context, offset);
+      if (image.position == PrettyQrDecorationImagePosition.foreground) {
+        decoration.shape.paint(paintingContext);
+      }
+
+      _decorationImagePainter ??= image.createPainter(markNeedsPaint);
+      _decorationImagePainter?.paint(canvas, imageRect, null, configuration);
     }
+
+    if (image?.position != PrettyQrDecorationImagePosition.foreground) {
+      decoration.shape.paint(paintingContext);
+    }
+
+    canvas.restore();
+    super.paint(context, offset);
   }
 
   @override
@@ -173,10 +166,10 @@ class PrettyQrRenderView extends RenderProxyBox {
     properties
       ..add(DiagnosticsProperty<ImageConfiguration>(
         'configuration',
-        _configuration,
+        configuration,
       ))
-      ..add(DiagnosticsProperty<QrImage>('qrImage', _qrImage))
-      ..add(_decoration.toDiagnosticsNode(name: 'decoration'));
+      ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage))
+      ..add(decoration.toDiagnosticsNode(name: 'decoration'));
   }
 
   @override

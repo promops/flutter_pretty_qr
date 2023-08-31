@@ -19,6 +19,16 @@ class PrettyQrModule extends Point<int> {
     required this.isDark,
   });
 
+  /// Creates a copy of this [PrettyQrModule] but with the given fields replaced
+  /// with the new values.
+  @factory
+  @useResult
+  PrettyQrModule copyWith({
+    final bool? isDark,
+  }) {
+    return PrettyQrModule(x, y, isDark: isDark ?? this.isDark);
+  }
+
   @override
   int get hashCode {
     return runtimeType.hashCode ^ super.hashCode ^ isDark.hashCode;

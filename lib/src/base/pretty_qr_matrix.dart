@@ -36,11 +36,15 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
     final QrImage qrImage,
   ) {
     return PrettyQrMatrix(
-      modules: [
-        for (var row = 0; row < qrImage.moduleCount; ++row)
-          for (var col = 0; col < qrImage.moduleCount; ++col)
-            PrettyQrModule(col, row, isDark: qrImage.isDark(row, col)),
-      ],
+      modules: List.generate(
+        qrImage.moduleCount * qrImage.moduleCount,
+        (index) {
+          final col = index % qrImage.moduleCount;
+          final row = index ~/ qrImage.moduleCount;
+          return PrettyQrModule(col, row, isDark: qrImage.isDark(row, col));
+        },
+        growable: false,
+      ),
       dimension: qrImage.moduleCount,
     );
   }
@@ -55,7 +59,15 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
     return modules[y * dimension + x];
   }
 
+  /// Set `isDark` equals to `false` fot the module at position [x], [y].
+  @nonVirtual
+  void removeDarkAt(int x, int y) {
+    final module = getModule(x, y);
+    modules[y * dimension + x] = module!.copyWith(isDark: false);
+  }
+
   /// Returns the directions to the nearest neighbours of the [point].
+  @nonVirtual
   Set<PrettyQrNeighbourDirection> getNeighboursDirections(
     final Point<int> point,
   ) {
@@ -68,6 +80,7 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
 
   /// Returns `true` if the point is part of one of three Finder Pattern
   /// components.
+  @nonVirtual
   bool isFinderPatternPoint(Point<int> point) {
     const pSide = kFinderPatternDimension;
     if (point.x < pSide && point.y < pSide) return true;

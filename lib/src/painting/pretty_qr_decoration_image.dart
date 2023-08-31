@@ -3,12 +3,29 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
+/// {@template pretty_qr_code.PrettyQrDecorationImagePosition}
+/// Where to paint a image decoration.
+/// {@endtemplate}
+enum PrettyQrDecorationImagePosition {
+  /// Paint the image decoration inside the QR code.
+  embedded,
+
+  /// Paint the image decoration behind the QR code.
+  background,
+
+  /// Paint the image decoration in front of the QR code.
+  foreground,
+}
+
 /// An image for a QR decoration.
 @immutable
 class PrettyQrDecorationImage extends DecorationImage {
   /// The padding for the QR image.
   @nonVirtual
   final EdgeInsetsGeometry padding;
+
+  /// {@macro pretty_qr_code.PrettyQrDecorationImagePosition}
+  final PrettyQrDecorationImagePosition position;
 
   /// Creates an image to show in a [PrettyQrDecoration].
   ///
@@ -19,6 +36,7 @@ class PrettyQrDecorationImage extends DecorationImage {
     required super.image,
     super.scale = 0.2,
     this.padding = EdgeInsets.zero,
+    this.position = PrettyQrDecorationImagePosition.embedded,
   }) : assert(scale >= 0 && scale <= 1);
 
   /// Creates a copy of this [PrettyQrDecorationImage] but with the given fields
@@ -29,11 +47,13 @@ class PrettyQrDecorationImage extends DecorationImage {
     final double? scale,
     final ImageProvider? image,
     final EdgeInsetsGeometry? padding,
+    final PrettyQrDecorationImagePosition? position,
   }) {
     return PrettyQrDecorationImage(
       scale: scale ?? this.scale,
       image: image ?? this.image,
       padding: padding ?? this.padding,
+      position: position ?? this.position,
     );
   }
 
@@ -58,6 +78,7 @@ class PrettyQrDecorationImage extends DecorationImage {
       return PrettyQrDecorationImage(
         image: b!.image,
         scale: b.scale * t,
+        position: b.position,
         padding: EdgeInsetsGeometry.lerp(null, b.padding, t)!,
       );
     }
@@ -66,6 +87,7 @@ class PrettyQrDecorationImage extends DecorationImage {
       return PrettyQrDecorationImage(
         image: a.image,
         scale: a.scale * (1.0 - t),
+        position: a.position,
         padding: EdgeInsetsGeometry.lerp(a.padding, null, t)!,
       );
     }
@@ -73,6 +95,7 @@ class PrettyQrDecorationImage extends DecorationImage {
     return PrettyQrDecorationImage(
       image: t < 0.5 ? a.image : b.image,
       scale: lerpDouble(a.scale, b.scale, t)!,
+      position: t < 0.5 ? a.position : b.position,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,
     );
   }
@@ -89,6 +112,7 @@ class PrettyQrDecorationImage extends DecorationImage {
 
     return other is PrettyQrDecorationImage &&
         super == other &&
-        other.padding == padding;
+        other.padding == padding &&
+        other.position == position;
   }
 }
