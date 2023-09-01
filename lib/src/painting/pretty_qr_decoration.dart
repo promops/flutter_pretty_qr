@@ -1,22 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/foundation.dart';
 
+import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
+import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_modules.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
-import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_default_dots.dart';
-
-import 'pretty_qr_shape.dart';
 
 /// {@template pretty_qr_code.PrettyQrDecoration}
 /// An immutable description of how to paint a QR image.
 /// {@endtemplate}
 @immutable
 class PrettyQrDecoration with Diagnosticable {
-  /// The color of QR dots.
-  @nonVirtual
-  final Color color;
-
-  /// The QR dots shape.
+  /// The QR modules shape.
   @nonVirtual
   final PrettyQrShape shape;
 
@@ -28,8 +22,7 @@ class PrettyQrDecoration with Diagnosticable {
   @literal
   const PrettyQrDecoration({
     this.image,
-    this.color = const Color(0xFF000000),
-    this.shape = const PrettyQrDefaultDots(),
+    this.shape = const PrettyQrSmoothModules(),
   });
 
   @override
@@ -42,31 +35,62 @@ class PrettyQrDecoration with Diagnosticable {
   @factory
   @useResult
   PrettyQrDecoration copyWith({
-    final Color? color,
     final PrettyQrShape? shape,
     final PrettyQrDecorationImage? image,
   }) {
     return PrettyQrDecoration(
-      color: color ?? this.color,
       image: image ?? this.image,
       shape: shape ?? this.shape,
     );
   }
 
   /// Linearly interpolates between two [PrettyQrDecoration]s.
+  ///
+  /// {@macro dart.ui.shadow.lerp}
   @factory
   static PrettyQrDecoration? lerp(
     final PrettyQrDecoration? a,
     final PrettyQrDecoration? b,
     final double t,
   ) {
-    // TODO: implement lerp? для PrettyQrShapeDots тоже, тогда можно будет красиво их менять
-    return const PrettyQrDecoration();
+    if (identical(a, b)) {
+      return a;
+    }
+
+    if (a != null && b != null) {
+      if (t == 0.0) return a;
+      if (t == 1.0) return b;
+    }
+
+    return PrettyQrDecoration(
+      shape: PrettyQrShape.lerp(a?.shape, b?.shape, t)!,
+      image: PrettyQrDecorationImage.lerp(a?.image, b?.image, t),
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+        DiagnosticsProperty<PrettyQrShape>(
+          'shape',
+          shape,
+          defaultValue: const PrettyQrSmoothModules(),
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<PrettyQrDecorationImage>(
+          'image',
+          image,
+          defaultValue: null,
+        ),
+      );
   }
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ Object.hash(color, image, shape);
+    return runtimeType.hashCode ^ Object.hash(image, shape);
   }
 
   @override
@@ -75,29 +99,7 @@ class PrettyQrDecoration with Diagnosticable {
     if (other.runtimeType != runtimeType) return false;
 
     return other is PrettyQrDecoration &&
-        other.color == color &&
         other.image == image &&
         other.shape == shape;
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(ColorProperty(
-        'color',
-        color,
-        defaultValue: const Color(0xFF000000),
-      ))
-      ..add(EnumProperty<PrettyQrShape>(
-        'shape',
-        shape,
-        defaultValue: const PrettyQrDefaultDots(),
-      ))
-      ..add(DiagnosticsProperty<PrettyQrDecorationImage>(
-        'image',
-        image,
-        defaultValue: null,
-      ));
   }
 }

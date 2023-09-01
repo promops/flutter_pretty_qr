@@ -3,27 +3,24 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:pretty_qr_code/src/pretty_qr_data_view.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/rendering/render_pretty_qr_view.dart';
-
-/// {@macro pretty_qr_code.PrettyQrView}
-@Deprecated('Use `PrettyQrView` instead')
-typedef PrettyQr = PrettyQrView;
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 
 /// {@template pretty_qr_code.PrettyQrView}
-/// TODO: `PrettyQrView` description
+/// A widget that displays a QR code image.
 /// {@endtemplate}
 @sealed
 class PrettyQrView extends SingleChildRenderObjectWidget {
-  /// {@macro pretty_qr_code.RenderPrettyQrView.qrImage}
+  /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
   @protected
   final QrImage qrImage;
 
-  /// {@macro pretty_qr_code.RenderPrettyQrView.decoration}
+  /// {@macro pretty_qr_code.PrettyQrRenderView.decoration}
   @protected
   final PrettyQrDecoration decoration;
 
-  /// Creates a widget that displays an QR image obtained from a [code].
+  /// Creates a widget that displays an QR image obtained from a [qrImage].
   @literal
   const PrettyQrView({
     required this.qrImage,
@@ -33,51 +30,53 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   });
 
   /// Creates a widget that displays an QR image obtained from a [data].
-  factory PrettyQrView.data({
+  @factory
+  static PrettyQrDataView data({
     required final String data,
     final Key? key,
     final Widget? child,
     final int errorCorrectLevel = QrErrorCorrectLevel.L,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
   }) {
-    final qrCode = QrCode.fromData(
-      data: data,
-      errorCorrectLevel: errorCorrectLevel,
-    );
-
-    return PrettyQrView(
+    return PrettyQrDataView(
       key: key,
-      qrImage: QrImage(qrCode),
+      data: data,
       decoration: decoration,
+      errorCorrectLevel: errorCorrectLevel,
       child: child,
     );
   }
 
   @override
-  RenderPrettyQrView createRenderObject(BuildContext context) {
-    return RenderPrettyQrView(
+  PrettyQrRenderView createRenderObject(BuildContext context) {
+    return PrettyQrRenderView(
       qrImage: qrImage,
       decoration: decoration,
+      configuration: createLocalImageConfiguration(context),
     );
   }
 
   @override
   void updateRenderObject(
     final BuildContext context,
-    final RenderPrettyQrView renderObject,
+    final PrettyQrRenderView renderObject,
   ) {
     renderObject
       ..qrImage = qrImage
-      ..decoration = decoration;
+      ..decoration = decoration
+      ..configuration = createLocalImageConfiguration(context);
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-
-    properties.add(DiagnosticsProperty<PrettyQrDecoration>(
-      'decoration',
-      decoration,
-    ));
+    properties
+      ..add(
+        DiagnosticsProperty<PrettyQrDecoration>(
+          'decoration',
+          decoration,
+        ),
+      )
+      ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage));
   }
 }
