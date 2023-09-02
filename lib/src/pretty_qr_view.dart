@@ -10,8 +10,27 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 /// {@template pretty_qr_code.PrettyQrView}
 /// A widget that displays a QR code image.
 /// {@endtemplate}
+///
+/// {@tool snippet}
+///
+/// This sample code shows how to use `PrettyQrView` to display QR code image.
+///
+/// ```dart
+/// PrettyQrView.data(
+///   data: '...',
+///   errorCorrectLevel: QrErrorCorrectLevel.H,
+///   decoration: const PrettyQrDecoration(
+///     shape: PrettyQrSmoothModules(),
+///     image: PrettyQrDecorationImage(
+///       image: AssetImage('images/flutter.png'),
+///       position: PrettyQrDecorationImagePosition.embedded,
+///     ),
+///   ),
+/// )
+/// ```
+/// {@end-tool}
 @sealed
-class PrettyQrView extends SingleChildRenderObjectWidget {
+class PrettyQrView extends LeafRenderObjectWidget {
   /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
   @protected
   final QrImage qrImage;
@@ -25,7 +44,6 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   const PrettyQrView({
     required this.qrImage,
     super.key,
-    super.child,
     this.decoration = const PrettyQrDecoration(),
   });
 
@@ -34,7 +52,6 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
   static PrettyQrDataView data({
     required final String data,
     final Key? key,
-    final Widget? child,
     final int errorCorrectLevel = QrErrorCorrectLevel.L,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
   }) {
@@ -43,7 +60,6 @@ class PrettyQrView extends SingleChildRenderObjectWidget {
       data: data,
       decoration: decoration,
       errorCorrectLevel: errorCorrectLevel,
-      child: child,
     );
   }
 

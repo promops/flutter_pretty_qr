@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:ui' as ui;
+import 'dart:math' as math;
 
 import 'package:qr/qr.dart';
 import 'package:meta/meta.dart';
@@ -11,11 +12,11 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// {@template pretty_qr_code.PrettyQrRenderView}
-/// Paints a [PrettyQrDecoration] either before its child paints.
+/// An QR code image in the render tree.
 /// {@endtemplate}
 @sealed
 @internal
-class PrettyQrRenderView extends RenderProxyBox {
+class PrettyQrRenderView extends RenderBox {
   /// {@template pretty_qr_code.PrettyQrRenderView.qrImage}
   /// The QR to display.
   /// {@endtemplate}
@@ -39,16 +40,22 @@ class PrettyQrRenderView extends RenderProxyBox {
   @protected
   DecorationImagePainter? _decorationImagePainter;
 
-  /// Creates a pretty qr view.
+  /// The QR code image raster size.
+  @protected
+  Size? _cachedQRImageSize;
+
+  /// The QR code image raster.
+  @protected
+  ui.Image? _cachedQRImageRaster;
+
+  /// Creates a QR view.
   PrettyQrRenderView({
     required QrImage qrImage,
     required PrettyQrDecoration decoration,
-    final RenderBox? child,
     final ImageConfiguration configuration = ImageConfiguration.empty,
   })  : _qrImage = qrImage,
         _decoration = decoration,
-        _configuration = configuration,
-        super(child);
+        _configuration = configuration;
 
   /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
   QrImage get qrImage {
@@ -95,50 +102,70 @@ class PrettyQrRenderView extends RenderProxyBox {
   }
 
   @override
-  bool hitTestSelf(Offset position) {
-    return (Offset.zero & size).contains(position);
+  void markNeedsPaint() {
+    _resetCachedRaster();
+    super.markNeedsPaint();
   }
 
   @override
-  Size computeSizeForNoChild(BoxConstraints constraints) {
-    return Size.square(min(constraints.maxWidth, constraints.maxHeight));
+  bool hitTestSelf(Offset position) {
+    return true;
+  }
+
+  @override
+  void performLayout() {
+    size = _sizeForConstraints(constraints);
+  }
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    return _sizeForConstraints(constraints);
+  }
+
+  /// Find a size for the QR image within the given constraints.
+  @protected
+  Size _sizeForConstraints(BoxConstraints constraints) {
+    final minDimension = math.min(constraints.maxWidth, constraints.maxHeight);
+    return constraints.constrain(Size.square(minDimension));
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final canvas = context.canvas;
-    canvas.save();
+    final size = Size.square(
+      configuration.size?.shortestSide ?? this.size.shortestSide,
+    );
 
-    if (offset != Offset.zero) {
-      canvas.translate(offset.dx, offset.dy);
+    if (_cachedQRImageSize != null && _cachedQRImageSize != size) {
+      _resetCachedRaster();
     }
 
+    if (_cachedQRImageRaster != null) {
+      context.setIsComplexHint();
+      return _paintCachedRaster(context, offset);
+    }
+
+    final offsetLayer = OffsetLayer();
     final paintingContext = PrettyQrPaintingContext(
-      canvas: canvas,
-      bounds: Offset.zero & size,
+      offsetLayer,
+      Offset.zero & size,
       matrix: PrettyQrMatrix.fromQrImage(qrImage),
       textDirection: configuration.textDirection,
     );
 
     final image = decoration.image;
     if (image != null) {
+      final imageScale = image.scale.clamp(0.0, 1.0);
       final imageRect = Rect.fromCenter(
         center: size.center(Offset.zero),
-        width: size.width * image.scale,
-        height: size.height * image.scale,
-      );
-
-      final imagePadding = image.padding.resolve(
-        configuration.textDirection,
+        width: size.width * imageScale,
+        height: size.height * imageScale,
       );
 
       // clear space for the embedded image
       if (image.position == PrettyQrDecorationImagePosition.embedded) {
-        final imageClippedRect = imagePadding.inflateRect(imageRect);
         for (final module in paintingContext.matrix) {
           final moduleRect = module.resolve(paintingContext);
-
-          if (imageClippedRect.overlaps(moduleRect)) {
+          if (imageRect.overlaps(moduleRect)) {
             paintingContext.matrix.removeDarkAt(module.x, module.y);
           }
         }
@@ -148,16 +175,68 @@ class PrettyQrRenderView extends RenderProxyBox {
         decoration.shape.paint(paintingContext);
       }
 
+      final imagePadding = (image.padding * imageScale).resolve(
+        configuration.textDirection,
+      );
+      final imageCroppedRect = imagePadding.deflateRect(imageRect);
+
       _decorationImagePainter ??= image.createPainter(markNeedsPaint);
-      _decorationImagePainter?.paint(canvas, imageRect, null, configuration);
+      _decorationImagePainter?.paint(
+        paintingContext.canvas,
+        imageCroppedRect,
+        null,
+        configuration.copyWith(size: imageCroppedRect.size),
+      );
     }
 
     if (image?.position != PrettyQrDecorationImagePosition.foreground) {
       decoration.shape.paint(paintingContext);
     }
 
-    canvas.restore();
-    super.paint(context, offset);
+    // ignore: invalid_use_of_protected_member, see `SnapshotWidget`
+    paintingContext.stopRecordingIfNeeded();
+
+    _cachedQRImageRaster = offsetLayer.toImageSync(
+      paintingContext.estimatedBounds,
+      pixelRatio: configuration.devicePixelRatio!,
+    );
+    _cachedQRImageSize = size;
+
+    offsetLayer.dispose();
+    _paintCachedRaster(context, offset);
+  }
+
+  @protected
+  void _paintCachedRaster(PaintingContext context, Offset offset) {
+    final cachedQRImageSize = _cachedQRImageSize;
+    final cachedQRImageRaster = _cachedQRImageRaster;
+
+    if (cachedQRImageSize == null) return;
+    if (cachedQRImageRaster == null) return;
+
+    context.canvas.drawImageRect(
+      cachedQRImageRaster,
+      Rect.fromLTWH(
+        0,
+        0,
+        cachedQRImageRaster.width.toDouble(),
+        cachedQRImageRaster.height.toDouble(),
+      ),
+      Rect.fromCenter(
+        center: size.center(offset),
+        width: cachedQRImageSize.width,
+        height: cachedQRImageSize.height,
+      ),
+      Paint()..filterQuality = FilterQuality.low,
+    );
+  }
+
+  @protected
+  void _resetCachedRaster() {
+    _cachedQRImageRaster?.dispose();
+
+    _cachedQRImageSize = null;
+    _cachedQRImageRaster = null;
   }
 
   @override
@@ -175,7 +254,14 @@ class PrettyQrRenderView extends RenderProxyBox {
   }
 
   @override
+  void detach() {
+    _resetCachedRaster();
+    super.detach();
+  }
+
+  @override
   void dispose() {
+    _resetCachedRaster();
     _decorationImagePainter?.dispose();
 
     super.dispose();
