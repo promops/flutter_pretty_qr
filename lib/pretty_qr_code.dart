@@ -18,5 +18,6 @@ export 'src/painting/shapes/pretty_qr_rounded_rectangle_modules.dart';
 
 export 'src/painting/animation/pretty_qr_decoration_tween.dart';
 
+export 'src/painting/extensions/pretty_qr_image_extensions.dart';
 export 'src/painting/extensions/pretty_qr_module_extensions.dart';
 export 'src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';

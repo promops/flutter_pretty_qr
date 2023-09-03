@@ -6,39 +6,33 @@ import 'package:meta/meta.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
+import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
-import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// {@template pretty_qr_code.PrettyQrRenderView}
 /// An QR code image in the render tree.
 /// {@endtemplate}
-@sealed
 @internal
 class PrettyQrRenderView extends RenderBox {
   /// {@template pretty_qr_code.PrettyQrRenderView.qrImage}
   /// The QR to display.
   /// {@endtemplate}
   @nonVirtual
-  QrImage _qrImage;
+  late QrImage _qrImage;
 
   /// {@template pretty_qr_code.PrettyQrRenderView.decoration}
   /// What decoration to paint.
   /// {@endtemplate}
   @nonVirtual
-  PrettyQrDecoration _decoration;
+  late PrettyQrDecoration _decoration;
 
   /// {@template pretty_qr_code.PrettyQrRenderView.configuration}
   /// The settings to pass to the decoration when painting, so that it can
   /// resolve images appropriately. See [ImageProvider.resolve].
   /// {@endtemplate}
   @nonVirtual
-  ImageConfiguration _configuration;
-
-  /// The painter for a [PrettyQrDecorationImage].
-  @protected
-  DecorationImagePainter? _decorationImagePainter;
+  late ImageConfiguration _configuration;
 
   /// The QR code image raster size.
   @protected
@@ -47,6 +41,10 @@ class PrettyQrRenderView extends RenderBox {
   /// The QR code image raster.
   @protected
   ui.Image? _cachedQRImageRaster;
+
+  /// The painter for a [PrettyQrPainter].
+  @protected
+  PrettyQrPainter? _decorationPainter;
 
   /// Creates a QR view.
   PrettyQrRenderView({
@@ -79,10 +77,8 @@ class PrettyQrRenderView extends RenderBox {
   set decoration(PrettyQrDecoration value) {
     if (_decoration == value) return;
 
-    if (_decoration.image?.image != value.image?.image) {
-      _decorationImagePainter?.dispose();
-      _decorationImagePainter = null;
-    }
+    _decorationPainter?.dispose();
+    _decorationPainter = null;
 
     _decoration = value;
     markNeedsPaint();
@@ -147,51 +143,13 @@ class PrettyQrRenderView extends RenderBox {
     final offsetLayer = OffsetLayer();
     final paintingContext = PrettyQrPaintingContext(
       offsetLayer,
-      Offset.zero & size,
+      offsetLayer.offset & size,
       matrix: PrettyQrMatrix.fromQrImage(qrImage),
       textDirection: configuration.textDirection,
     );
 
-    final image = decoration.image;
-    if (image != null) {
-      final imageScale = image.scale.clamp(0.0, 1.0);
-      final imageRect = Rect.fromCenter(
-        center: size.center(Offset.zero),
-        width: size.width * imageScale,
-        height: size.height * imageScale,
-      );
-
-      // clear space for the embedded image
-      if (image.position == PrettyQrDecorationImagePosition.embedded) {
-        for (final module in paintingContext.matrix) {
-          final moduleRect = module.resolve(paintingContext);
-          if (imageRect.overlaps(moduleRect)) {
-            paintingContext.matrix.removeDarkAt(module.x, module.y);
-          }
-        }
-      }
-
-      if (image.position == PrettyQrDecorationImagePosition.foreground) {
-        decoration.shape.paint(paintingContext);
-      }
-
-      final imagePadding = (image.padding * imageScale).resolve(
-        configuration.textDirection,
-      );
-      final imageCroppedRect = imagePadding.deflateRect(imageRect);
-
-      _decorationImagePainter ??= image.createPainter(markNeedsPaint);
-      _decorationImagePainter?.paint(
-        paintingContext.canvas,
-        imageCroppedRect,
-        null,
-        configuration.copyWith(size: imageCroppedRect.size),
-      );
-    }
-
-    if (image?.position != PrettyQrDecorationImagePosition.foreground) {
-      decoration.shape.paint(paintingContext);
-    }
+    _decorationPainter ??= decoration.createPainter(markNeedsPaint);
+    _decorationPainter?.paint(paintingContext, configuration);
 
     // ignore: invalid_use_of_protected_member, see `SnapshotWidget`
     paintingContext.stopRecordingIfNeeded();
@@ -262,7 +220,7 @@ class PrettyQrRenderView extends RenderBox {
   @override
   void dispose() {
     _resetCachedRaster();
-    _decorationImagePainter?.dispose();
+    _decorationPainter?.dispose();
 
     super.dispose();
   }
