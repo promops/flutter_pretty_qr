@@ -47,27 +47,40 @@ extension PrettyQrImageExtension on QrImage {
 
     final decorationImageStreamListener = ImageStreamListener(
       (imageInfo, synchronous) {
-        imageCompleter.complete(captureQRImage());
-        imageInfo.dispose();
+        try {
+          final image = captureQRImage();
+          imageCompleter.complete(image);
+        } catch (error, stackTrace) {
+          Future.delayed(
+            Duration.zero,
+            () => imageCompleter.completeError(error, stackTrace),
+          );
+        } finally {
+          imageInfo.dispose();
+        }
       },
-      onError: imageCompleter.completeError,
+      onError: (error, stackTrace) => Future.delayed(
+        Duration.zero,
+        () => imageCompleter.completeError(error, stackTrace),
+      ),
     );
 
     final decorationImageStream = decoration.image?.image.resolve(
       configuration,
     )?..addListener(decorationImageStreamListener);
 
-    if (decorationImageStream == null) {
-      imageCompleter.complete(captureQRImage());
-    }
+    try {
+      if (decorationImageStream == null) {
+        final image = captureQRImage();
+        imageCompleter.complete(image);
+      }
 
-    return imageCompleter.future.then((image) {
+      return await imageCompleter.future;
+    } finally {
       offsetLayer.dispose();
       decorationPainter.dispose();
       decorationImageStream?.removeListener(decorationImageStreamListener);
-
-      return image;
-    });
+    }
   }
 
   /// Returns the QR Code image as a list of bytes.
