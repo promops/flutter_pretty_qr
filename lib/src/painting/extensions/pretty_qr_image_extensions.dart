@@ -28,7 +28,7 @@ extension PrettyQrImageExtension on QrImage {
       textDirection: configuration.textDirection,
     );
 
-    ui.Image captureQRImage() {
+    Future<ui.Image> captureQRImage() async {
       decorationPainter.paint(
         context,
         configuration.copyWith(size: Size.square(size)),
@@ -36,6 +36,7 @@ extension PrettyQrImageExtension on QrImage {
 
       // ignore: invalid_use_of_protected_member
       context.stopRecordingIfNeeded();
+      await Future.delayed(Duration.zero);
 
       final image = offsetLayer.toImageSync(
         context.estimatedBounds,
@@ -46,41 +47,39 @@ extension PrettyQrImageExtension on QrImage {
     }
 
     final decorationImageStreamListener = ImageStreamListener(
-      (imageInfo, synchronous) {
+      (imageInfo, synchronous) async {
         try {
-          final image = captureQRImage();
+          final image = await captureQRImage();
           imageCompleter.complete(image);
-        } catch (error, stackTrace) {
-          Future.delayed(
-            Duration.zero,
-            () => imageCompleter.completeError(error, stackTrace),
-          );
         } finally {
           imageInfo.dispose();
         }
       },
-      onError: (error, stackTrace) => Future.delayed(
-        Duration.zero,
-        () => imageCompleter.completeError(error, stackTrace),
-      ),
+      onError: (error, stack) async {
+        throw Error.throwWithStackTrace(error, stack ?? StackTrace.current);
+      },
     );
 
-    final decorationImageStream = decoration.image?.image.resolve(
-      configuration,
-    )?..addListener(decorationImageStreamListener);
+    final decorationImageStream = runZonedGuarded(
+      () {
+        return decoration.image?.image.resolve(
+          configuration,
+        )?..addListener(decorationImageStreamListener);
+      },
+      (error, stackTrace) {
+        imageCompleter.completeError(error, stackTrace);
+      },
+    );
 
-    try {
-      if (decorationImageStream == null) {
-        final image = captureQRImage();
-        imageCompleter.complete(image);
-      }
+    if (!imageCompleter.isCompleted && decorationImageStream == null) {
+      imageCompleter.complete(captureQRImage());
+    }
 
-      return await imageCompleter.future;
-    } finally {
+    return imageCompleter.future.whenComplete(() {
       offsetLayer.dispose();
       decorationPainter.dispose();
       decorationImageStream?.removeListener(decorationImageStreamListener);
-    }
+    });
   }
 
   /// Returns the QR Code image as a list of bytes.
@@ -95,6 +94,6 @@ extension PrettyQrImageExtension on QrImage {
       decoration: decoration,
       configuration: configuration,
     );
-    return await image.toByteData(format: format);
+    return image.toByteData(format: format);
   }
 }
