@@ -42,35 +42,7 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
   late QrImage qrImage;
 
   @protected
-  late PrettyQrDecoration previosDecoration;
-
-  @protected
-  late PrettyQrDecoration currentDecoration;
-
-  @visibleForTesting
-  static const kDefaultPrettyQrDecorationImage = PrettyQrDecorationImage(
-    image: AssetImage('images/flutter.png'),
-    position: PrettyQrDecorationImagePosition.embedded,
-  );
-
-  @protected
-  Color get shapeColor {
-    var shape = currentDecoration.shape;
-    if (shape is PrettyQrSmoothModules) return shape.color;
-    if (shape is PrettyQrRoundedRectangleModules) return shape.color;
-    return Colors.black;
-  }
-
-  @protected
-  bool get isRoundedBorders {
-    var shape = currentDecoration.shape;
-    if (shape is PrettyQrSmoothModules) {
-      return shape.roundFactor > 0;
-    } else if (shape is PrettyQrRoundedRectangleModules) {
-      return shape.borderRadius != BorderRadius.zero;
-    }
-    return false;
-  }
+  late PrettyQrDecoration decoration;
 
   @override
   void initState() {
@@ -80,23 +52,14 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
       data: 'https://pub.dev/packages/pretty_qr_code',
       errorCorrectLevel: QrErrorCorrectLevel.H,
     );
-
     qrImage = QrImage(qrCode);
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final decoration = PrettyQrDecoration(
+    decoration = const PrettyQrDecoration(
       shape: PrettyQrSmoothModules(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Color(0xFF74565F),
       ),
-      image: kDefaultPrettyQrDecorationImage,
+      image: _PrettyQrSettings.kDefaultPrettyQrDecorationImage,
     );
-
-    previosDecoration = decoration;
-    currentDecoration = decoration;
   }
 
   @override
@@ -106,34 +69,189 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
         centerTitle: true,
         title: const Text('Pretty QR Code'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: TweenAnimationBuilder<PrettyQrDecoration>(
-                tween: PrettyQrDecorationTween(
-                  begin: previosDecoration,
-                  end: currentDecoration,
-                ),
-                curve: Curves.ease,
-                duration: const Duration(
-                  milliseconds: 240,
-                ),
-                builder: (context, decoration, child) {
-                  return PrettyQrView(
-                    qrImage: qrImage,
-                    decoration: decoration,
-                  );
-                },
-              ),
-            ),
-            PopupMenuButton(
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 1024,
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final safePadding = MediaQuery.of(context).padding;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (constraints.maxWidth >= 720)
+                    Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: safePadding.left + 24,
+                          right: safePadding.right + 24,
+                          bottom: 24,
+                        ),
+                        child: _PrettyQrAnimatedView(
+                          qrImage: qrImage,
+                          decoration: decoration,
+                        ),
+                      ),
+                    ),
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        if (constraints.maxWidth < 720)
+                          Padding(
+                            padding: safePadding.copyWith(
+                              top: 0,
+                              bottom: 0,
+                            ),
+                            child: _PrettyQrAnimatedView(
+                              qrImage: qrImage,
+                              decoration: decoration,
+                            ),
+                          ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: safePadding.copyWith(top: 0),
+                            child: _PrettyQrSettings(
+                              decoration: decoration,
+                              onChanged: (value) => setState(() {
+                                decoration = value;
+                              }),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PrettyQrAnimatedView extends StatefulWidget {
+  @protected
+  final QrImage qrImage;
+
+  @protected
+  final PrettyQrDecoration decoration;
+
+  const _PrettyQrAnimatedView({
+    required this.qrImage,
+    required this.decoration,
+  });
+
+  @override
+  State<_PrettyQrAnimatedView> createState() => _PrettyQrAnimatedViewState();
+}
+
+class _PrettyQrAnimatedViewState extends State<_PrettyQrAnimatedView> {
+  @protected
+  late PrettyQrDecoration previosDecoration;
+
+  @override
+  void initState() {
+    super.initState();
+
+    previosDecoration = widget.decoration;
+  }
+
+  @override
+  void didUpdateWidget(
+    covariant _PrettyQrAnimatedView oldWidget,
+  ) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.decoration != oldWidget.decoration) {
+      previosDecoration = oldWidget.decoration;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: TweenAnimationBuilder<PrettyQrDecoration>(
+        tween: PrettyQrDecorationTween(
+          begin: previosDecoration,
+          end: widget.decoration,
+        ),
+        curve: Curves.ease,
+        duration: const Duration(
+          milliseconds: 240,
+        ),
+        builder: (context, decoration, child) {
+          return PrettyQrView(
+            qrImage: widget.qrImage,
+            decoration: decoration,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _PrettyQrSettings extends StatefulWidget {
+  @protected
+  final PrettyQrDecoration decoration;
+
+  @protected
+  final ValueChanged<PrettyQrDecoration>? onChanged;
+
+  @visibleForTesting
+  static const kDefaultPrettyQrDecorationImage = PrettyQrDecorationImage(
+    image: AssetImage('images/flutter.png'),
+    position: PrettyQrDecorationImagePosition.embedded,
+  );
+
+  const _PrettyQrSettings({
+    required this.decoration,
+    this.onChanged,
+  });
+
+  @override
+  State<_PrettyQrSettings> createState() => _PrettyQrSettingsState();
+}
+
+class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
+  @protected
+  Color get shapeColor {
+    var shape = widget.decoration.shape;
+    if (shape is PrettyQrSmoothModules) return shape.color;
+    if (shape is PrettyQrRoundedRectangleModules) return shape.color;
+    return Colors.black;
+  }
+
+  @protected
+  bool get isRoundedBorders {
+    var shape = widget.decoration.shape;
+    if (shape is PrettyQrSmoothModules) {
+      return shape.roundFactor > 0;
+    } else if (shape is PrettyQrRoundedRectangleModules) {
+      return shape.borderRadius != BorderRadius.zero;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return PopupMenuButton(
               onSelected: changeShape,
-              constraints: const BoxConstraints(
-                minWidth: double.infinity,
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
               ),
-              initialValue: currentDecoration.shape.runtimeType,
+              initialValue: widget.decoration.shape.runtimeType,
               itemBuilder: (context) {
                 return [
                   const PopupMenuItem(
@@ -150,74 +268,74 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
                 leading: const Icon(Icons.format_paint_outlined),
                 title: const Text('Style'),
                 trailing: Text(
-                  currentDecoration.shape is PrettyQrSmoothModules
+                  widget.decoration.shape is PrettyQrSmoothModules
                       ? 'Smooth'
                       : 'Rounded rectangle',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
-            ),
-            SwitchListTile.adaptive(
-              value: shapeColor != Colors.black,
-              onChanged: (value) => toggleColor(),
-              secondary: const Icon(Icons.color_lens_outlined),
-              title: const Text('Colored'),
-            ),
-            SwitchListTile.adaptive(
-              value: isRoundedBorders,
-              onChanged: (value) => toggleRoundedCorners(),
-              secondary: const Icon(Icons.rounded_corner),
-              title: const Text('Rounded corners'),
-            ),
-            const Divider(),
-            SwitchListTile.adaptive(
-              value: currentDecoration.image != null,
-              onChanged: (value) => toggleImage(),
-              secondary: Icon(
-                currentDecoration.image != null
-                    ? Icons.image_outlined
-                    : Icons.hide_image_outlined,
-              ),
-              title: const Text('Image'),
-            ),
-            if (currentDecoration.image != null)
-              ListTile(
-                enabled: currentDecoration.image != null,
-                leading: const Icon(Icons.layers_outlined),
-                title: const Text('Image position'),
-                trailing: PopupMenuButton(
-                  onSelected: changeImagePosition,
-                  initialValue: currentDecoration.image!.position,
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: PrettyQrDecorationImagePosition.embedded,
-                        child: Text('Embedded'),
-                      ),
-                      const PopupMenuItem(
-                        value: PrettyQrDecorationImagePosition.foreground,
-                        child: Text('Foreground'),
-                      ),
-                      const PopupMenuItem(
-                        value: PrettyQrDecorationImagePosition.background,
-                        child: Text('Background'),
-                      ),
-                    ];
-                  },
-                ),
-              ),
-          ],
+            );
+          },
         ),
-      ),
+        SwitchListTile.adaptive(
+          value: shapeColor != Colors.black,
+          onChanged: (value) => toggleColor(),
+          secondary: const Icon(Icons.color_lens_outlined),
+          title: const Text('Colored'),
+        ),
+        SwitchListTile.adaptive(
+          value: isRoundedBorders,
+          onChanged: (value) => toggleRoundedCorners(),
+          secondary: const Icon(Icons.rounded_corner),
+          title: const Text('Rounded corners'),
+        ),
+        const Divider(),
+        SwitchListTile.adaptive(
+          value: widget.decoration.image != null,
+          onChanged: (value) => toggleImage(),
+          secondary: Icon(
+            widget.decoration.image != null
+                ? Icons.image_outlined
+                : Icons.hide_image_outlined,
+          ),
+          title: const Text('Image'),
+        ),
+        if (widget.decoration.image != null)
+          ListTile(
+            enabled: widget.decoration.image != null,
+            leading: const Icon(Icons.layers_outlined),
+            title: const Text('Image position'),
+            trailing: PopupMenuButton(
+              onSelected: changeImagePosition,
+              initialValue: widget.decoration.image?.position,
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: PrettyQrDecorationImagePosition.embedded,
+                    child: Text('Embedded'),
+                  ),
+                  const PopupMenuItem(
+                    value: PrettyQrDecorationImagePosition.foreground,
+                    child: Text('Foreground'),
+                  ),
+                  const PopupMenuItem(
+                    value: PrettyQrDecorationImagePosition.background,
+                    child: Text('Background'),
+                  ),
+                ];
+              },
+            ),
+          ),
+      ],
     );
   }
 
   @protected
   void changeShape(
-    final Type value,
+    final Type type,
   ) {
-    var shape = currentDecoration.shape;
-    if (shape.runtimeType == value) return;
+    var shape = widget.decoration.shape;
+    if (shape.runtimeType == type) return;
 
     if (shape is PrettyQrSmoothModules) {
       shape = PrettyQrRoundedRectangleModules(color: shapeColor);
@@ -225,15 +343,12 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
       shape = PrettyQrSmoothModules(color: shapeColor);
     }
 
-    setState(() {
-      previosDecoration = currentDecoration;
-      currentDecoration = currentDecoration.copyWith(shape: shape);
-    });
+    widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
   }
 
   @protected
   void toggleColor() {
-    var shape = currentDecoration.shape;
+    var shape = widget.decoration.shape;
     var color = shapeColor != Colors.black
         ? Colors.black
         : Theme.of(context).colorScheme.secondary;
@@ -250,15 +365,12 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
       );
     }
 
-    setState(() {
-      previosDecoration = currentDecoration;
-      currentDecoration = currentDecoration.copyWith(shape: shape);
-    });
+    widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
   }
 
   @protected
   void toggleRoundedCorners() {
-    var shape = currentDecoration.shape;
+    var shape = widget.decoration.shape;
 
     if (shape is PrettyQrSmoothModules) {
       shape = PrettyQrSmoothModules(
@@ -274,34 +386,23 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
       );
     }
 
-    setState(() {
-      previosDecoration = currentDecoration;
-      currentDecoration = currentDecoration.copyWith(shape: shape);
-    });
+    widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
   }
 
   @protected
   void toggleImage() {
-    var image = currentDecoration.image;
-    image = image != null ? null : kDefaultPrettyQrDecorationImage;
+    const defaultImage = _PrettyQrSettings.kDefaultPrettyQrDecorationImage;
+    final image = widget.decoration.image != null ? null : defaultImage;
 
-    setState(() {
-      previosDecoration = currentDecoration;
-      currentDecoration = PrettyQrDecoration(
-        image: image,
-        shape: currentDecoration.shape,
-      );
-    });
+    widget.onChanged?.call(
+        PrettyQrDecoration(image: image, shape: widget.decoration.shape));
   }
 
   @protected
   void changeImagePosition(
     final PrettyQrDecorationImagePosition value,
   ) {
-    final image = currentDecoration.image?.copyWith(position: value);
-    setState(() {
-      previosDecoration = currentDecoration;
-      currentDecoration = currentDecoration.copyWith(image: image);
-    });
+    final image = widget.decoration.image?.copyWith(position: value);
+    widget.onChanged?.call(widget.decoration.copyWith(image: image));
   }
 }
