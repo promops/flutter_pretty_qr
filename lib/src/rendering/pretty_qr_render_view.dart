@@ -1,54 +1,50 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:qr/qr.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
+import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
-import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// {@template pretty_qr_code.PrettyQrRenderView}
-/// Paints a [PrettyQrDecoration] either before its child paints.
+/// An QR code image in the render tree.
 /// {@endtemplate}
-@sealed
 @internal
-class PrettyQrRenderView extends RenderProxyBox {
+class PrettyQrRenderView extends RenderBox {
   /// {@template pretty_qr_code.PrettyQrRenderView.qrImage}
   /// The QR to display.
   /// {@endtemplate}
   @nonVirtual
-  QrImage _qrImage;
+  late QrImage _qrImage;
 
   /// {@template pretty_qr_code.PrettyQrRenderView.decoration}
   /// What decoration to paint.
   /// {@endtemplate}
   @nonVirtual
-  PrettyQrDecoration _decoration;
+  late PrettyQrDecoration _decoration;
 
   /// {@template pretty_qr_code.PrettyQrRenderView.configuration}
   /// The settings to pass to the decoration when painting, so that it can
   /// resolve images appropriately. See [ImageProvider.resolve].
   /// {@endtemplate}
   @nonVirtual
-  ImageConfiguration _configuration;
+  late ImageConfiguration _configuration;
 
-  /// The painter for a [PrettyQrDecorationImage].
+  /// The painter for a [PrettyQrPainter].
   @protected
-  DecorationImagePainter? _decorationImagePainter;
+  PrettyQrPainter? _decorationPainter;
 
-  /// Creates a pretty qr view.
+  /// Creates a QR view.
   PrettyQrRenderView({
     required QrImage qrImage,
     required PrettyQrDecoration decoration,
-    final RenderBox? child,
     final ImageConfiguration configuration = ImageConfiguration.empty,
   })  : _qrImage = qrImage,
         _decoration = decoration,
-        _configuration = configuration,
-        super(child);
+        _configuration = configuration;
 
   /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
   QrImage get qrImage {
@@ -72,10 +68,8 @@ class PrettyQrRenderView extends RenderProxyBox {
   set decoration(PrettyQrDecoration value) {
     if (_decoration == value) return;
 
-    if (_decoration.image?.image != value.image?.image) {
-      _decorationImagePainter?.dispose();
-      _decorationImagePainter = null;
-    }
+    _decorationPainter?.dispose();
+    _decorationPainter = null;
 
     _decoration = value;
     markNeedsPaint();
@@ -96,68 +90,50 @@ class PrettyQrRenderView extends RenderProxyBox {
 
   @override
   bool hitTestSelf(Offset position) {
-    return (Offset.zero & size).contains(position);
+    return true;
   }
 
   @override
-  Size computeSizeForNoChild(BoxConstraints constraints) {
-    return Size.square(min(constraints.maxWidth, constraints.maxHeight));
+  void performLayout() {
+    size = _sizeForConstraints(constraints);
+  }
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    return _sizeForConstraints(constraints);
+  }
+
+  /// Find a size for the QR image within the given constraints.
+  @protected
+  Size _sizeForConstraints(BoxConstraints constraints) {
+    final minDimension = math.min(constraints.maxWidth, constraints.maxHeight);
+    return constraints.constrain(Size.square(minDimension));
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final canvas = context.canvas;
-    canvas.save();
-
+    context.canvas.save();
     if (offset != Offset.zero) {
-      canvas.translate(offset.dx, offset.dy);
+      context.canvas.translate(offset.dx, offset.dy);
     }
 
-    final paintingContext = PrettyQrPaintingContext(
-      canvas: canvas,
-      bounds: Offset.zero & size,
-      matrix: PrettyQrMatrix.fromQrImage(qrImage),
-      textDirection: configuration.textDirection,
-    );
-
-    final image = decoration.image;
-    if (image != null) {
-      final imageRect = Rect.fromCenter(
-        center: size.center(Offset.zero),
-        width: size.width * image.scale,
-        height: size.height * image.scale,
+    try {
+      final size = Size.square(
+        configuration.size?.shortestSide ?? this.size.shortestSide,
       );
 
-      final imagePadding = image.padding.resolve(
-        configuration.textDirection,
+      final paintingContext = PrettyQrPaintingContext(
+        context.canvas,
+        Offset.zero & size,
+        matrix: PrettyQrMatrix.fromQrImage(qrImage),
+        textDirection: configuration.textDirection,
       );
 
-      // clear space for the embedded image
-      if (image.position == PrettyQrDecorationImagePosition.embedded) {
-        final imageClippedRect = imagePadding.inflateRect(imageRect);
-        for (final module in paintingContext.matrix) {
-          final moduleRect = module.resolve(paintingContext);
-
-          if (imageClippedRect.overlaps(moduleRect)) {
-            paintingContext.matrix.removeDarkAt(module.x, module.y);
-          }
-        }
-      }
-
-      if (image.position == PrettyQrDecorationImagePosition.foreground) {
-        decoration.shape.paint(paintingContext);
-      }
-
-      _decorationImagePainter ??= image.createPainter(markNeedsPaint);
-      _decorationImagePainter?.paint(canvas, imageRect, null, configuration);
+      _decorationPainter ??= decoration.createPainter(markNeedsPaint);
+      _decorationPainter?.paint(paintingContext, configuration);
+    } finally {
+      context.canvas.restore();
     }
-
-    if (image?.position != PrettyQrDecorationImagePosition.foreground) {
-      decoration.shape.paint(paintingContext);
-    }
-
-    canvas.restore();
-    super.paint(context, offset);
   }
 
   @override
@@ -176,7 +152,7 @@ class PrettyQrRenderView extends RenderProxyBox {
 
   @override
   void dispose() {
-    _decorationImagePainter?.dispose();
+    _decorationPainter?.dispose();
 
     super.dispose();
   }

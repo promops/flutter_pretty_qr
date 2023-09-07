@@ -2,8 +2,9 @@ import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
-import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_modules.dart';
+import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
+import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_modules.dart';
 
 /// {@template pretty_qr_code.PrettyQrDecoration}
 /// An immutable description of how to paint a QR image.
@@ -42,6 +43,12 @@ class PrettyQrDecoration with Diagnosticable {
       image: image ?? this.image,
       shape: shape ?? this.shape,
     );
+  }
+
+  /// Returns a [PrettyQrPainter] that will paint QR code with this decoration.
+  @nonVirtual
+  PrettyQrPainter createPainter(VoidCallback onChanged) {
+    return PrettyQrPainter(decoration: this, onChanged: onChanged);
   }
 
   /// Linearly interpolates between two [PrettyQrDecoration]s.

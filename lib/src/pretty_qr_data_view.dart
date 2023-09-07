@@ -12,10 +12,6 @@ class PrettyQrDataView extends StatefulWidget {
   @protected
   final String data;
 
-  /// The widget below this widget in the tree.
-  @protected
-  final Widget? child;
-
   /// The QR code error correction level;
   @protected
   final int errorCorrectLevel;
@@ -28,7 +24,6 @@ class PrettyQrDataView extends StatefulWidget {
   const PrettyQrDataView({
     required this.data,
     super.key,
-    this.child,
     this.decoration = const PrettyQrDecoration(),
     this.errorCorrectLevel = QrErrorCorrectLevel.L,
   }) : assert(errorCorrectLevel >= 0 && errorCorrectLevel <= 3);
@@ -75,7 +70,6 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
     return PrettyQrView(
       qrImage: qrImage,
       decoration: widget.decoration,
-      child: widget.child,
     );
   }
 }
