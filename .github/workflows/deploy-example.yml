@@ -1,0 +1,40 @@
+name: Deploy example to GitHub Pages
+
+on:
+  push:
+    branches: ["master", "v3.0.0"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy-example:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v3
+      - name: Build example
+        working-directory: ./example
+        run: flutter build web --no-source-maps --base-href /flutter_pretty_qr/
+      - name: Upload example artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './example/build/web'
+      - name: Deploy example to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
