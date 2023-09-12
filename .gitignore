@@ -25,5 +25,7 @@
 .pub/
 /build/
 /coverage/
+.fvm/
 
 pubspec.lock
+
