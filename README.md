@@ -1,60 +1,96 @@
-# pretty_qr_code
+<p align="center">
+  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/resources/qr-code.png" width="33%" /> 
+</p>
 
-Pretty QR code for Flutter. You can round the edges with parameter or use the standard view.
+## Pretty QR Code
+
+<p align="left">
+  <a href="https://pub.dev/packages/pretty_qr_code"><img src="https://img.shields.io/pub/v/pretty_qr_code.svg" alt="Pub"></a>
+  <a href="https://pub.dev/packages/pretty_qr_code/score"><img src="https://img.shields.io/pub/likes/pretty_qr_code?logo=dart" alt="Likes on pub.dev"></a>
+  <a href="https://github.com/promops/flutter_pretty_qr"><img src="https://img.shields.io/github/stars/promops/flutter_pretty_qr.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
+  <a href="https://opensource.org/licenses/BSD"><img src="https://img.shields.io/badge/license-BSD-purple.svg" alt="License: BSD-3-Clause"></a>
+</p>
+
+A highly customizable Flutter widget that make it easy to rendering QR code.
 
 ## Features
 
-* Created with [QR dart](https://github.com/kevmoo/qr.dart)
+* Built on [qr](https://pub.dev/packages/qr) package.
+* Supports embedding images.
+* Support tween animation
+* Support some options for images
 
-## Screenshots
+If you want to say thank you, star us on GitHub or like us on pub.dev
 
-  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/images/Scr1.png" width="250"> 
+## Usage
 
-  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/images/Scr2.png" width="250"> 
-
-  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/images/Scr3.png" width="250"> 
-
-
-
-## Example
+First, follow the [package installation instructions](https://pub.dev/packages/pretty_qr_code/install) and add a `PrettyQrView` widget to your app:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:qr/qr.dart';
+PrettyQrView.data(
+  data: 'lorem ipsum dolor sit amet',
+  decoration: const PrettyQrDecoration(
+    image: PrettyQrDecorationImage(
+      image: AssetImage('images/flutter.png'),
+    ),
+  ),
+)
+```
 
-void main() => runApp(MyApp());
+If you want to pass non-string data or want to specify a QR version, consider using the default `PrettyQrView` constructor:
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: PrettyQr(
-            image: AssetImage('images/twitter.png'),
-            typeNumber: 3,
-            size: 200,
-            data: 'https://www.google.ru',
-            errorCorrectLevel: QrErrorCorrectLevel.M,
-            roundEdges: true,
-          ),
-        ),
-      ),
-    );
-  }
+```dart
+@protected
+late QrImage qrImage;
+
+@override
+void initState() {
+  super.initState();
+
+  final qrCode = QrCode(
+    8,
+    QrErrorCorrectLevel.H,
+  )..addData('lorem ipsum dolor sit amet');
+
+  qrImage = QrImage(qrCode)
+}
+
+@override
+Widget build(BuildContext context) {
+  return PrettyQrView(
+    qrImage: qrImage,
+    decoration: const PrettyQrDecoration(),
+  );
 }
 ```
 
-`typeNumber` is null by default. It means that it will be automatically chosen based on `data` length
+**Note:** Do _not_ create `QrImage` inside `build` method, or you may otherwise have undesired jank in UI thread.
 
-## Getting Started
+See the `example` folder for more code samples of the various possibilities.
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## Contributing
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Contributions are welcomed!
+
+Here is a curated list of how you can help:
+
+* Fix typos/grammar mistakes
+* Report parts of the documentation that are unclear
+* Report bugs and scenarios that are difficult to implement
+
+Or you may want to implement some features from the TODO list by creating a [pull request](https://github.com/promops/flutter_pretty_qr/pulls):
+
+### TODO: 
+
+* Quiet Zone
+* Gradient filling 
+* Export as image
+* Error handling API
+* Gaps between modules
+* Background color for QR code
+* Timing Patterns and Alignment Patterns
+* Automatic image scale limitation (embedded mode)
+
+## See also
+
+[Live Preview](https://promops.github.io/flutter_pretty_qr/)
