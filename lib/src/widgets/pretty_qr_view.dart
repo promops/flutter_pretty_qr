@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:pretty_qr_code/src/pretty_qr_data_view.dart';
+import 'package:pretty_qr_code/src/widgets/pretty_qr_data_view.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 

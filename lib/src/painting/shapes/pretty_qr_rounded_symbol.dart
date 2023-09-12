@@ -5,10 +5,10 @@ import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
-/// A rectangular modules with rounded corners.
+/// A rectangular symbol with rounded corners.
 @sealed
-class PrettyQrRoundedRectangleModules extends PrettyQrShape {
-  /// The color of QR modules.
+class PrettyQrRoundedSymbol extends PrettyQrShape {
+  /// The color of QR Code symbol.
   @nonVirtual
   final Color color;
 
@@ -23,7 +23,7 @@ class PrettyQrRoundedRectangleModules extends PrettyQrShape {
 
   /// Creates a basic QR shape.
   @literal
-  const PrettyQrRoundedRectangleModules({
+  const PrettyQrRoundedSymbol({
     this.color = const Color(0xFF000000),
     this.borderRadius = kDefaultBorderRadius,
   });
@@ -40,45 +40,52 @@ class PrettyQrRoundedRectangleModules extends PrettyQrShape {
 
     for (final module in context.matrix) {
       if (!module.isDark) continue;
-      final moduleRect = module.resolve(context);
 
-      path.addRRect(borderRadius.toRRect(moduleRect));
+      final modulePath = Path();
+      final moduleRect = module.resolveRect(context);
+      modulePath.addRRect(borderRadius.toRRect(moduleRect));
+
+      if (context.isImpellerEngineEnabled) {
+        context.canvas.drawPath(modulePath, paint);
+      } else {
+        path.addPath(modulePath, Offset.zero);
+      }
     }
 
     context.canvas.drawPath(path, paint);
   }
 
   @override
-  PrettyQrRoundedRectangleModules? lerpFrom(PrettyQrShape? a, double t) {
+  PrettyQrRoundedSymbol? lerpFrom(PrettyQrShape? a, double t) {
     if (identical(a, this)) {
       return this;
     }
 
     if (a == null) return this;
-    if (a is! PrettyQrRoundedRectangleModules) return null;
+    if (a is! PrettyQrRoundedSymbol) return null;
 
     if (t == 0.0) return a;
     if (t == 1.0) return this;
 
-    return PrettyQrRoundedRectangleModules(
+    return PrettyQrRoundedSymbol(
       color: Color.lerp(a.color, color, t)!,
       borderRadius: BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t)!,
     );
   }
 
   @override
-  PrettyQrRoundedRectangleModules? lerpTo(PrettyQrShape? b, double t) {
+  PrettyQrRoundedSymbol? lerpTo(PrettyQrShape? b, double t) {
     if (identical(this, b)) {
       return this;
     }
 
     if (b == null) return this;
-    if (b is! PrettyQrRoundedRectangleModules) return null;
+    if (b is! PrettyQrRoundedSymbol) return null;
 
     if (t == 0.0) return this;
     if (t == 1.0) return b;
 
-    return PrettyQrRoundedRectangleModules(
+    return PrettyQrRoundedSymbol(
       color: Color.lerp(color, b.color, t)!,
       borderRadius: BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t)!,
     );
@@ -94,7 +101,7 @@ class PrettyQrRoundedRectangleModules extends PrettyQrShape {
     if (identical(other, this)) return true;
     if (other.runtimeType != runtimeType) return false;
 
-    return other is PrettyQrRoundedRectangleModules &&
+    return other is PrettyQrRoundedSymbol &&
         other.color == color &&
         other.borderRadius == borderRadius;
   }

@@ -9,10 +9,10 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
-/// A rectangular modules with smoothed flow.
+/// A rectangular symbol with smoothed flow.
 @sealed
-class PrettyQrSmoothModules extends PrettyQrShape {
-  /// The color of QR dots.
+class PrettyQrSmoothSymbol extends PrettyQrShape {
+  /// The color of QR symbol.
   @nonVirtual
   final Color color;
 
@@ -22,7 +22,7 @@ class PrettyQrSmoothModules extends PrettyQrShape {
 
   /// Creates a pretty QR shape.
   @literal
-  const PrettyQrSmoothModules({
+  const PrettyQrSmoothSymbol({
     this.roundFactor = 1,
     this.color = const Color(0xFF000000),
   })  : assert(roundFactor <= 1, 'roundFactor must be less than 1'),
@@ -37,18 +37,23 @@ class PrettyQrSmoothModules extends PrettyQrShape {
       ..style = PaintingStyle.fill;
 
     for (final module in context.matrix) {
-      final moduleRect = module.resolve(context);
+      final moduleRect = module.resolveRect(context);
       final moduleNeighbours = context.matrix.getNeighboursDirections(module);
+      late Path modulePath;
 
       if (module.isDark) {
-        path.addRRect(
+        modulePath = Path();
+        modulePath.addRRect(
           transformDarkModuleRect(moduleRect, moduleNeighbours),
         );
       } else {
-        path.addPath(
-          transformWhiteModuleRect(moduleRect, moduleNeighbours),
-          Offset.zero,
-        );
+        modulePath = transformWhiteModuleRect(moduleRect, moduleNeighbours);
+      }
+
+      if (context.isImpellerEngineEnabled) {
+        context.canvas.drawPath(modulePath, paint);
+      } else {
+        path.addPath(modulePath, Offset.zero);
       }
     }
 
@@ -82,41 +87,54 @@ class PrettyQrSmoothModules extends PrettyQrShape {
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
+    final path = Path();
     final padding = (roundFactor / 2).clamp(0.0, 0.5) * moduleRect.longestSide;
 
     if (neighbours.atTopAndLeft && neighbours.atToptLeft) {
-      return buildInnerCornerShape(
-        moduleRect.topLeft.translate(0, padding),
-        moduleRect.topLeft,
-        moduleRect.topLeft.translate(padding, 0),
+      path.addPath(
+        buildInnerCornerShape(
+          moduleRect.topLeft.translate(0, padding),
+          moduleRect.topLeft,
+          moduleRect.topLeft.translate(padding, 0),
+        ),
+        Offset.zero,
       );
     }
 
     if (neighbours.atTopAndRight && neighbours.atToptRight) {
-      return buildInnerCornerShape(
-        moduleRect.topRight.translate(-padding, 0),
-        moduleRect.topRight,
-        moduleRect.topRight.translate(0, padding),
+      path.addPath(
+        buildInnerCornerShape(
+          moduleRect.topRight.translate(-padding, 0),
+          moduleRect.topRight,
+          moduleRect.topRight.translate(0, padding),
+        ),
+        Offset.zero,
       );
     }
 
     if (neighbours.atBottomAndLeft && neighbours.atBottomLeft) {
-      return buildInnerCornerShape(
-        moduleRect.bottomLeft.translate(0, -padding),
-        moduleRect.bottomLeft,
-        moduleRect.bottomLeft.translate(padding, 0),
+      path.addPath(
+        buildInnerCornerShape(
+          moduleRect.bottomLeft.translate(0, -padding),
+          moduleRect.bottomLeft,
+          moduleRect.bottomLeft.translate(padding, 0),
+        ),
+        Offset.zero,
       );
     }
 
     if (neighbours.atBottomAndRight && neighbours.atBottomRight) {
-      return buildInnerCornerShape(
-        moduleRect.bottomRight.translate(-padding, 0),
-        moduleRect.bottomRight,
-        moduleRect.bottomRight.translate(0, -padding),
+      path.addPath(
+        buildInnerCornerShape(
+          moduleRect.bottomRight.translate(-padding, 0),
+          moduleRect.bottomRight,
+          moduleRect.bottomRight.translate(0, -padding),
+        ),
+        Offset.zero,
       );
     }
 
-    return Path();
+    return path;
   }
 
   @protected
@@ -130,36 +148,36 @@ class PrettyQrSmoothModules extends PrettyQrShape {
   }
 
   @override
-  PrettyQrSmoothModules? lerpFrom(PrettyQrShape? a, double t) {
+  PrettyQrSmoothSymbol? lerpFrom(PrettyQrShape? a, double t) {
     if (identical(a, this)) {
       return this;
     }
 
     if (a == null) return this;
-    if (a is! PrettyQrSmoothModules) return null;
+    if (a is! PrettyQrSmoothSymbol) return null;
 
     if (t == 0.0) return a;
     if (t == 1.0) return this;
 
-    return PrettyQrSmoothModules(
+    return PrettyQrSmoothSymbol(
       color: Color.lerp(a.color, color, t)!,
       roundFactor: lerpDouble(a.roundFactor, roundFactor, t)!,
     );
   }
 
   @override
-  PrettyQrSmoothModules? lerpTo(PrettyQrShape? b, double t) {
+  PrettyQrSmoothSymbol? lerpTo(PrettyQrShape? b, double t) {
     if (identical(this, b)) {
       return this;
     }
 
     if (b == null) return this;
-    if (b is! PrettyQrSmoothModules) return null;
+    if (b is! PrettyQrSmoothSymbol) return null;
 
     if (t == 0.0) return this;
     if (t == 1.0) return b;
 
-    return PrettyQrSmoothModules(
+    return PrettyQrSmoothSymbol(
       color: Color.lerp(color, b.color, t)!,
       roundFactor: lerpDouble(roundFactor, b.roundFactor, t)!,
     );
@@ -175,7 +193,7 @@ class PrettyQrSmoothModules extends PrettyQrShape {
     if (identical(other, this)) return true;
     if (other.runtimeType != runtimeType) return false;
 
-    return other is PrettyQrSmoothModules &&
+    return other is PrettyQrSmoothSymbol &&
         other.color == color &&
         other.roundFactor == roundFactor;
   }

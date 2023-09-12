@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
-import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_modules.dart';
+import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
 
 /// {@template pretty_qr_code.PrettyQrDecoration}
 /// An immutable description of how to paint a QR image.
@@ -23,7 +23,7 @@ class PrettyQrDecoration with Diagnosticable {
   @literal
   const PrettyQrDecoration({
     this.image,
-    this.shape = const PrettyQrSmoothModules(),
+    this.shape = const PrettyQrSmoothSymbol(),
   });
 
   @override
@@ -83,7 +83,7 @@ class PrettyQrDecoration with Diagnosticable {
         DiagnosticsProperty<PrettyQrShape>(
           'shape',
           shape,
-          defaultValue: const PrettyQrSmoothModules(),
+          defaultValue: const PrettyQrSmoothSymbol(),
         ),
       )
       ..add(
@@ -105,8 +105,6 @@ class PrettyQrDecoration with Diagnosticable {
     if (identical(other, this)) return true;
     if (other.runtimeType != runtimeType) return false;
 
-    return other is PrettyQrDecoration &&
-        other.image == image &&
-        other.shape == shape;
+    return other is PrettyQrDecoration && other.image == image && other.shape == shape;
   }
 }

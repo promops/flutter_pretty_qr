@@ -1,13 +1,13 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'package:pretty_qr_code/src/widgets/pretty_qr_view.dart';
 import 'package:qr/qr.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:pretty_qr_code/src/pretty_qr_view.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
-import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_modules.dart';
+import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
 
 /// {@macro pretty_qr_code.PrettyQrView}
 @Deprecated('Use `PrettyQrView.data` instead')
@@ -109,7 +109,7 @@ class _PrettyQrState extends State<PrettyQr> {
       child: PrettyQrView(
         qrImage: qrImage,
         decoration: PrettyQrDecoration(
-          shape: PrettyQrSmoothModules(
+          shape: PrettyQrSmoothSymbol(
             color: widget.elementColor,
             roundFactor: widget.roundEdges ? 1 : 0,
           ),

@@ -51,7 +51,7 @@ class PrettyQrPainter {
       // clear space for the embedded image
       if (image.position == PrettyQrDecorationImagePosition.embedded) {
         for (final module in context.matrix) {
-          final moduleRect = module.resolve(context);
+          final moduleRect = module.resolveRect(context);
           if (imageScaledRect.overlaps(moduleRect)) {
             context.matrix.removeDarkAt(module.x, module.y);
           }

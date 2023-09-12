@@ -73,8 +73,7 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
   ) {
     return {
       for (final value in PrettyQrNeighbourDirection.values)
-        if (getModule(point.x + value.x, point.y + value.y)?.isDark ?? false)
-          value,
+        if (getModule(point.x + value.x, point.y + value.y)?.isDark ?? false) value,
     };
   }
 
