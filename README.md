@@ -8,13 +8,14 @@
   <a href="https://pub.dev/packages/pretty_qr_code"><img src="https://img.shields.io/pub/v/pretty_qr_code.svg" alt="Pub"></a>
   <a href="https://pub.dev/packages/pretty_qr_code/score"><img src="https://img.shields.io/pub/likes/pretty_qr_code?logo=dart" alt="Likes on pub.dev"></a>
   <a href="https://github.com/promops/flutter_pretty_qr"><img src="https://img.shields.io/github/stars/promops/flutter_pretty_qr.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
-  <a href="https://opensource.org/licenses/BSD"><img src="https://img.shields.io/badge/license-BSD-purple.svg" alt="License: BSD-3-Clause"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
 A highly customizable Flutter widget that make it easy to rendering QR code.
 
 ## Features
 
+* [Live Preview](https://promops.github.io/flutter_pretty_qr/)
 * Built on [qr](https://pub.dev/packages/qr) package.
 * Supports embedding images.
 * Support tween animation
@@ -78,9 +79,7 @@ Here is a curated list of how you can help:
 * Report parts of the documentation that are unclear
 * Report bugs and scenarios that are difficult to implement
 
-Or you may want to implement some features from the TODO list by creating a [pull request](https://github.com/promops/flutter_pretty_qr/pulls):
-
-### TODO: 
+## TODO: 
 
 * Quiet Zone
 * Gradient filling 
@@ -90,7 +89,3 @@ Or you may want to implement some features from the TODO list by creating a [pul
 * Background color for QR code
 * Timing Patterns and Alignment Patterns
 * Automatic image scale limitation (embedded mode)
-
-## See also
-
-[Live Preview](https://promops.github.io/flutter_pretty_qr/)
