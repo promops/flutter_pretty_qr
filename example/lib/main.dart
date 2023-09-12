@@ -52,10 +52,11 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
       data: 'https://pub.dev/packages/pretty_qr_code',
       errorCorrectLevel: QrErrorCorrectLevel.H,
     );
+
     qrImage = QrImage(qrCode);
 
     decoration = const PrettyQrDecoration(
-      shape: PrettyQrSmoothModules(
+      shape: PrettyQrSmoothSymbol(
         color: Color(0xFF74565F),
       ),
       image: _PrettyQrSettings.kDefaultPrettyQrDecorationImage,
@@ -224,17 +225,17 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   @protected
   Color get shapeColor {
     var shape = widget.decoration.shape;
-    if (shape is PrettyQrSmoothModules) return shape.color;
-    if (shape is PrettyQrRoundedRectangleModules) return shape.color;
+    if (shape is PrettyQrSmoothSymbol) return shape.color;
+    if (shape is PrettyQrRoundedSymbol) return shape.color;
     return Colors.black;
   }
 
   @protected
   bool get isRoundedBorders {
     var shape = widget.decoration.shape;
-    if (shape is PrettyQrSmoothModules) {
+    if (shape is PrettyQrSmoothSymbol) {
       return shape.roundFactor > 0;
-    } else if (shape is PrettyQrRoundedRectangleModules) {
+    } else if (shape is PrettyQrRoundedSymbol) {
       return shape.borderRadius != BorderRadius.zero;
     }
     return false;
@@ -255,11 +256,11 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               itemBuilder: (context) {
                 return [
                   const PopupMenuItem(
-                    value: PrettyQrSmoothModules,
+                    value: PrettyQrSmoothSymbol,
                     child: Text('Smooth'),
                   ),
                   const PopupMenuItem(
-                    value: PrettyQrRoundedRectangleModules,
+                    value: PrettyQrRoundedSymbol,
                     child: Text('Rounded rectangle'),
                   ),
                 ];
@@ -268,9 +269,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                 leading: const Icon(Icons.format_paint_outlined),
                 title: const Text('Style'),
                 trailing: Text(
-                  widget.decoration.shape is PrettyQrSmoothModules
-                      ? 'Smooth'
-                      : 'Rounded rectangle',
+                  widget.decoration.shape is PrettyQrSmoothSymbol ? 'Smooth' : 'Rounded rectangle',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -294,9 +293,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
           value: widget.decoration.image != null,
           onChanged: (value) => toggleImage(),
           secondary: Icon(
-            widget.decoration.image != null
-                ? Icons.image_outlined
-                : Icons.hide_image_outlined,
+            widget.decoration.image != null ? Icons.image_outlined : Icons.hide_image_outlined,
           ),
           title: const Text('Image'),
         ),
@@ -337,10 +334,10 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     var shape = widget.decoration.shape;
     if (shape.runtimeType == type) return;
 
-    if (shape is PrettyQrSmoothModules) {
-      shape = PrettyQrRoundedRectangleModules(color: shapeColor);
-    } else if (shape is PrettyQrRoundedRectangleModules) {
-      shape = PrettyQrSmoothModules(color: shapeColor);
+    if (shape is PrettyQrSmoothSymbol) {
+      shape = PrettyQrRoundedSymbol(color: shapeColor);
+    } else if (shape is PrettyQrRoundedSymbol) {
+      shape = PrettyQrSmoothSymbol(color: shapeColor);
     }
 
     widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
@@ -349,17 +346,15 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   @protected
   void toggleColor() {
     var shape = widget.decoration.shape;
-    var color = shapeColor != Colors.black
-        ? Colors.black
-        : Theme.of(context).colorScheme.secondary;
+    var color = shapeColor != Colors.black ? Colors.black : Theme.of(context).colorScheme.secondary;
 
-    if (shape is PrettyQrSmoothModules) {
-      shape = PrettyQrSmoothModules(
+    if (shape is PrettyQrSmoothSymbol) {
+      shape = PrettyQrSmoothSymbol(
         color: color,
         roundFactor: shape.roundFactor,
       );
-    } else if (shape is PrettyQrRoundedRectangleModules) {
-      shape = PrettyQrRoundedRectangleModules(
+    } else if (shape is PrettyQrRoundedSymbol) {
+      shape = PrettyQrRoundedSymbol(
         color: color,
         borderRadius: shape.borderRadius,
       );
@@ -372,17 +367,16 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   void toggleRoundedCorners() {
     var shape = widget.decoration.shape;
 
-    if (shape is PrettyQrSmoothModules) {
-      shape = PrettyQrSmoothModules(
+    if (shape is PrettyQrSmoothSymbol) {
+      shape = PrettyQrSmoothSymbol(
         color: shape.color,
         roundFactor: isRoundedBorders ? 0 : 1,
       );
-    } else if (shape is PrettyQrRoundedRectangleModules) {
-      shape = PrettyQrRoundedRectangleModules(
+    } else if (shape is PrettyQrRoundedSymbol) {
+      shape = PrettyQrRoundedSymbol(
         color: shape.color,
-        borderRadius: isRoundedBorders
-            ? BorderRadius.zero
-            : const BorderRadius.all(Radius.circular(10)),
+        borderRadius:
+            isRoundedBorders ? BorderRadius.zero : const BorderRadius.all(Radius.circular(10)),
       );
     }
 
@@ -394,8 +388,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     const defaultImage = _PrettyQrSettings.kDefaultPrettyQrDecorationImage;
     final image = widget.decoration.image != null ? null : defaultImage;
 
-    widget.onChanged?.call(
-        PrettyQrDecoration(image: image, shape: widget.decoration.shape));
+    widget.onChanged?.call(PrettyQrDecoration(image: image, shape: widget.decoration.shape));
   }
 
   @protected
