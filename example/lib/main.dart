@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
+import 'package:pretty_qr_code_example/featues/io_save_image.dart'
+    if (dart.library.html) 'package:pretty_qr_code_example/featues/web_save_image.dart';
+
 void main() {
   runApp(const PrettyQrExampleApp());
 }
@@ -63,6 +66,16 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
     );
   }
 
+  @protected
+  Future Function(int)? get onExportPressedCallback {
+    if (!qrImage.supportsSaving) {
+      return null;
+    }
+    return (int size) async {
+      qrImage.exportAsImage(context, size: size, decoration: decoration);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,6 +134,7 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
                               onChanged: (value) => setState(() {
                                 decoration = value;
                               }),
+                              onExportPressed: onExportPressedCallback,
                             ),
                           ),
                         ),
@@ -204,6 +218,9 @@ class _PrettyQrSettings extends StatefulWidget {
   final PrettyQrDecoration decoration;
 
   @protected
+  final Future Function(int)? onExportPressed;
+
+  @protected
   final ValueChanged<PrettyQrDecoration>? onChanged;
 
   @visibleForTesting
@@ -215,6 +232,7 @@ class _PrettyQrSettings extends StatefulWidget {
   const _PrettyQrSettings({
     required this.decoration,
     this.onChanged,
+    this.onExportPressed,
   });
 
   @override
@@ -222,6 +240,24 @@ class _PrettyQrSettings extends StatefulWidget {
 }
 
 class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
+  @protected
+  late final TextEditingController imageSizeEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    imageSizeEditingController = TextEditingController(
+      text: ' 512w',
+    );
+  }
+
+  @protected
+  int get imageSize {
+    final rawValue = imageSizeEditingController.text;
+    return int.parse(rawValue.replaceAll('w', '').replaceAll(' ', ''));
+  }
+
   @protected
   Color get shapeColor {
     var shape = widget.decoration.shape;
@@ -323,6 +359,70 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               },
             ),
           ),
+        if (widget.onExportPressed != null) ...[
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.save_alt_outlined),
+            title: const Text('Export'),
+            onTap: () async {
+              await widget.onExportPressed?.call(imageSize);
+              const snackBar = SnackBar(
+                content: Text('Saved'),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PopupMenuButton(
+                  initialValue: imageSize,
+                  onSelected: (value) {
+                    imageSizeEditingController.text = ' ${value}w';
+                    setState(() {});
+                  },
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 256,
+                        child: Text('256w'),
+                      ),
+                      const PopupMenuItem(
+                        value: 512,
+                        child: Text('512w'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1024,
+                        child: Text('1024w'),
+                      ),
+                    ];
+                  },
+                  child: SizedBox(
+                    width: 72,
+                    height: 36,
+                    child: TextField(
+                      enabled: false,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      controller: imageSizeEditingController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        counterText: '',
+                        contentPadding: EdgeInsets.zero,
+                        fillColor: Theme.of(context).colorScheme.background,
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -388,7 +488,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     const defaultImage = _PrettyQrSettings.kDefaultPrettyQrDecorationImage;
     final image = widget.decoration.image != null ? null : defaultImage;
 
-    widget.onChanged?.call(PrettyQrDecoration(image: image, shape: widget.decoration.shape));
+    widget.onChanged?.call(
+      PrettyQrDecoration(image: image, shape: widget.decoration.shape),
+    );
   }
 
   @protected
@@ -397,5 +499,12 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   ) {
     final image = widget.decoration.image?.copyWith(position: value);
     widget.onChanged?.call(widget.decoration.copyWith(image: image));
+  }
+
+  @override
+  void dispose() {
+    imageSizeEditingController.dispose();
+
+    super.dispose();
   }
 }

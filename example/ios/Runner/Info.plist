@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save qr image</string>
 </dict>
 </plist>
