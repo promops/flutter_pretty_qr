@@ -1,0 +1,68 @@
+{
+  "date": "2023-10-29 00:05:35.977336Z",
+  "paths": {
+    "lib/src/painting/shapes/pretty_qr_rounded_symbol.dart": {
+      "avoid-shadowing": [
+        "3f8444e11db9b3b072aebda9670df811"
+      ],
+      "unnecessary-trailing-comma": [
+        "df6e1a79cee34bb532267fff861d05ec"
+      ]
+    },
+    "lib/src/painting/pretty_qr_painter.dart": {
+      "unnecessary-trailing-comma": [
+        "a1a9f6071a002989f1907122a7fe899f"
+      ],
+      "move-variable-closer-to-its-usage": [
+        "cf896cca167eb7ea301a3a13e9609c8d"
+      ]
+    },
+    "lib/src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart": {
+      "prefer-match-file-name": [
+        "a014183e74e825e4331da074765ae554"
+      ]
+    },
+    "lib/src/painting/extensions/pretty_qr_module_extensions.dart": {
+      "prefer-match-file-name": [
+        "ecc0c103d18eb967315ba7abfea70d18"
+      ]
+    },
+    "lib/src/painting/pretty_qr_decoration_image.dart": {
+      "prefer-match-file-name": [
+        "80226f80aa3c557819fc4d6c731bc228"
+      ]
+    },
+    "lib/src/base/pretty_qr_matrix.dart": {
+      "unnecessary-trailing-comma": [
+        "7045f0ff9d94040a0e6102f99fb18809",
+        "28a016f4f9c180328bde4e3839bd9555"
+      ],
+      "avoid-unsafe-collection-methods": [
+        "938074c4e61a4fe49ef394963cb7c0b5"
+      ]
+    },
+    "lib/src/base/pretty_qr_module.dart": {
+      "unnecessary-trailing-comma": [
+        "e5c3874e829afa76b6b1a77cd2ce30c6",
+        "bb81ebb47c09834b7108ac3d9583f680"
+      ]
+    },
+    "lib/src/widgets/pretty_qr_data_view.dart": {
+      "unnecessary-trailing-comma": [
+        "ae7a87e5cfe06af86725e4c140ff26b7",
+        "67a284ed9a3282c4651c891e22d9bad5"
+      ]
+    },
+    "lib/src/widgets/pretty_qr_view.dart": {
+      "unnecessary-trailing-comma": [
+        "74a612ba1fd822c593fe10528b34d050"
+      ]
+    },
+    "lib/src/widgets/pretty_qr.dart": {
+      "unnecessary-trailing-comma": [
+        "dab0733cc06ec15af4896350818de212",
+        "791d87f1f1e055f46c72b565e6531298"
+      ]
+    }
+  }
+}

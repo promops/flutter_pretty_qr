@@ -1,1 +1,6 @@
 include: package:flutter_lints/flutter.yaml
+
+dart_code_metrics:
+  extends:
+    - package:dart_code_metrics_presets/recommended.yaml
+    

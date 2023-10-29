@@ -38,3 +38,13 @@ jobs:
       - name: Deploy example to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+  dcm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install DCM
+        uses: CQLabs/setup-dcm@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run DCM
+        run: dcm analyze .
