@@ -16,6 +16,9 @@ jobs:
   dcm:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v2       
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
         with:
