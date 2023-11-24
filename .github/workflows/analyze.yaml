@@ -1,33 +1,61 @@
-name: analyze
+name: Analyze
 
-on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+on: push
 
 jobs:
-  dcm:
+  code-quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2    
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: flutter pub get
-        
-      - name: Analyze
-        run: flutter analyze .
 
-      - name: Run DCM
-        run: dcm analyze .
+      - name: Format
+        run: dart format --set-exit-if-changed .
+
+      - name: Lints
+        run: |
+          flutter analyze --fatal-infos --fatal-warnings .
+          dcm analyze --no-analytics --reporter=github .
+          dcm check-unnecessary-nullable --no-analytics lib
+
+      - name: Dependencies
+        run: |
+          dcm check-dependencies --no-analytics .
+
+      - name: Unused code
+        run: |
+          dcm check-unused-files --no-analytics .
+          dcm check-unused-code --no-analytics .
+
+  publication-guidelines:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: |
+          flutter pub get
+          flutter pub global activate pana
+          sudo apt-get install webp
+
+      - name: Verify Pub Score
+        run: pana --no-warning --exit-code-threshold=0 

@@ -2,5 +2,33 @@ include: package:flutter_lints/flutter.yaml
 
 dart_code_metrics:
   extends:
-    - package:dart_code_metrics_presets/recommended.yaml
+    - package:dart_code_metrics_presets/all.yaml
+    - package:dart_code_metrics_presets/pub.yaml
+  rules:
+    # style
+    arguments-ordering: false
+    enum-constants-ordering: false
+    format-comment:
+      only-doc-comments: true
+    member-ordering: false
+    newline-before-return: false
+    parameters-ordering: false
+    prefer-widget-private-members: false
+    prefer-correct-identifier-length:
+        exceptions: ['i', 'x', 'y']
+        min-identifier-length: 3
+        max-identifier-length: 27
+    prefer-returning-conditional-expressions: false
+    unnecessary-trailing-comma: false
+
+    # warning
+    avoid-non-null-assertion: false
+    avoid-passing-default-values: false
+    no-equal-arguments: false
+    no-magic-number: false
+    prefer-match-file-name: false
+
+  pubspec-rules:
+    prefer-caret-version-syntax: false
+    prefer-publish-to-none: false
     
