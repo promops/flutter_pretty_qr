@@ -76,6 +76,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
     final BuildContext context,
     final PrettyQrRenderView renderObject,
   ) {
+    // ignore: avoid-mutating-parameters
     renderObject
       ..qrImage = qrImage
       ..decoration = decoration

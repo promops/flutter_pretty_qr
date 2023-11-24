@@ -56,6 +56,7 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
     if (y < 0 || y >= dimension) return null;
     if (x < 0 || x >= dimension) return null;
 
+    // ignore: avoid-unsafe-collection-methods
     return modules[y * dimension + x];
   }
 
@@ -73,7 +74,8 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
   ) {
     return {
       for (final value in PrettyQrNeighbourDirection.values)
-        if (getModule(point.x + value.x, point.y + value.y)?.isDark ?? false) value,
+        if (getModule(point.x + value.x, point.y + value.y)?.isDark ?? false)
+          value,
     };
   }
 
