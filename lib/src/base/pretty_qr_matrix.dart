@@ -56,7 +56,8 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
     if (y < 0 || y >= dimension) return null;
     if (x < 0 || x >= dimension) return null;
 
-    return modules.elementAt(y * dimension + x);
+    // ignore: avoid-unsafe-collection-methods
+    return modules[y * dimension + x];
   }
 
   /// Set `isDark` equals to `false` fot the module at position [x], [y].
