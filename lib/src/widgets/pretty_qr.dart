@@ -85,18 +85,18 @@ class _PrettyQrState extends State<PrettyQr> {
 
   @protected
   void prepareQrImage() {
-    if (widget.typeNumber != null) {
-      final qrCode = QrCode(
-        widget.typeNumber!,
-        widget.errorCorrectLevel,
-      )..addData(widget.data);
-
-      qrImage = QrImage(qrCode);
-    } else {
+    if (widget.typeNumber == null) {
       final qrCode = QrCode.fromData(
         data: widget.data,
         errorCorrectLevel: widget.errorCorrectLevel,
       );
+
+      qrImage = QrImage(qrCode);
+    } else {
+      final qrCode = QrCode(
+        widget.typeNumber!,
+        widget.errorCorrectLevel,
+      )..addData(widget.data);
 
       qrImage = QrImage(qrCode);
     }

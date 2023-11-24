@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 abstract class PrettyQrImpeller {
   /// The default behavior is result of call [isImpellerDefaultEngine].
   /// You can set this to your own value to override this default behavior.
+  // ignore: avoid-global-state
   static bool? enabled;
 
   /// Attempts to indirectly detect whether the `Impeller` rendering engine is

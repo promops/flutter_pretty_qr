@@ -27,6 +27,9 @@ dart_code_metrics:
     no-equal-arguments: false
     no-magic-number: false
     prefer-match-file-name: false
+    prefer-commenting-analyzer-ignores: false
+    avoid-late-keyword: false
+    
 
   pubspec-rules:
     prefer-caret-version-syntax: false
