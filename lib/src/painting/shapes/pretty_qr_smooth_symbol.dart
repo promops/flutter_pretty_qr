@@ -39,7 +39,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
     for (final module in context.matrix) {
       final moduleRect = module.resolveRect(context);
       final moduleNeighbours = context.matrix.getNeighboursDirections(module);
-      late Path modulePath;
+      Path modulePath;
 
       if (module.isDark) {
         modulePath = Path();

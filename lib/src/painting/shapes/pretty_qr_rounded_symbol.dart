@@ -36,14 +36,14 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
 
-    final borderRadius = this.borderRadius.resolve(context.textDirection);
+    final radius = borderRadius.resolve(context.textDirection);
 
     for (final module in context.matrix) {
       if (!module.isDark) continue;
 
       final modulePath = Path();
       final moduleRect = module.resolveRect(context);
-      modulePath.addRRect(borderRadius.toRRect(moduleRect));
+      modulePath.addRRect(radius.toRRect(moduleRect));
 
       if (context.isImpellerEngineEnabled) {
         context.canvas.drawPath(modulePath, paint);

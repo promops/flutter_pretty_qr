@@ -305,7 +305,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                 leading: const Icon(Icons.format_paint_outlined),
                 title: const Text('Style'),
                 trailing: Text(
-                  widget.decoration.shape is PrettyQrSmoothSymbol ? 'Smooth' : 'Rounded rectangle',
+                  widget.decoration.shape is PrettyQrSmoothSymbol
+                      ? 'Smooth'
+                      : 'Rounded rectangle',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -329,7 +331,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
           value: widget.decoration.image != null,
           onChanged: (value) => toggleImage(),
           secondary: Icon(
-            widget.decoration.image != null ? Icons.image_outlined : Icons.hide_image_outlined,
+            widget.decoration.image != null
+                ? Icons.image_outlined
+                : Icons.hide_image_outlined,
           ),
           title: const Text('Image'),
         ),
@@ -446,7 +450,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   @protected
   void toggleColor() {
     var shape = widget.decoration.shape;
-    var color = shapeColor != Colors.black ? Colors.black : Theme.of(context).colorScheme.secondary;
+    var color = shapeColor != Colors.black
+        ? Colors.black
+        : Theme.of(context).colorScheme.secondary;
 
     if (shape is PrettyQrSmoothSymbol) {
       shape = PrettyQrSmoothSymbol(
@@ -475,8 +481,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     } else if (shape is PrettyQrRoundedSymbol) {
       shape = PrettyQrRoundedSymbol(
         color: shape.color,
-        borderRadius:
-            isRoundedBorders ? BorderRadius.zero : const BorderRadius.all(Radius.circular(10)),
+        borderRadius: isRoundedBorders
+            ? BorderRadius.zero
+            : const BorderRadius.all(Radius.circular(10)),
       );
     }
 
@@ -489,8 +496,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     final image = widget.decoration.image != null ? null : defaultImage;
 
     widget.onChanged?.call(
-      PrettyQrDecoration(image: image, shape: widget.decoration.shape),
-    );
+        PrettyQrDecoration(image: image, shape: widget.decoration.shape));
   }
 
   @protected

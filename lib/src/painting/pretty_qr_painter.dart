@@ -38,9 +38,9 @@ class PrettyQrPainter {
     final ImageConfiguration configuration,
   ) {
     final image = decoration.image;
-    final size = context.estimatedBounds.size;
 
     if (image != null) {
+      final size = context.estimatedBounds.size;
       final imageScale = image.scale.clamp(0.0, 1.0);
       final imageScaledRect = Rect.fromCenter(
         center: size.center(Offset.zero),

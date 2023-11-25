@@ -105,6 +105,8 @@ class PrettyQrDecoration with Diagnosticable {
     if (identical(other, this)) return true;
     if (other.runtimeType != runtimeType) return false;
 
-    return other is PrettyQrDecoration && other.image == image && other.shape == shape;
+    return other is PrettyQrDecoration &&
+        other.image == image &&
+        other.shape == shape;
   }
 }

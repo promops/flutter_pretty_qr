@@ -12,7 +12,7 @@ class PrettyQrDataView extends StatefulWidget {
   @protected
   final String data;
 
-  /// The QR code error correction level;
+  /// The QR code error correction level.
   @protected
   final int errorCorrectLevel;
 
