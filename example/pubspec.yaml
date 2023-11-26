@@ -14,7 +14,7 @@ dependencies:
 
   pretty_qr_code:
     path: ../
-  image_gallery_saver: '^2.0.3'
+  path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_lints: ^2.0.1

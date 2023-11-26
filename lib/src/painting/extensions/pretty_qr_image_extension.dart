@@ -13,6 +13,8 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 /// Extensions that apply to QR Image.
 extension PrettyQrImageExtension on QrImage {
   /// Returns the QR Code image.
+  /// NOTE: Does not work with nested images on the Web
+  /// until the stable Flutter 3.7.0 version (https://github.com/flutter/flutter/issues/103803).
   Future<ui.Image> toImage({
     required final int size,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
@@ -30,16 +32,12 @@ extension PrettyQrImageExtension on QrImage {
       textDirection: configuration.textDirection,
     );
 
-    void captureQRImage() {
-      final picture = pictureRecorder.endRecording();
-      imageCompleter.complete(picture.toImage(size, size));
-    }
-
-    late final PrettyQrPainter decorationPainter;
+    late PrettyQrPainter decorationPainter;
     try {
       decorationPainter = decoration.createPainter(() {
         decorationPainter.paint(context, imageConfiguration);
-        captureQRImage();
+        final picture = pictureRecorder.endRecording();
+        imageCompleter.complete(picture.toImage(size, size));
       });
       decorationPainter.paint(context, imageConfiguration);
 
@@ -48,14 +46,18 @@ extension PrettyQrImageExtension on QrImage {
       );
 
       if (decorationImageStream == null) {
-        captureQRImage();
+        final picture = pictureRecorder.endRecording();
+        imageCompleter.complete(picture.toImage(size, size));
       } else {
-        late final ImageStreamListener imageStreamListener;
+        late ImageStreamListener imageStreamListener;
         imageStreamListener = ImageStreamListener(
           (imageInfo, synchronous) {
             decorationImageStream.removeListener(imageStreamListener);
             imageInfo.dispose();
-            if (synchronous) captureQRImage();
+            if (synchronous) {
+              final picture = pictureRecorder.endRecording();
+              imageCompleter.complete(picture.toImage(size, size));
+            }
           },
           onError: (error, stackTrace) {
             decorationImageStream.removeListener(imageStreamListener);

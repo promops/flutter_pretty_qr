@@ -4,9 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 extension PrettyQrImageExtension on QrImage {
-  /// Whether or not this [QrImage], can be saved as file.
-  bool get supportsSaving => true;
-
   Future<void> exportAsImage(
     final BuildContext context, {
     required final int size,
@@ -22,10 +19,11 @@ extension PrettyQrImageExtension on QrImage {
       html.Blob([imageBytes]),
     );
 
-    final saveImageAnchor = html.document.createElement('a') as html.AnchorElement
-      ..href = imageUrl
-      ..style.display = 'none'
-      ..download = 'qr-code.png';
+    final saveImageAnchor =
+        html.document.createElement('a') as html.AnchorElement
+          ..href = imageUrl
+          ..style.display = 'none'
+          ..download = 'qr-code.png';
 
     html.document.body?.children.add(saveImageAnchor);
     saveImageAnchor.click();

@@ -1,23 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 extension PrettyQrImageExtension on QrImage {
-  /// Whether or not this [QrImage], can be saved as file.
-  bool get supportsSaving => true;
-
-  Future<void> exportAsImage(
+  Future<String?> exportAsImage(
     final BuildContext context, {
     required final int size,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
   }) async {
+    final configuration = createLocalImageConfiguration(context);
+    final docDirectory = Platform.isIOS
+        ? await getApplicationDocumentsDirectory()
+        : await getExternalStorageDirectory();
     final bytes = await toImageAsBytes(
-      size: size,
-      decoration: decoration,
-      configuration: createLocalImageConfiguration(context),
-    );
+        size: size, decoration: decoration, configuration: configuration);
 
-    await ImageGallerySaver.saveImage(bytes!.buffer.asUint8List());
+    if (docDirectory != null) {
+      final file = await File('${docDirectory.path}/qr.png').create();
+      await file.writeAsBytes(bytes!.buffer.asUint8List());
+      return docDirectory.path;
+    }
+
+    return null;
   }
 }

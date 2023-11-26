@@ -67,12 +67,9 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
   }
 
   @protected
-  Future Function(int)? get onExportPressedCallback {
-    if (!qrImage.supportsSaving) {
-      return null;
-    }
+  Future<String?> Function(int)? get onExportPressedCallback {
     return (int size) async {
-      qrImage.exportAsImage(context, size: size, decoration: decoration);
+      return qrImage.exportAsImage(context, size: size, decoration: decoration);
     };
   }
 
@@ -218,7 +215,7 @@ class _PrettyQrSettings extends StatefulWidget {
   final PrettyQrDecoration decoration;
 
   @protected
-  final Future Function(int)? onExportPressed;
+  final Future<String?> Function(int)? onExportPressed;
 
   @protected
   final ValueChanged<PrettyQrDecoration>? onChanged;
@@ -368,13 +365,14 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
           ListTile(
             leading: const Icon(Icons.save_alt_outlined),
             title: const Text('Export'),
-            onTap: () async {
-              await widget.onExportPressed?.call(imageSize);
-              const snackBar = SnackBar(
-                content: Text('Saved'),
-              );
-
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            onTap: () {
+              widget.onExportPressed?.call(imageSize).then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Saved to $value'),
+                  ),
+                );
+              });
             },
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
