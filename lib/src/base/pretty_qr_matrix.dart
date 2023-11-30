@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_module.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 
-/// {@template pretty_qr_code.PrettyQrMatrix}
+/// {@template pretty_qr_code.base.PrettyQrMatrix}
 /// The QR code matrix consisting of an array of nominally square modules.
 /// {@endtemplate}
 @sealed
@@ -56,7 +56,7 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
     if (y < 0 || y >= dimension) return null;
     if (x < 0 || x >= dimension) return null;
 
-    // ignore: avoid-unsafe-collection-methods
+    // ignore: avoid-unsafe-collection-methods, must always exist.
     return modules[y * dimension + x];
   }
 

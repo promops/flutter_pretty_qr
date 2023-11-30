@@ -1,6 +1,6 @@
 import 'package:flutter/animation.dart';
 
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 
 /// An interpolation between two [PrettyQrDecoration]s.
 ///

@@ -6,32 +6,32 @@ import 'package:flutter/rendering.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 
-/// {@template pretty_qr_code.PrettyQrRenderView}
+/// {@template pretty_qr_code.rendering.PrettyQrRenderView}
 /// An QR code image in the render tree.
 /// {@endtemplate}
 @internal
 class PrettyQrRenderView extends RenderBox {
-  /// {@template pretty_qr_code.PrettyQrRenderView.qrImage}
+  /// {@template pretty_qr_code.rendering.PrettyQrRenderView.qrImage}
   /// The QR to display.
   /// {@endtemplate}
   @nonVirtual
-  late QrImage _qrImage;
+  QrImage _qrImage;
 
-  /// {@template pretty_qr_code.PrettyQrRenderView.decoration}
+  /// {@template pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   /// What decoration to paint.
   /// {@endtemplate}
   @nonVirtual
-  late PrettyQrDecoration _decoration;
+  PrettyQrDecoration _decoration;
 
-  /// {@template pretty_qr_code.PrettyQrRenderView.configuration}
+  /// {@template pretty_qr_code.rendering.PrettyQrRenderView.configuration}
   /// The settings to pass to the decoration when painting, so that it can
   /// resolve images appropriately. See [ImageProvider.resolve].
   /// {@endtemplate}
   @nonVirtual
-  late ImageConfiguration _configuration;
+  ImageConfiguration _configuration;
 
   /// The painter for a [PrettyQrPainter].
   @protected
@@ -46,7 +46,7 @@ class PrettyQrRenderView extends RenderBox {
         _decoration = decoration,
         _configuration = configuration;
 
-  /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.qrImage}
   QrImage get qrImage {
     return _qrImage;
   }
@@ -59,7 +59,7 @@ class PrettyQrRenderView extends RenderBox {
     markNeedsPaint();
   }
 
-  /// {@macro pretty_qr_code.PrettyQrRenderView.decoration}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   PrettyQrDecoration get decoration {
     return _decoration;
   }
@@ -75,7 +75,7 @@ class PrettyQrRenderView extends RenderBox {
     markNeedsPaint();
   }
 
-  /// {@macro pretty_qr_code.PrettyQrRenderView.configuration}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.configuration}
   ImageConfiguration get configuration {
     return _configuration;
   }

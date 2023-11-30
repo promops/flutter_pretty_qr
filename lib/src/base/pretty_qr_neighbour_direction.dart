@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-/// {@template pretty_qr_code.PrettyQrNeighbourDirection}
-/// The direction in which there is a closest point.
+/// {@template pretty_qr_code.base.PrettyQrNeighbourDirection}
+/// The direction in which there is a dark module.
 /// {@endtemplate}
 enum PrettyQrNeighbourDirection {
   /// The top left corner.
@@ -36,7 +36,7 @@ enum PrettyQrNeighbourDirection {
   @nonVirtual
   final int y;
 
-  /// {@macro pretty_qr_code.PrettyQrNeighbourDirection}
+  /// {@macro pretty_qr_code.base.PrettyQrNeighbourDirection}
   @literal
   const PrettyQrNeighbourDirection(this.x, this.y);
 }
