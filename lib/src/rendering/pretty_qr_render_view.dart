@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 
 /// {@template pretty_qr_code.rendering.PrettyQrRenderView}
@@ -89,6 +90,11 @@ class PrettyQrRenderView extends RenderBox {
   }
 
   @override
+  bool get isRepaintBoundary {
+    return PrettyQrRenderExperiments.enableRepaintBoundary;
+  }
+
+  @override
   bool hitTestSelf(Offset position) {
     return true;
   }
@@ -133,6 +139,7 @@ class PrettyQrRenderView extends RenderBox {
       _decorationPainter?.paint(paintingContext, configuration);
     } finally {
       context.canvas.restore();
+      context.setIsComplexHint();
     }
   }
 

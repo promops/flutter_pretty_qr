@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_impeller.dart';
 
 /// {@template pretty_qr_code.rendering.PrettyQrPaintingContext}
 /// A place to paint QR.
@@ -33,10 +32,4 @@ class PrettyQrPaintingContext {
     required this.matrix,
     this.textDirection,
   });
-
-  /// {@macro pretty_qr_code.painting.PrettyQrImpeller}
-  @nonVirtual
-  bool get isImpellerEngineEnabled {
-    return PrettyQrImpeller.enabled ?? PrettyQrImpeller.isImpellerDefaultEngine;
-  }
 }
