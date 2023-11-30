@@ -58,4 +58,4 @@ jobs:
           sudo apt-get install webp
 
       - name: Verify Pub Score
-        run: pana --no-warning --exit-code-threshold=0 
+        run: pana --no-warning --exit-code-threshold=0
