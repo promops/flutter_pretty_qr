@@ -48,7 +48,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
           ..addRRect(_transformDarkModuleRect(moduleRect, moduleNeighbours))
           ..close();
       } else {
-        modulePath = transformWhiteModuleRect(moduleRect, moduleNeighbours);
+        modulePath = _transformWhiteModuleRect(moduleRect, moduleNeighbours);
       }
 
       if (PrettyQrRenderExperiments.needsAvoidComplexPaths) {
@@ -85,7 +85,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   }
 
   @protected
-  Path transformWhiteModuleRect(
+  Path _transformWhiteModuleRect(
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
