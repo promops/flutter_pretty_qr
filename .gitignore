@@ -27,4 +27,4 @@
 /coverage/
 .fvm/
 
-./pubspec.lock
+pubspec.lock
