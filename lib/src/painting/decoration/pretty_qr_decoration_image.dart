@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
-/// {@template pretty_qr_code.PrettyQrDecorationImagePosition}
+/// {@template pretty_qr_code.painting.PrettyQrDecorationImagePosition}
 /// Where to paint a image decoration.
 /// {@endtemplate}
 enum PrettyQrDecorationImagePosition {
@@ -24,7 +24,7 @@ class PrettyQrDecorationImage extends DecorationImage {
   @nonVirtual
   final EdgeInsetsGeometry padding;
 
-  /// {@macro pretty_qr_code.PrettyQrDecorationImagePosition}
+  /// {@macro pretty_qr_code.painting.PrettyQrDecorationImagePosition}
   final PrettyQrDecorationImagePosition position;
 
   /// Creates an image to show into QR code.
@@ -35,6 +35,15 @@ class PrettyQrDecorationImage extends DecorationImage {
   const PrettyQrDecorationImage({
     required super.image,
     super.scale = 0.2,
+    super.onError,
+    super.colorFilter,
+    super.fit,
+    super.repeat = ImageRepeat.noRepeat,
+    super.matchTextDirection = false,
+    super.opacity = 1.0,
+    super.filterQuality = FilterQuality.low,
+    super.invertColors = false,
+    super.isAntiAlias = false,
     this.padding = EdgeInsets.zero,
     this.position = PrettyQrDecorationImagePosition.embedded,
   }) : assert(scale >= 0 && scale <= 1);
@@ -44,14 +53,32 @@ class PrettyQrDecorationImage extends DecorationImage {
   @factory
   @useResult
   PrettyQrDecorationImage copyWith({
-    final double? scale,
     final ImageProvider? image,
+    final double? scale,
+    final ImageErrorListener? onError,
+    final ColorFilter? colorFilter,
+    final BoxFit? fit,
+    final ImageRepeat? repeat,
+    final bool? matchTextDirection,
+    final double? opacity,
+    final FilterQuality? filterQuality,
+    final bool? invertColors,
+    final bool? isAntiAlias,
     final EdgeInsetsGeometry? padding,
     final PrettyQrDecorationImagePosition? position,
   }) {
     return PrettyQrDecorationImage(
-      scale: scale ?? this.scale,
       image: image ?? this.image,
+      scale: scale ?? this.scale,
+      onError: onError ?? this.onError,
+      colorFilter: colorFilter ?? this.colorFilter,
+      fit: fit ?? this.fit,
+      repeat: repeat ?? this.repeat,
+      matchTextDirection: matchTextDirection ?? this.matchTextDirection,
+      opacity: opacity ?? this.opacity,
+      filterQuality: filterQuality ?? this.filterQuality,
+      invertColors: invertColors ?? this.invertColors,
+      isAntiAlias: isAntiAlias ?? this.isAntiAlias,
       padding: padding ?? this.padding,
       position: position ?? this.position,
     );
@@ -102,7 +129,7 @@ class PrettyQrDecorationImage extends DecorationImage {
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ super.hashCode ^ padding.hashCode;
+    return super.hashCode ^ Object.hash(runtimeType, padding);
   }
 
   @override

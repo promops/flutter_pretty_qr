@@ -7,6 +7,7 @@ dart_code_metrics:
   rules:
     # style
     arguments-ordering: false
+    avoid-inferrable-type-arguments: false
     enum-constants-ordering: false
     format-comment:
       only-doc-comments: true
@@ -17,21 +18,20 @@ dart_code_metrics:
     prefer-correct-identifier-length:
         exceptions: ['i', 'x', 'y']
         min-identifier-length: 3
-        max-identifier-length: 27
+        max-identifier-length: 40
     prefer-returning-conditional-expressions: false
     unnecessary-trailing-comma: false
 
     # warning
+    avoid-collection-mutating-methods: false
+    avoid-late-keyword: false
     avoid-non-null-assertion: false
     avoid-passing-default-values: false
     no-equal-arguments: false
     no-magic-number: false
+    prefer-addition-subtraction-assignments: false
     prefer-match-file-name: false
-    prefer-commenting-analyzer-ignores: false
-    avoid-late-keyword: false
-    
 
   pubspec-rules:
     prefer-caret-version-syntax: false
     prefer-publish-to-none: false
-    

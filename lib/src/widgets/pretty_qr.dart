@@ -1,16 +1,19 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
-import 'package:pretty_qr_code/src/widgets/pretty_qr_view.dart';
 import 'package:qr/qr.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
+import 'package:pretty_qr_code/src/widgets/pretty_qr_view.dart';
 import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_image.dart';
 
-/// {@macro pretty_qr_code.PrettyQrView}
-@Deprecated('Use `PrettyQrView.data` instead')
+/// {@macro pretty_qr_code.widgets.PrettyQrView}
+@Deprecated(
+  'Please use `PrettyQrView.data` instead. '
+  'This feature was deprecated after v3.0.0.',
+)
 class PrettyQr extends StatefulWidget {
   /// Widget size.
   @nonVirtual
@@ -41,7 +44,10 @@ class PrettyQr extends StatefulWidget {
   final ImageProvider? image;
 
   @literal
-  @Deprecated('Use `PrettyQrView.data` instead')
+  @Deprecated(
+    'Please use `PrettyQrView.data` instead. '
+    'This feature was deprecated after v3.0.0.',
+  )
   const PrettyQr({
     required this.data,
     super.key,

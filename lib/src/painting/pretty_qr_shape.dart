@@ -2,8 +2,8 @@ import 'package:meta/meta.dart';
 
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 
-/// {@template pretty_qr_code.PrettyQrShape}
-/// Base class for shape QR modules.
+/// {@template pretty_qr_code.painting.PrettyQrShape}
+/// A base class for shape QR Code symbol.
 /// {@endtemplate}
 @immutable
 abstract class PrettyQrShape {

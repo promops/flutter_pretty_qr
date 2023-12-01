@@ -3,6 +3,7 @@ import 'package:flutter/painting.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// A rectangular symbol with rounded corners.
@@ -41,17 +42,19 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
     for (final module in context.matrix) {
       if (!module.isDark) continue;
 
-      final modulePath = Path();
       final moduleRect = module.resolveRect(context);
-      modulePath.addRRect(radius.toRRect(moduleRect));
+      final modulePath = Path()
+        ..addRRect(radius.toRRect(moduleRect))
+        ..close();
 
-      if (context.isImpellerEngineEnabled) {
+      if (PrettyQrRenderExperiments.needsAvoidComplexPaths) {
         context.canvas.drawPath(modulePath, paint);
       } else {
         path.addPath(modulePath, Offset.zero);
       }
     }
 
+    path.close();
     context.canvas.drawPath(path, paint);
   }
 

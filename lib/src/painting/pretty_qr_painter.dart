@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 
 /// A stateful class that can paint a QR code.
