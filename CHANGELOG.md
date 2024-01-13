@@ -1,6 +1,6 @@
 ## 3.1.0
 
-* Optimize QR code repaints [#10](https://github.com/promops/flutter_pretty_qr/issues/10).
+* Optimize QR code repaints [#10](https://github.com/promops/flutter_pretty_qr/issues/10). Thanks to [nxtSwitch  (#28)](https://github.com/promops/flutter_pretty_qr/pull/28).
 * Added the ability to save code to an image with `toImage` and `toImageAsBytes` methods [#14](https://github.com/promops/flutter_pretty_qr/issues/14).
 
 ## 3.0.0
