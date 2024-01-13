@@ -15,15 +15,14 @@ extension PrettyQrImageExtension on QrImage {
     final docDirectory = Platform.isIOS
         ? await getApplicationDocumentsDirectory()
         : await getExternalStorageDirectory();
+
+    if (docDirectory == null) return null;
+
     final bytes = await toImageAsBytes(
         size: size, decoration: decoration, configuration: configuration);
 
-    if (docDirectory != null) {
-      final file = await File('${docDirectory.path}/qr.png').create();
-      await file.writeAsBytes(bytes!.buffer.asUint8List());
-      return docDirectory.path;
-    }
-
-    return null;
+    final file = await File('${docDirectory.path}/qr.png').create();
+    await file.writeAsBytes(bytes!.buffer.asUint8List());
+    return docDirectory.path;
   }
 }

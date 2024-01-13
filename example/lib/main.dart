@@ -366,6 +366,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             leading: const Icon(Icons.save_alt_outlined),
             title: const Text('Export'),
             onTap: () {
+              if (!mounted) return;
               widget.onExportPressed?.call(imageSize).then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
