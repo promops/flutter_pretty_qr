@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 extension PrettyQrImageExtension on QrImage {
-  Future<void> exportAsImage(
+  Future<String?> exportAsImage(
     final BuildContext context, {
     required final int size,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
@@ -30,5 +30,7 @@ extension PrettyQrImageExtension on QrImage {
 
     html.Url.revokeObjectUrl(imageUrl);
     html.document.body?.children.remove(saveImageAnchor);
+
+    return null;
   }
 }

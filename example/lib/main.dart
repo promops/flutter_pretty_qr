@@ -369,7 +369,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               widget.onExportPressed?.call(imageSize).then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Saved to $value'),
+                    content: Text(value == null ? 'Saved' : 'Saved to $value'),
                   ),
                 );
               });
