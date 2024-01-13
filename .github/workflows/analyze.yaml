@@ -1,10 +1,6 @@
 name: Analyze
 
-on:
-  push:
-  pull_request:
-    branches:
-      - master
+on: push
 
 jobs:
   code-quality:
@@ -35,7 +31,7 @@ jobs:
           dcm analyze --no-analytics --reporter=github .
           dcm check-unnecessary-nullable --no-analytics lib
 
-      - name: Dependencies  
+      - name: Dependencies
         run: |
           dcm check-dependencies --no-analytics .
 
