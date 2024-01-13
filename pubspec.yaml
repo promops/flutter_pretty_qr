@@ -4,6 +4,14 @@ description: Pretty QR code for Flutter. You can round the edges with parameter 
 version: 3.1.0
 homepage: https://github.com/promops/flutter_pretty_qr
 
+topics:
+  - qr
+  - pretty-qr
+  
+screenshots:
+  - description: A smoothed QR code.
+    path: resources/qr-code-blue.png
+
 environment:
   sdk: '>=2.17.0 <4.0.0'
   flutter: ">=3.0.0"
