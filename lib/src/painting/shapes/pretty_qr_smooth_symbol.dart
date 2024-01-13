@@ -6,13 +6,14 @@ import 'package:flutter/painting.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
-/// A rectangular symbol with smoothed flow.
+/// A rectangular modules with smoothed flow.
 @sealed
 class PrettyQrSmoothSymbol extends PrettyQrShape {
-  /// The color of QR symbol.
+  /// The color to use when filling the QR code.
   @nonVirtual
   final Color color;
 
@@ -39,29 +40,30 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
     for (final module in context.matrix) {
       final moduleRect = module.resolveRect(context);
       final moduleNeighbours = context.matrix.getNeighboursDirections(module);
-      Path modulePath;
 
+      Path modulePath;
       if (module.isDark) {
         modulePath = Path();
-        modulePath.addRRect(
-          transformDarkModuleRect(moduleRect, moduleNeighbours),
-        );
+        modulePath
+          ..addRRect(_transformDarkModuleRect(moduleRect, moduleNeighbours))
+          ..close();
       } else {
-        modulePath = transformWhiteModuleRect(moduleRect, moduleNeighbours);
+        modulePath = _transformWhiteModuleRect(moduleRect, moduleNeighbours);
       }
 
-      if (context.isImpellerEngineEnabled) {
+      if (PrettyQrRenderExperiments.needsAvoidComplexPaths) {
         context.canvas.drawPath(modulePath, paint);
       } else {
         path.addPath(modulePath, Offset.zero);
       }
     }
 
+    path.close();
     context.canvas.drawPath(path, paint);
   }
 
   @protected
-  RRect transformDarkModuleRect(
+  RRect _transformDarkModuleRect(
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
@@ -83,7 +85,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   }
 
   @protected
-  Path transformWhiteModuleRect(
+  Path _transformWhiteModuleRect(
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
@@ -92,7 +94,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atTopAndLeft && neighbours.atToptLeft) {
       path.addPath(
-        buildInnerCornerShape(
+        _buildInnerCornerShape(
           moduleRect.topLeft.translate(0, padding),
           moduleRect.topLeft,
           moduleRect.topLeft.translate(padding, 0),
@@ -103,7 +105,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atTopAndRight && neighbours.atToptRight) {
       path.addPath(
-        buildInnerCornerShape(
+        _buildInnerCornerShape(
           moduleRect.topRight.translate(-padding, 0),
           moduleRect.topRight,
           moduleRect.topRight.translate(0, padding),
@@ -114,7 +116,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atBottomAndLeft && neighbours.atBottomLeft) {
       path.addPath(
-        buildInnerCornerShape(
+        _buildInnerCornerShape(
           moduleRect.bottomLeft.translate(0, -padding),
           moduleRect.bottomLeft,
           moduleRect.bottomLeft.translate(padding, 0),
@@ -125,7 +127,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atBottomAndRight && neighbours.atBottomRight) {
       path.addPath(
-        buildInnerCornerShape(
+        _buildInnerCornerShape(
           moduleRect.bottomRight.translate(-padding, 0),
           moduleRect.bottomRight,
           moduleRect.bottomRight.translate(0, -padding),
@@ -134,11 +136,11 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
       );
     }
 
-    return path;
+    return path..close();
   }
 
   @protected
-  Path buildInnerCornerShape(Offset p1, Offset p2, Offset p3) {
+  Path _buildInnerCornerShape(Offset p1, Offset p2, Offset p3) {
     return Path()
       ..moveTo(p1.dx, p1.dy)
       ..quadraticBezierTo(p2.dx, p2.dy, p3.dx, p3.dy)
@@ -185,7 +187,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ Object.hash(color, roundFactor);
+    return Object.hash(runtimeType, color, roundFactor);
   }
 
   @override

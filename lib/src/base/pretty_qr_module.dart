@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 
-/// {@template pretty_qr_code.PrettyQrModule}
+/// {@template pretty_qr_code.base.PrettyQrModule}
 /// The QR code module.
 /// {@endtemplate}
 @sealed

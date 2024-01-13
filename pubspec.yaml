@@ -16,7 +16,6 @@ dependencies:
   meta: ^1.7.0
 
 dev_dependencies:
-  dart_code_metrics_presets: ^2.5.0
-
   # lints
   flutter_lints: ^2.0.1
+  dart_code_metrics_presets: ^2.6.0

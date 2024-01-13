@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration_image.dart';
 import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_image.dart';
 
-/// {@template pretty_qr_code.PrettyQrDecoration}
+/// {@template pretty_qr_code.painting.PrettyQrDecoration}
 /// An immutable description of how to paint a QR image.
 /// {@endtemplate}
 @immutable
@@ -97,7 +97,7 @@ class PrettyQrDecoration with Diagnosticable {
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ Object.hash(image, shape);
+    return Object.hash(runtimeType, image, shape);
   }
 
   @override

@@ -1,8 +1,6 @@
 name: Deploy example to GitHub Pages
 
-on:
-  push:
-    branches: ["master", "v3.0.0"]
+on: workflow_dispatch
 
 permissions:
   contents: read
@@ -22,19 +20,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v3
+
       - name: Build example
         working-directory: ./example
         run: flutter build web --no-source-maps --base-href /flutter_pretty_qr/
+
       - name: Upload example artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: './example/build/web'
+
       - name: Deploy example to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

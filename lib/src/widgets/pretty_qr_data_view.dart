@@ -3,9 +3,9 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:pretty_qr_code/src/widgets/pretty_qr_view.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 
-/// {@macro pretty_qr_code.PrettyQrView}
+/// {@macro pretty_qr_code.widgets.PrettyQrView}
 @internal
 class PrettyQrDataView extends StatefulWidget {
   /// The QR code data.
@@ -16,7 +16,7 @@ class PrettyQrDataView extends StatefulWidget {
   @protected
   final int errorCorrectLevel;
 
-  /// {@macro pretty_qr_code.PrettyQrRenderView.decoration}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   @protected
   final PrettyQrDecoration decoration;
 

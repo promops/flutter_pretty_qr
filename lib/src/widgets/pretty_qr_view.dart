@@ -4,14 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:pretty_qr_code/src/widgets/pretty_qr_data_view.dart';
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 
-/// {@template pretty_qr_code.PrettyQrView}
-/// A widget that displays a QR code image.
+/// {@template pretty_qr_code.widgets.PrettyQrView}
+/// A widget that displays a QR code symbol.
 /// {@endtemplate}
 ///
 /// {@tool snippet}
+///
 /// This sample code shows how to use `PrettyQrView` to display QR code image.
 ///
 /// ```dart
@@ -19,7 +20,7 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 ///   data: '...',
 ///   errorCorrectLevel: QrErrorCorrectLevel.H,
 ///   decoration: const PrettyQrDecoration(
-///     shape: PrettyQrSmoothModules(),
+///     shape: PrettyQrSmoothSymbol(),
 ///     image: PrettyQrDecorationImage(
 ///       image: AssetImage('images/flutter.png'),
 ///       position: PrettyQrDecorationImagePosition.embedded,
@@ -30,15 +31,15 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 /// {@end-tool}
 @sealed
 class PrettyQrView extends LeafRenderObjectWidget {
-  /// {@macro pretty_qr_code.PrettyQrRenderView.qrImage}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.qrImage}
   @protected
   final QrImage qrImage;
 
-  /// {@macro pretty_qr_code.PrettyQrRenderView.decoration}
+  /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   @protected
   final PrettyQrDecoration decoration;
 
-  /// Creates a widget that displays an QR image obtained from a [qrImage].
+  /// Creates a widget that displays an QR symbol obtained from a [qrImage].
   @literal
   const PrettyQrView({
     required this.qrImage,
@@ -46,7 +47,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
     this.decoration = const PrettyQrDecoration(),
   });
 
-  /// Creates a widget that displays an QR image obtained from a [data].
+  /// Creates a widget that displays an QR symbol obtained from a [data].
   @factory
   static PrettyQrDataView data({
     required final String data,
@@ -76,7 +77,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
     final BuildContext context,
     final PrettyQrRenderView renderObject,
   ) {
-    // ignore: avoid-mutating-parameters
+    // ignore: avoid-mutating-parameters, updates the current render object.
     renderObject
       ..qrImage = qrImage
       ..decoration = decoration
@@ -87,12 +88,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(
-        DiagnosticsProperty<PrettyQrDecoration>(
-          'decoration',
-          decoration,
-        ),
-      )
-      ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage));
+      ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage))
+      ..add(DiagnosticsProperty<PrettyQrDecoration>('decoration', decoration));
   }
 }
