@@ -1,8 +1,3 @@
-## 3.1.0 
-
-* Added the ability to save code to an image with (`toImage`) & (`toImageAsBytes`) methods.
-
-
 ## 3.0.0
 
 > Note: This release has breaking changes.

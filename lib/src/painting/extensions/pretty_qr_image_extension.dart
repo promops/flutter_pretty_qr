@@ -13,6 +13,7 @@ import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 /// Extensions that apply to QR Image.
 extension PrettyQrImageExtension on QrImage {
   /// Returns the QR Code image.
+  ///
   /// NOTE: Does not work with nested images on the Web
   /// until the stable Flutter 3.7.0 version (https://github.com/flutter/flutter/issues/103803).
   Future<ui.Image> toImage({
@@ -76,6 +77,9 @@ extension PrettyQrImageExtension on QrImage {
   }
 
   /// Returns the QR Code image as a list of bytes.
+  ///
+  /// NOTE: Does not work with nested images on the Web
+  /// until the stable Flutter 3.7.0 version (https://github.com/flutter/flutter/issues/103803).
   Future<ByteData?> toImageAsBytes({
     required final int size,
     final ui.ImageByteFormat format = ui.ImageByteFormat.png,

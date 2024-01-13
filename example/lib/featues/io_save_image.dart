@@ -19,7 +19,10 @@ extension PrettyQrImageExtension on QrImage {
     if (docDirectory == null) return null;
 
     final bytes = await toImageAsBytes(
-        size: size, decoration: decoration, configuration: configuration);
+      size: size,
+      decoration: decoration,
+      configuration: configuration,
+    );
 
     final file = await File('${docDirectory.path}/qr.png').create();
     await file.writeAsBytes(bytes!.buffer.asUint8List());
