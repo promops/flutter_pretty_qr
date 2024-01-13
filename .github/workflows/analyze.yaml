@@ -17,6 +17,7 @@ jobs:
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
         with:
+          version: 1.10.3
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
