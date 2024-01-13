@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/resources/qr-code.png" width="33%" /> 
+  <img src="https://raw.githubusercontent.com/promops/flutter_pretty_qr/master/resources/pretty-qr-code.png"/> 
 </p>
 
 ## Pretty QR Code
@@ -18,8 +18,9 @@ A highly customizable Flutter widget that make it easy to rendering QR code.
 * [Live Preview](https://promops.github.io/flutter_pretty_qr/)
 * Built on [qr](https://pub.dev/packages/qr) package.
 * Supports embedding images.
-* Support tween animation
-* Support some options for images
+* Support tween animation.
+* Support some options for images.
+* Export qr as image.
 
 If you want to say thank you, star us on GitHub or like us on pub.dev
 
@@ -53,7 +54,7 @@ void initState() {
     QrErrorCorrectLevel.H,
   )..addData('lorem ipsum dolor sit amet');
 
-  qrImage = QrImage(qrCode)
+  qrImage = QrImage(qrCode);
 }
 
 @override
@@ -69,6 +70,23 @@ Widget build(BuildContext context) {
 
 See the `example` folder for more code samples of the various possibilities.
 
+## Save the symbol as an image
+
+ You can save the QR code as an image using the [toImage](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImage.html) or [toImageAsBytes](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImageAsBytes.html) extension methods that apply to `QrImage`. Optionally, the `configuration` parameter may be used to set additional saving options, such as pixel ratio or text direction.
+
+ ```dart
+ final qrCode = QrCode.fromData(
+   data: 'lorem ipsum dolor sit amet',
+   errorCorrectLevel: QrErrorCorrectLevel.H,
+ );
+ final qrImage = QrImage(qrCode);
+ final imageBytes = await qrImage.toImageAsBytes(
+   size: 512,
+   format: ImageByteFormat.png,
+   decoration: const PrettyQrDecoration(),
+ );
+ ```
+
 ## Contributing
 
 Contributions are welcomed!
@@ -83,7 +101,7 @@ Here is a curated list of how you can help:
 
 * Quiet Zone
 * Gradient filling 
-* Export as image
+* ~~Export as image~~
 * Error handling API
 * Gaps between modules
 * Background color for QR code
