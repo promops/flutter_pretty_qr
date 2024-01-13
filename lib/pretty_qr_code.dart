@@ -19,6 +19,7 @@ export 'src/painting/decoration/pretty_qr_decoration.dart';
 export 'src/painting/decoration/pretty_qr_decoration_image.dart';
 export 'src/painting/decoration/pretty_qr_decoration_tween.dart';
 
+export 'src/painting/extensions/pretty_qr_image_extension.dart';
 export 'src/painting/extensions/pretty_qr_module_extensions.dart';
 export 'src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
 

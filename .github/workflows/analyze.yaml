@@ -1,10 +1,6 @@
 name: Analyze
 
-on:
-  push:
-  pull_request:
-    branches:
-      - master
+on: push
 
 jobs:
   code-quality:
