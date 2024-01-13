@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
-import 'package:pretty_qr_code/src/painting/pretty_qr_decoration.dart';
-import 'package:qr/qr.dart';
 import 'package:flutter/rendering.dart';
+import 'package:qr/qr.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 
