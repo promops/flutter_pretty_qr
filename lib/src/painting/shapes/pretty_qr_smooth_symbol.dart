@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_grandient.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
@@ -17,25 +18,41 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   @nonVirtual
   final Color color;
 
-  /// The corners of dots are rounded by this [BorderRadiusGeometry] value.
+  /// Optional gradient to fill the QR code.
+  final PrettyQrGradient? prettyQrGradient;
+
+  /// The corners of dots are rounded by this value.
   @nonVirtual
   final double roundFactor;
 
   /// Creates a pretty QR shape.
+  ///
+  /// [roundFactor] defines how much the corners will be rounded.
+  /// [color] is used as a fallback if no gradient is provided.
+  /// [gradient] is an optional gradient to fill the QR code.
   @literal
   const PrettyQrSmoothSymbol({
     this.roundFactor = 1,
     this.color = const Color(0xFF000000),
-  })  : assert(roundFactor <= 1, 'roundFactor must be less than 1'),
-        assert(roundFactor >= 0, 'roundFactor must be greater than 0');
+    this.prettyQrGradient,
+  })  : assert(roundFactor <= 1, 'roundFactor must be less than or equal to 1'),
+        assert(
+            roundFactor >= 0, 'roundFactor must be greater than or equal to 0');
 
   @override
   void paint(PrettyQrPaintingContext context) {
     final path = Path();
     final paint = Paint()
-      ..color = color
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
+
+    // Use gradient if provided, otherwise use solid color
+    if (prettyQrGradient != null) {
+      paint.shader = prettyQrGradient!.linearGradient
+          .createShader(context.estimatedBounds);
+    } else {
+      paint.color = color;
+    }
 
     for (final module in context.matrix) {
       final moduleRect = module.resolveRect(context);
@@ -43,8 +60,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
       Path modulePath;
       if (module.isDark) {
-        modulePath = Path();
-        modulePath
+        modulePath = Path()
           ..addRRect(_transformDarkModuleRect(moduleRect, moduleNeighbours))
           ..close();
       } else {
