@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
-import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_grandient.dart';
+import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_gradient.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';

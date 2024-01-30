@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class PrettyQrGradient {
   final List<Color> colors;
