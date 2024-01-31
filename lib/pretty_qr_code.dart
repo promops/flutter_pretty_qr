@@ -24,4 +24,3 @@ export 'src/painting/extensions/pretty_qr_module_extensions.dart';
 export 'src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
 export 'src/rendering/pretty_qr_render_experiments.dart';
-export 'src/painting/decoration/pretty_qr_decoration_gradient.dart';

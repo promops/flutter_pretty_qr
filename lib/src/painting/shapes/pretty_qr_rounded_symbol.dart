@@ -13,6 +13,12 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
   @nonVirtual
   final Color color;
 
+  /// Optional gradient to fill the QR code.
+  final List<Color>? gradientColors; 
+  final List<double>? gradientStops; 
+  final AlignmentGeometry? gradientBegin; 
+  final AlignmentGeometry? gradientEnd;
+
   /// If non-null, the corners of QR modules are rounded by this [BorderRadius].
   @nonVirtual
   final BorderRadiusGeometry borderRadius;
@@ -26,16 +32,31 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
   @literal
   const PrettyQrRoundedSymbol({
     this.color = const Color(0xFF000000),
-    this.borderRadius = kDefaultBorderRadius,
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.gradientColors,
+    this.gradientStops,
+    this.gradientBegin = Alignment.topCenter,
+    this.gradientEnd = Alignment.bottomCenter,
   });
 
   @override
   void paint(PrettyQrPaintingContext context) {
     final path = Path();
     final paint = Paint()
-      ..color = color
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
+
+    // Use gradient if provided, otherwise use solid color
+    if (gradientColors != null && gradientBegin != null && gradientEnd != null) {
+      paint.shader = LinearGradient(
+        begin: gradientBegin!,
+        end: gradientEnd!,
+        colors: gradientColors!,
+        stops: gradientStops,
+      ).createShader(context.estimatedBounds);
+    } else {
+      paint.color = color;
+    }
 
     final radius = borderRadius.resolve(context.textDirection);
 

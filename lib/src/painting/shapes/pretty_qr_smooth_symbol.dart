@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
-import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_gradient.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
@@ -19,9 +18,11 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   final Color color;
 
   /// Optional gradient to fill the QR code.
-  final PrettyQrGradient? prettyQrGradient;
+  final List<Color>? gradientColors; 
+  final List<double>? gradientStops; 
+  final AlignmentGeometry? gradientBegin; 
+  final AlignmentGeometry? gradientEnd; 
 
-  /// The corners of dots are rounded by this value.
   @nonVirtual
   final double roundFactor;
 
@@ -29,15 +30,17 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   ///
   /// [roundFactor] defines how much the corners will be rounded.
   /// [color] is used as a fallback if no gradient is provided.
-  /// [gradient] is an optional gradient to fill the QR code.
-  @literal
+  /// [gradientColors], [gradientStops], [gradientBegin], [gradientEnd]
+  /// are used for an optional gradient to fill the QR code.
   const PrettyQrSmoothSymbol({
     this.roundFactor = 1,
     this.color = const Color(0xFF000000),
-    this.prettyQrGradient,
-  })  : assert(roundFactor <= 1, 'roundFactor must be less than or equal to 1'),
-        assert(
-            roundFactor >= 0, 'roundFactor must be greater than or equal to 0');
+    this.gradientColors,
+    this.gradientStops,
+    this.gradientBegin = Alignment.topCenter,
+    this.gradientEnd = Alignment.bottomCenter,
+  }) : assert(roundFactor <= 1, 'roundFactor must be less than or equal to 1'),
+       assert(roundFactor >= 0, 'roundFactor must be greater than or equal to 0');
 
   @override
   void paint(PrettyQrPaintingContext context) {
@@ -47,9 +50,13 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
       ..style = PaintingStyle.fill;
 
     // Use gradient if provided, otherwise use solid color
-    if (prettyQrGradient != null) {
-      paint.shader = prettyQrGradient!.linearGradient
-          .createShader(context.estimatedBounds);
+    if (gradientColors != null && gradientBegin != null && gradientEnd != null) {
+      paint.shader = LinearGradient(
+        begin: gradientBegin!,
+        end: gradientEnd!,
+        colors: gradientColors!,
+        stops: gradientStops,
+      ).createShader(context.estimatedBounds);
     } else {
       paint.color = color;
     }
