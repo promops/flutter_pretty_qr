@@ -37,10 +37,13 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
     this.color = const Color(0xFF000000),
     this.gradientColors,
     this.gradientStops,
-    this.gradientBegin = Alignment.topCenter,
-    this.gradientEnd = Alignment.bottomCenter,
-  }) : assert(roundFactor <= 1, 'roundFactor must be less than or equal to 1'),
-       assert(roundFactor >= 0, 'roundFactor must be greater than or equal to 0');
+    this.gradientBegin,
+    this.gradientEnd
+  }) : assert(roundFactor >= 0 && roundFactor <= 1, 'roundFactor must be between 0 and 1'),
+       assert(
+         gradientColors == null || (gradientBegin != null && gradientEnd != null),
+         'When using gradientColors, both gradientBegin and gradientEnd must be provided.',
+       );
 
   @override
   void paint(PrettyQrPaintingContext context) {
