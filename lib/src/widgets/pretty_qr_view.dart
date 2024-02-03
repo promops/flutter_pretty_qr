@@ -54,12 +54,14 @@ class PrettyQrView extends LeafRenderObjectWidget {
     final Key? key,
     final int errorCorrectLevel = QrErrorCorrectLevel.L,
     final PrettyQrDecoration decoration = const PrettyQrDecoration(),
+    final ImageErrorWidgetBuilder? errorBuilder,
   }) {
     return PrettyQrDataView(
       key: key,
       data: data,
       decoration: decoration,
       errorCorrectLevel: errorCorrectLevel,
+      errorBuilder: errorBuilder,
     );
   }
 
