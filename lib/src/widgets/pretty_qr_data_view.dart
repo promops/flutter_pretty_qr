@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-unnecessary-setstate
+
 import 'package:flutter/foundation.dart';
 import 'package:pretty_qr_code/src/widgets/pretty_qr_error.dart';
 import 'package:qr/qr.dart';
@@ -74,13 +76,6 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
     }
   }
 
-  void _setError(Object error, StackTrace stackTrace) {
-    setState(() {
-      _lastError = error;
-      _lastStackTrace = stackTrace;
-    });
-  }
-
   @protected
   void prepareQrImage() {
     try {
@@ -90,7 +85,11 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
       );
       qrImage = QrImage(qrCode);
     } on Exception catch (error, stackTrace) {
-      _setError(error, stackTrace);
+      setState(() {
+        _lastError = error;
+        _lastStackTrace = stackTrace;
+      });
+
       if (widget.errorBuilder != null) {
         return;
       }
