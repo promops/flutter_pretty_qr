@@ -21,6 +21,10 @@ dart_code_metrics:
         max-identifier-length: 40
     prefer-returning-conditional-expressions: false
     unnecessary-trailing-comma: false
+    prefer-single-widget-per-file:
+      ignore-private-widgets: true
+    avoid-shadowing: 
+      ignore-parameters: true
 
     # warning
     avoid-collection-mutating-methods: false
