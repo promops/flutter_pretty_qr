@@ -51,7 +51,7 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
 
   @protected
 
-  // ignore: no-object-declaration, Catch all types of errors
+  // ignore: no-object-declaration, Catch all types of errors.
   Object? _lastError;
 
   @protected
@@ -128,7 +128,7 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
 }
 
 class _PrettyQrErrorWidget extends StatelessWidget {
-  // ignore: no-object-declaration, Aall types of errors
+  // ignore: no-object-declaration, All types of errors.
   final Object error;
 
   const _PrettyQrErrorWidget({
