@@ -29,6 +29,7 @@ class PrettyQrDataView extends StatefulWidget {
   /// If this builder is not provided, any exceptions will be reported to
   /// [FlutterError.onError]. If it is provided, the caller should either handle
   /// the exception by providing a replacement widget, or rethrow the exception.
+  @protected
   final ImageErrorWidgetBuilder? errorBuilder;
 
   @literal
