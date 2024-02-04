@@ -1,3 +1,7 @@
+## 3.2.0
+
+* Added `errorBuilder` to `PrettyQrView.data` constructor.
+
 ## 3.1.0
 
 * Optimize QR code repaints [#10](https://github.com/promops/flutter_pretty_qr/issues/10). Thanks to [nxtSwitch  (#28)](https://github.com/promops/flutter_pretty_qr/pull/28).
