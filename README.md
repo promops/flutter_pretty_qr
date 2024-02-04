@@ -102,7 +102,7 @@ Here is a curated list of how you can help:
 * Quiet Zone
 * Gradient filling 
 * ~~Export as image~~
-* Error handling API
+* ~~Error handling API~~
 * Gaps between modules
 * Background color for QR code
 * Timing Patterns and Alignment Patterns
