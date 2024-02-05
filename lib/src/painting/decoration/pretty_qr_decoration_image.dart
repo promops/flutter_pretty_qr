@@ -87,7 +87,6 @@ class PrettyQrDecorationImage extends DecorationImage {
   /// Linearly interpolates between two [PrettyQrDecorationImage]s.
   ///
   /// {@macro dart.ui.shadow.lerp}
-  @factory
   static PrettyQrDecorationImage? lerp(
     final PrettyQrDecorationImage? a,
     final PrettyQrDecorationImage? b,
@@ -118,20 +117,10 @@ class PrettyQrDecorationImage extends DecorationImage {
       );
     }
 
-    return PrettyQrDecorationImage(
-      image: t < 0.5 ? a.image : b.image,
+    return (t < 0.5 ? a : b).copyWith(
       scale: lerpDouble(a.scale, b.scale, t)!,
-      onError: t < 0.5 ? a.onError : b.onError,
-      colorFilter: t < 0.5 ? a.colorFilter : b.colorFilter,
-      fit: t < 0.5 ? a.fit : b.fit,
-      repeat: t < 0.5 ? a.repeat : b.repeat,
-      matchTextDirection: t < 0.5 ? a.matchTextDirection : b.matchTextDirection,
       opacity: lerpDouble(a.opacity, b.opacity, t)!,
-      filterQuality: t < 0.5 ? a.filterQuality : b.filterQuality,
-      invertColors: t < 0.5 ? a.invertColors : b.invertColors,
-      isAntiAlias: t < 0.5 ? a.isAntiAlias : b.isAntiAlias,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,
-      position: t < 0.5 ? a.position : b.position,
     );
   }
 
