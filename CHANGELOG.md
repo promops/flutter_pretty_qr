@@ -1,3 +1,7 @@
+## 3.2.1
+
+* Fixed bug when errorBuilder was working incorrectly when data was changed.
+
 ## 3.2.0
 
 * Added `errorBuilder` to `PrettyQrView.data` constructor.
