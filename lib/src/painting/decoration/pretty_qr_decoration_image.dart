@@ -87,6 +87,7 @@ class PrettyQrDecorationImage extends DecorationImage {
   /// Linearly interpolates between two [PrettyQrDecorationImage]s.
   ///
   /// {@macro dart.ui.shadow.lerp}
+  @factory
   static PrettyQrDecorationImage? lerp(
     final PrettyQrDecorationImage? a,
     final PrettyQrDecorationImage? b,
@@ -102,19 +103,17 @@ class PrettyQrDecorationImage extends DecorationImage {
     }
 
     if (a == null) {
-      return PrettyQrDecorationImage(
-        image: b!.image,
+      return b?.copyWith(
         scale: b.scale * t,
-        position: b.position,
+        opacity: b.opacity * t,
         padding: EdgeInsetsGeometry.lerp(null, b.padding, t)!,
       );
     }
 
     if (b == null) {
-      return PrettyQrDecorationImage(
-        image: a.image,
+      return a.copyWith(
         scale: a.scale * (1.0 - t),
-        position: a.position,
+        opacity: a.opacity * (1.0 - t),
         padding: EdgeInsetsGeometry.lerp(a.padding, null, t)!,
       );
     }
@@ -122,8 +121,17 @@ class PrettyQrDecorationImage extends DecorationImage {
     return PrettyQrDecorationImage(
       image: t < 0.5 ? a.image : b.image,
       scale: lerpDouble(a.scale, b.scale, t)!,
-      position: t < 0.5 ? a.position : b.position,
+      onError: t < 0.5 ? a.onError : b.onError,
+      colorFilter: t < 0.5 ? a.colorFilter : b.colorFilter,
+      fit: t < 0.5 ? a.fit : b.fit,
+      repeat: t < 0.5 ? a.repeat : b.repeat,
+      matchTextDirection: t < 0.5 ? a.matchTextDirection : b.matchTextDirection,
+      opacity: lerpDouble(a.opacity, b.opacity, t)!,
+      filterQuality: t < 0.5 ? a.filterQuality : b.filterQuality,
+      invertColors: t < 0.5 ? a.invertColors : b.invertColors,
+      isAntiAlias: t < 0.5 ? a.isAntiAlias : b.isAntiAlias,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,
+      position: t < 0.5 ? a.position : b.position,
     );
   }
 
