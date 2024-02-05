@@ -79,6 +79,9 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
   @pragma('vm:notify-debugger-on-exception')
   void _prepareQrImage() {
     try {
+      _lastError = null;
+      _lastStackTrace = null;
+
       final qrCode = QrCode.fromData(
         data: widget.data,
         errorCorrectLevel: widget.errorCorrectLevel,
