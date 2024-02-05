@@ -21,7 +21,7 @@ class PrettyQrDataView extends StatefulWidget {
 
   /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   @protected
-  final PrettyQrDecoration decoration;
+  final PrettyQrDecoration? decoration;
 
   /// A builder function that is called if an error occurs during data encoding.
   ///
@@ -35,9 +35,9 @@ class PrettyQrDataView extends StatefulWidget {
   const PrettyQrDataView({
     required this.data,
     super.key,
-    this.decoration = const PrettyQrDecoration(),
-    this.errorCorrectLevel = QrErrorCorrectLevel.L,
+    this.decoration,
     this.errorBuilder,
+    this.errorCorrectLevel = QrErrorCorrectLevel.L,
   }) : assert(errorCorrectLevel >= 0 && errorCorrectLevel <= 3);
 
   @override

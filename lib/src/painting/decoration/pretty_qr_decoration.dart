@@ -19,11 +19,21 @@ class PrettyQrDecoration with Diagnosticable {
   @nonVirtual
   final PrettyQrDecorationImage? image;
 
+  /// The default QR code shape.
+  ///
+  /// This value is used by default to paint QR codes.
+  @Deprecated(
+    'Please use `PrettyQrTheme.fallback` instead. '
+    'This feature was deprecated after v3.3.0.',
+  )
+  static const kDefaultDecorationShape = PrettyQrSmoothSymbol();
+
   /// Creates a QR image decoration.
   @literal
   const PrettyQrDecoration({
     this.image,
-    this.shape = const PrettyQrSmoothSymbol(),
+    // ignore: deprecated_member_use_from_same_package, backward compatibility.
+    this.shape = kDefaultDecorationShape,
   });
 
   @override
@@ -40,8 +50,8 @@ class PrettyQrDecoration with Diagnosticable {
     final PrettyQrDecorationImage? image,
   }) {
     return PrettyQrDecoration(
-      image: image ?? this.image,
       shape: shape ?? this.shape,
+      image: image ?? this.image,
     );
   }
 
@@ -79,20 +89,8 @@ class PrettyQrDecoration with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(
-        DiagnosticsProperty<PrettyQrShape>(
-          'shape',
-          shape,
-          defaultValue: const PrettyQrSmoothSymbol(),
-        ),
-      )
-      ..add(
-        DiagnosticsProperty<PrettyQrDecorationImage>(
-          'image',
-          image,
-          defaultValue: null,
-        ),
-      );
+      ..add(DiagnosticsProperty('shape', shape))
+      ..add(DiagnosticsProperty('image', image, defaultValue: null));
   }
 
   @override
@@ -106,7 +104,7 @@ class PrettyQrDecoration with Diagnosticable {
     if (other.runtimeType != runtimeType) return false;
 
     return other is PrettyQrDecoration &&
-        other.image == image &&
-        other.shape == shape;
+        other.shape == shape &&
+        other.image == image;
   }
 }
