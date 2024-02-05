@@ -102,27 +102,24 @@ class PrettyQrDecorationImage extends DecorationImage {
     }
 
     if (a == null) {
-      return PrettyQrDecorationImage(
-        image: b!.image,
+      return b?.copyWith(
         scale: b.scale * t,
-        position: b.position,
+        opacity: b.opacity * t,
         padding: EdgeInsetsGeometry.lerp(null, b.padding, t)!,
       );
     }
 
     if (b == null) {
-      return PrettyQrDecorationImage(
-        image: a.image,
+      return a.copyWith(
         scale: a.scale * (1.0 - t),
-        position: a.position,
+        opacity: a.opacity * (1.0 - t),
         padding: EdgeInsetsGeometry.lerp(a.padding, null, t)!,
       );
     }
 
-    return PrettyQrDecorationImage(
-      image: t < 0.5 ? a.image : b.image,
+    return (t < 0.5 ? a : b).copyWith(
       scale: lerpDouble(a.scale, b.scale, t)!,
-      position: t < 0.5 ? a.position : b.position,
+      opacity: lerpDouble(a.opacity, b.opacity, t)!,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,
     );
   }
