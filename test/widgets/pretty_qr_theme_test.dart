@@ -306,51 +306,65 @@ void main() {
   });
 
   group('PrettyQrDecorationThemeExtension', () {
-    test(
-      'returns theme decoration when current decoration is null',
-      () {
-        // arrange
-        const prettyQrTheme = PrettyQrTheme(
-          decoration: PrettyQrDecoration(
-            image: PrettyQrDecorationImage(
-              image: AssetImage('images/flutter.png'),
+    group('applyDefaults', () {
+      test(
+        'returns theme decoration when current decoration is null',
+        () {
+          // arrange
+          const prettyQrTheme = PrettyQrTheme(
+            decoration: PrettyQrDecoration(
+              image: PrettyQrDecorationImage(
+                image: AssetImage('images/flutter.png'),
+              ),
+              shape: PrettyQrSmoothSymbol(color: Colors.green),
             ),
-            shape: PrettyQrSmoothSymbol(color: Colors.green),
-          ),
-        );
+          );
 
-        // act
-        final mergedDecoration = null.applyDefaults(prettyQrTheme);
+          // act
+          final mergedDecoration = null.applyDefaults(prettyQrTheme);
 
-        // assert
-        expect(mergedDecoration.shape, equals(prettyQrTheme.decoration.shape));
-        expect(mergedDecoration.image, equals(prettyQrTheme.decoration.image));
-      },
-    );
+          // assert
+          expect(
+            mergedDecoration.shape,
+            equals(prettyQrTheme.decoration.shape),
+          );
+          expect(
+            mergedDecoration.image,
+            equals(prettyQrTheme.decoration.image),
+          );
+        },
+      );
 
-    test(
-      'correctly merged current decoration with theme decoration',
-      () {
-        // arrange
-        const decoration = PrettyQrDecoration(
-          shape: PrettyQrSmoothSymbol(color: Colors.yellow),
-        );
-        const prettyQrTheme = PrettyQrTheme(
-          decoration: PrettyQrDecoration(
-            image: PrettyQrDecorationImage(
-              image: AssetImage('images/flutter.png'),
+      test(
+        'correctly merged current decoration with theme decoration',
+        () {
+          // arrange
+          const decoration = PrettyQrDecoration(
+            shape: PrettyQrSmoothSymbol(color: Colors.yellow),
+          );
+          const prettyQrTheme = PrettyQrTheme(
+            decoration: PrettyQrDecoration(
+              image: PrettyQrDecorationImage(
+                image: AssetImage('images/flutter.png'),
+              ),
+              shape: PrettyQrSmoothSymbol(color: Colors.green),
             ),
-            shape: PrettyQrSmoothSymbol(color: Colors.green),
-          ),
-        );
+          );
 
-        // act
-        final mergedDecoration = decoration.applyDefaults(prettyQrTheme);
+          // act
+          final mergedDecoration = decoration.applyDefaults(prettyQrTheme);
 
-        // assert
-        expect(mergedDecoration.shape, equals(decoration.shape));
-        expect(mergedDecoration.image, equals(prettyQrTheme.decoration.image));
-      },
-    );
+          // assert
+          expect(
+            mergedDecoration.shape,
+            equals(decoration.shape),
+          );
+          expect(
+            mergedDecoration.image,
+            equals(prettyQrTheme.decoration.image),
+          );
+        },
+      );
+    });
   });
 }
