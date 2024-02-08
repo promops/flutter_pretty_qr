@@ -8,6 +8,9 @@ dart_code_metrics:
     # style
     arguments-ordering: false
     avoid-inferrable-type-arguments: false
+    avoid-similar-names:
+      exclude:
+        - test/**
     enum-constants-ordering: false
     format-comment:
       only-doc-comments: true
@@ -31,6 +34,8 @@ dart_code_metrics:
     avoid-collection-mutating-methods: false
     avoid-late-keyword: false
     avoid-long-functions:
+      exclude:
+        - test/**
       ignored-names:
         - toImage
     avoid-non-null-assertion: false
@@ -41,6 +46,9 @@ dart_code_metrics:
     no-magic-number: false
     prefer-addition-subtraction-assignments: false
     prefer-match-file-name: false
+    prefer-moving-to-variable:
+      exclude:
+        - test/**
 
   # warning (pubspec)
   pubspec-rules:
