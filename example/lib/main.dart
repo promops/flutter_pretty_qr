@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-import 'package:pretty_qr_code_example/featues/io_save_image.dart'
-    if (dart.library.html) 'package:pretty_qr_code_example/featues/web_save_image.dart';
+import 'package:pretty_qr_code_example/features/io_save_image.dart'
+    if (dart.library.html) 'package:pretty_qr_code_example/features/web_save_image.dart';
 
 void main() {
   runApp(const PrettyQrExampleApp());
@@ -125,8 +125,11 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
                                 decoration = value;
                               }),
                               onExportPressed: (size) {
-                                return qrImage.exportAsImage(context,
-                                    size: size, decoration: decoration);
+                                return qrImage.exportAsImage(
+                                  context,
+                                  size: size,
+                                  decoration: decoration,
+                                );
                               },
                             ),
                           ),

@@ -96,7 +96,7 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
 
   @override
   int get hashCode {
-    return runtimeType.hashCode ^ Object.hash(color, borderRadius);
+    return Object.hash(runtimeType, color, borderRadius);
   }
 
   @override

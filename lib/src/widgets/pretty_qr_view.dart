@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:pretty_qr_code/src/widgets/pretty_qr_theme.dart';
 import 'package:pretty_qr_code/src/widgets/pretty_qr_data_view.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
@@ -37,14 +38,14 @@ class PrettyQrView extends LeafRenderObjectWidget {
 
   /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   @protected
-  final PrettyQrDecoration decoration;
+  final PrettyQrDecoration? decoration;
 
   /// Creates a widget that displays an QR symbol obtained from a [qrImage].
   @literal
   const PrettyQrView({
     required this.qrImage,
     super.key,
-    this.decoration = const PrettyQrDecoration(),
+    this.decoration,
   });
 
   /// Creates a widget that displays an QR symbol obtained from a [data].
@@ -52,9 +53,9 @@ class PrettyQrView extends LeafRenderObjectWidget {
   static PrettyQrDataView data({
     required final String data,
     final Key? key,
-    final int errorCorrectLevel = QrErrorCorrectLevel.L,
-    final PrettyQrDecoration decoration = const PrettyQrDecoration(),
+    final PrettyQrDecoration? decoration,
     final ImageErrorWidgetBuilder? errorBuilder,
+    final int errorCorrectLevel = QrErrorCorrectLevel.L,
   }) {
     return PrettyQrDataView(
       key: key,
@@ -69,8 +70,8 @@ class PrettyQrView extends LeafRenderObjectWidget {
   PrettyQrRenderView createRenderObject(BuildContext context) {
     return PrettyQrRenderView(
       qrImage: qrImage,
-      decoration: decoration,
       configuration: createLocalImageConfiguration(context),
+      decoration: decoration.applyDefaults(PrettyQrTheme.of(context)),
     );
   }
 
@@ -82,8 +83,8 @@ class PrettyQrView extends LeafRenderObjectWidget {
     // ignore: avoid-mutating-parameters, updates the current render object.
     renderObject
       ..qrImage = qrImage
-      ..decoration = decoration
-      ..configuration = createLocalImageConfiguration(context);
+      ..configuration = createLocalImageConfiguration(context)
+      ..decoration = decoration.applyDefaults(PrettyQrTheme.of(context));
   }
 
   @override

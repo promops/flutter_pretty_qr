@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Setup lcov
+        run:  sudo apt-get -y install lcov
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Test
+        run: |
+          flutter test --no-pub --test-randomize-ordering-seed random --coverage
+          lcov -r coverage/lcov.info "*.*.dart" -o coverage/lcov.info

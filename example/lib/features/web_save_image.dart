@@ -7,7 +7,7 @@ extension PrettyQrImageExtension on QrImage {
   Future<String?> exportAsImage(
     final BuildContext context, {
     required final int size,
-    final PrettyQrDecoration decoration = const PrettyQrDecoration(),
+    required final PrettyQrDecoration decoration,
   }) async {
     final imageBytes = await toImageAsBytes(
       size: size,

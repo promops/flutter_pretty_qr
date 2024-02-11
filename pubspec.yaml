@@ -8,7 +8,7 @@ topics:
   - qr
   - pretty-qr
   - pretty-widgets
-  
+
 screenshots:
   - description: A smoothed QR code.
     path: resources/qr-code-blue.png
@@ -25,6 +25,9 @@ dependencies:
   meta: ^1.7.0
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
   # lints
   flutter_lints: ^2.0.1
-  dart_code_metrics_presets: ^2.6.0
+  dart_code_metrics_presets: ^2.9.0

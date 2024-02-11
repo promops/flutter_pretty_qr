@@ -21,7 +21,7 @@ class PrettyQrDataView extends StatefulWidget {
 
   /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
   @protected
-  final PrettyQrDecoration decoration;
+  final PrettyQrDecoration? decoration;
 
   /// A builder function that is called if an error occurs during data encoding.
   ///
@@ -35,9 +35,9 @@ class PrettyQrDataView extends StatefulWidget {
   const PrettyQrDataView({
     required this.data,
     super.key,
-    this.decoration = const PrettyQrDecoration(),
-    this.errorCorrectLevel = QrErrorCorrectLevel.L,
+    this.decoration,
     this.errorBuilder,
+    this.errorCorrectLevel = QrErrorCorrectLevel.L,
   }) : assert(errorCorrectLevel >= 0 && errorCorrectLevel <= 3);
 
   @override
@@ -47,12 +47,10 @@ class PrettyQrDataView extends StatefulWidget {
 @sealed
 class _PrettyQrDataViewState extends State<PrettyQrDataView> {
   @protected
-  late QrImage qrImage;
+  late QrImage _qrImage;
 
   @protected
-
-  // ignore: no-object-declaration, Catch all types of errors.
-  Object? _lastError;
+  Object? _lastError; // ignore: no-object-declaration, catch any errors.
 
   @protected
   StackTrace? _lastStackTrace;
@@ -86,7 +84,8 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
         data: widget.data,
         errorCorrectLevel: widget.errorCorrectLevel,
       );
-      qrImage = QrImage(qrCode);
+
+      _qrImage = QrImage(qrCode);
     } on Exception catch (error, stackTrace) {
       _lastError = error;
       _lastStackTrace = stackTrace;
@@ -123,17 +122,17 @@ class _PrettyQrDataViewState extends State<PrettyQrDataView> {
       }
       return widget.errorBuilder!(context, _lastError!, _lastStackTrace);
     }
-    return PrettyQrView(
-      qrImage: qrImage,
-      decoration: widget.decoration,
-    );
+    return PrettyQrView(qrImage: _qrImage, decoration: widget.decoration);
   }
 }
 
+/// A widget that renders a QR code exception's message.
+@immutable
 class _PrettyQrErrorWidget extends StatelessWidget {
-  // ignore: no-object-declaration, All types of errors.
-  final Object error;
+  @protected
+  final Object error; // ignore: no-object-declaration, catch any errors.
 
+  @literal
   const _PrettyQrErrorWidget({
     required this.error,
   });
@@ -165,7 +164,7 @@ class _PrettyQrErrorWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: FittedBox(
                   child: Text(
-                    '$error',
+                    error.toString(),
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: const TextStyle(
