@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
+import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
@@ -13,7 +14,7 @@ import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_neighbour_direc
 /// A rectangular modules with smoothed flow.
 @sealed
 class PrettyQrSmoothSymbol extends PrettyQrShape {
-  /// The color to use when filling the QR code.
+  /// The color or brush to use when filling the QR code.
   @nonVirtual
   final Color color;
 
@@ -32,10 +33,12 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   @override
   void paint(PrettyQrPaintingContext context) {
     final path = Path();
-    final paint = Paint()
-      ..color = color
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill;
+    final brush = PrettyQrBrush.from(color);
+
+    final paint = brush.toPaint(
+      context.estimatedBounds,
+      textDirection: context.textDirection,
+    );
 
     for (final module in context.matrix) {
       final moduleRect = module.resolveRect(context);
@@ -162,7 +165,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
     if (t == 1.0) return this;
 
     return PrettyQrSmoothSymbol(
-      color: Color.lerp(a.color, color, t)!,
+      color: PrettyQrBrush.lerp(a.color, color, t)!,
       roundFactor: lerpDouble(a.roundFactor, roundFactor, t)!,
     );
   }
@@ -180,7 +183,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
     if (t == 1.0) return b;
 
     return PrettyQrSmoothSymbol(
-      color: Color.lerp(color, b.color, t)!,
+      color: PrettyQrBrush.lerp(color, b.color, t)!,
       roundFactor: lerpDouble(roundFactor, b.roundFactor, t)!,
     );
   }

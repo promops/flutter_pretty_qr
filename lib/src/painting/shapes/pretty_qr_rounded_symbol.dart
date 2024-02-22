@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
+import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
@@ -9,7 +10,7 @@ import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensio
 /// A rectangular symbol with rounded corners.
 @sealed
 class PrettyQrRoundedSymbol extends PrettyQrShape {
-  /// The color of QR Code symbol.
+  /// The color or brush to use when filling the QR code.
   @nonVirtual
   final Color color;
 
@@ -32,10 +33,12 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
   @override
   void paint(PrettyQrPaintingContext context) {
     final path = Path();
-    final paint = Paint()
-      ..color = color
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill;
+    final brush = PrettyQrBrush.from(color);
+
+    final paint = brush.toPaint(
+      context.estimatedBounds,
+      textDirection: context.textDirection,
+    );
 
     final radius = borderRadius.resolve(context.textDirection);
 
@@ -71,7 +74,7 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
     if (t == 1.0) return this;
 
     return PrettyQrRoundedSymbol(
-      color: Color.lerp(a.color, color, t)!,
+      color: PrettyQrBrush.lerp(a.color, color, t)!,
       borderRadius: BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t)!,
     );
   }
@@ -89,7 +92,7 @@ class PrettyQrRoundedSymbol extends PrettyQrShape {
     if (t == 1.0) return b;
 
     return PrettyQrRoundedSymbol(
-      color: Color.lerp(color, b.color, t)!,
+      color: PrettyQrBrush.lerp(color, b.color, t)!,
       borderRadius: BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t)!,
     );
   }
