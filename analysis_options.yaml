@@ -32,6 +32,7 @@ dart_code_metrics:
 
     # warning
     avoid-collection-mutating-methods: false
+    avoid-duplicate-collection-elements: false
     avoid-late-keyword: false
     avoid-long-functions:
       exclude:

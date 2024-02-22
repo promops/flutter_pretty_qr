@@ -329,6 +329,10 @@ void main() {
             equals(prettyQrTheme.decoration.shape),
           );
           expect(
+            mergedDecoration.background,
+            equals(prettyQrTheme.decoration.background),
+          );
+          expect(
             mergedDecoration.image,
             equals(prettyQrTheme.decoration.image),
           );
@@ -358,6 +362,10 @@ void main() {
           expect(
             mergedDecoration.shape,
             equals(decoration.shape),
+          );
+          expect(
+            mergedDecoration.background,
+            equals(decoration.background),
           );
           expect(
             mergedDecoration.image,

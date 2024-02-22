@@ -113,9 +113,10 @@ extension PrettyQrDecorationThemeExtension on PrettyQrDecoration? {
     final decoration = this;
     if (decoration == null) return theme.decoration;
 
-    return PrettyQrDecoration(
+    return theme.decoration.copyWith(
       shape: decoration.shape,
-      image: decoration.image ?? theme.decoration.image,
+      image: decoration.image,
+      background: decoration.background,
     );
   }
 }
