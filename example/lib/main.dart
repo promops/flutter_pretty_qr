@@ -366,7 +366,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             title: const Text('Export'),
             onTap: () async {
               final path = await widget.onExportPressed?.call(imageSize);
-              if (!mounted) return;
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(path == null ? 'Saved' : 'Saved to $path'),
