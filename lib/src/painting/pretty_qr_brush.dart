@@ -91,12 +91,14 @@ class PrettyQrSolidBrush extends PrettyQrBrush {
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, value);
+    return value.hashCode;
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
+    if (other.runtimeType != runtimeType) return false;
+
     return other is PrettyQrSolidBrush && other.value == value;
   }
 }
@@ -133,12 +135,14 @@ class PrettyQrGradientBrush extends PrettyQrBrush {
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, gradient, value);
+    return gradient.hashCode;
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
+    if (other.runtimeType != runtimeType) return false;
+
     return other is PrettyQrGradientBrush && other.gradient == gradient;
   }
 }

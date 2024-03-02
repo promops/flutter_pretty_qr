@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 
 /// Extensions that apply to [Gradient].
 @internal
-extension PrettyQrBaseGradientExtension on Gradient {
+extension PrettyQrBrushGradientExtension on Gradient {
   /// Linearly interpolates from `this` to [Color].
   Gradient lerpToColor(Color color, double t) {
     final gradient = this;
@@ -44,7 +44,7 @@ extension PrettyQrBaseGradientExtension on Gradient {
 
 /// Extensions that apply to [Color].
 @internal
-extension PrettyQrColorBaseGradientExtension on Color {
+extension PrettyQrColorBrushGradientExtension on Color {
   /// Linearly interpolates from `this` to [Gradient].
   Gradient lerpToGradient(Gradient gradient, double t) {
     if (gradient is LinearGradient) {
