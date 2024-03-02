@@ -34,6 +34,9 @@ dart_code_metrics:
     avoid-collection-mutating-methods: false
     avoid-duplicate-collection-elements: false
     avoid-late-keyword: false
+    avoid-long-files:
+      exclude:
+        - test/**
     avoid-long-functions:
       exclude:
         - test/**
@@ -41,6 +44,9 @@ dart_code_metrics:
         - toImage
     avoid-non-null-assertion: false
     avoid-passing-default-values: false
+    avoid-self-compare:
+      exclude:
+        - test/**
     avoid-shadowing:
       ignore-parameters: true
     no-equal-arguments: false

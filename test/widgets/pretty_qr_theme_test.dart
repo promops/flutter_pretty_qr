@@ -151,9 +151,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'copyWith returns updated state with replaced decoration value',
-      (tester) async {
+      () {
         // arrange
         const updatedQrDecoration = PrettyQrDecoration(
           shape: PrettyQrSmoothSymbol(
@@ -173,9 +173,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'lerps correctly',
-      (tester) async {
+      () {
         // arrange
         const decoration1 = PrettyQrDecoration(
           shape: PrettyQrSmoothSymbol(color: Colors.green),
@@ -199,9 +199,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'lerp returns correct theme state',
-      (tester) async {
+      () {
         // arrange
         const decorationA = PrettyQrDecoration(
           shape: PrettyQrSmoothSymbol(color: Colors.green),
@@ -225,9 +225,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'lerp returns correct value when destination is null',
-      (tester) async {
+      () {
         // arrange
         const prettyQrTheme = PrettyQrTheme(
           decoration: PrettyQrDecoration(
@@ -250,9 +250,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'lerp returns correct value when destination identical to current theme',
-      (tester) async {
+      () {
         // arrange
         const prettyQrTheme = PrettyQrTheme(
           decoration: PrettyQrDecoration(
@@ -275,9 +275,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'implements debugFillProperties',
-      (WidgetTester tester) async {
+      () {
         // arrange
         final builder = DiagnosticPropertiesBuilder();
         const prettyQrTheme = PrettyQrTheme(
