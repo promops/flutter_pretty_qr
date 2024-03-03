@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
 import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
@@ -14,6 +17,10 @@ class PrettyQrDecoration with Diagnosticable {
   /// The QR modules shape.
   @nonVirtual
   final PrettyQrShape shape;
+
+  /// The color or brush to fill in the background of the QR code.
+  @nonVirtual
+  final Color? background;
 
   /// The image will be embed to the center of the QR code.
   @nonVirtual
@@ -31,9 +38,10 @@ class PrettyQrDecoration with Diagnosticable {
   /// Creates a QR image decoration.
   @literal
   const PrettyQrDecoration({
-    this.image,
     // ignore: deprecated_member_use_from_same_package, backward compatibility.
     this.shape = kDefaultDecorationShape,
+    this.background,
+    this.image,
   });
 
   @override
@@ -47,10 +55,12 @@ class PrettyQrDecoration with Diagnosticable {
   @useResult
   PrettyQrDecoration copyWith({
     final PrettyQrShape? shape,
+    final Color? background,
     final PrettyQrDecorationImage? image,
   }) {
     return PrettyQrDecoration(
       shape: shape ?? this.shape,
+      background: background ?? this.background,
       image: image ?? this.image,
     );
   }
@@ -81,6 +91,7 @@ class PrettyQrDecoration with Diagnosticable {
 
     return PrettyQrDecoration(
       shape: PrettyQrShape.lerp(a?.shape, b?.shape, t)!,
+      background: PrettyQrBrush.lerp(a?.background, b?.background, t),
       image: PrettyQrDecorationImage.lerp(a?.image, b?.image, t),
     );
   }
@@ -90,12 +101,13 @@ class PrettyQrDecoration with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('shape', shape))
+      ..add(DiagnosticsProperty('background', background, defaultValue: null))
       ..add(DiagnosticsProperty('image', image, defaultValue: null));
   }
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, image, shape);
+    return Object.hash(runtimeType, shape, background, image);
   }
 
   @override
@@ -105,6 +117,7 @@ class PrettyQrDecoration with Diagnosticable {
 
     return other is PrettyQrDecoration &&
         other.shape == shape &&
+        other.background == background &&
         other.image == image;
   }
 }

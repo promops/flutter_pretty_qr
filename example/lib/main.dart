@@ -60,9 +60,9 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
 
     decoration = const PrettyQrDecoration(
       shape: PrettyQrSmoothSymbol(
-        color: Color(0xFF74565F),
+        color: _PrettyQrSettings.kDefaultQrDecorationBrush,
       ),
-      image: _PrettyQrSettings.kDefaultPrettyQrDecorationImage,
+      image: _PrettyQrSettings.kDefaultQrDecorationImage,
     );
   }
 
@@ -220,10 +220,13 @@ class _PrettyQrSettings extends StatefulWidget {
   final ValueChanged<PrettyQrDecoration>? onChanged;
 
   @visibleForTesting
-  static const kDefaultPrettyQrDecorationImage = PrettyQrDecorationImage(
+  static const kDefaultQrDecorationImage = PrettyQrDecorationImage(
     image: AssetImage('images/flutter.png'),
     position: PrettyQrDecorationImagePosition.embedded,
   );
+
+  @visibleForTesting
+  static const kDefaultQrDecorationBrush = Color(0xFF74565F);
 
   const _PrettyQrSettings({
     required this.decoration,
@@ -310,11 +313,39 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             );
           },
         ),
-        SwitchListTile.adaptive(
-          value: shapeColor != Colors.black,
-          onChanged: (value) => toggleColor(),
-          secondary: const Icon(Icons.color_lens_outlined),
-          title: const Text('Colored'),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return PopupMenuButton(
+              onSelected: toggleColor,
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+              ),
+              initialValue:
+                  shapeColor == _PrettyQrSettings.kDefaultQrDecorationBrush,
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: true,
+                    child: Text('Color'),
+                  ),
+                  const PopupMenuItem(
+                    value: false,
+                    child: Text('Gradient'),
+                  ),
+                ];
+              },
+              child: ListTile(
+                leading: const Icon(Icons.color_lens_outlined),
+                title: const Text('Brush'),
+                trailing: Text(
+                  shapeColor == _PrettyQrSettings.kDefaultQrDecorationBrush
+                      ? 'Color'
+                      : 'Gradient',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            );
+          },
         ),
         SwitchListTile.adaptive(
           value: isRoundedBorders,
@@ -366,7 +397,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             title: const Text('Export'),
             onTap: () async {
               final path = await widget.onExportPressed?.call(imageSize);
-              if (!mounted) return;
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(path == null ? 'Saved' : 'Saved to $path'),
@@ -445,11 +476,21 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   }
 
   @protected
-  void toggleColor() {
+  void toggleColor(bool value) {
     var shape = widget.decoration.shape;
-    var color = shapeColor != Colors.black
-        ? Colors.black
-        : Theme.of(context).colorScheme.secondary;
+    var color = value
+        ? _PrettyQrSettings.kDefaultQrDecorationBrush
+        : PrettyQrBrush.gradient(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.teal[200]!,
+                Colors.blue[200]!,
+                Colors.red[200]!,
+              ],
+            ),
+          );
 
     if (shape is PrettyQrSmoothSymbol) {
       shape = PrettyQrSmoothSymbol(
@@ -489,11 +530,14 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
 
   @protected
   void toggleImage() {
-    const defaultImage = _PrettyQrSettings.kDefaultPrettyQrDecorationImage;
+    const defaultImage = _PrettyQrSettings.kDefaultQrDecorationImage;
     final image = widget.decoration.image != null ? null : defaultImage;
 
-    widget.onChanged?.call(
-        PrettyQrDecoration(image: image, shape: widget.decoration.shape));
+    widget.onChanged?.call(PrettyQrDecoration(
+      image: image,
+      shape: widget.decoration.shape,
+      background: widget.decoration.background,
+    ));
   }
 
   @protected

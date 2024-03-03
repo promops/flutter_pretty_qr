@@ -11,6 +11,7 @@ export 'src/base/pretty_qr_matrix.dart';
 export 'src/base/pretty_qr_module.dart';
 export 'src/base/pretty_qr_neighbour_direction.dart';
 
+export 'src/painting/pretty_qr_brush.dart';
 export 'src/painting/pretty_qr_shape.dart';
 
 export 'src/painting/shapes/pretty_qr_smooth_symbol.dart';
