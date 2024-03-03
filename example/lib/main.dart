@@ -226,11 +226,7 @@ class _PrettyQrSettings extends StatefulWidget {
   );
 
   @visibleForTesting
-  static const kDefaultQrDecorationBrush = PrettyQrBrush.gradient(
-    gradient: LinearGradient(
-      colors: [Color(0xFF74565F), Color(0xFF74565F)],
-    ),
-  );
+  static const kDefaultQrDecorationBrush = Color(0xFF74565F);
 
   const _PrettyQrSettings({
     required this.decoration,
@@ -320,7 +316,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
         LayoutBuilder(
           builder: (context, constraints) {
             return PopupMenuButton(
-              onSelected: (value) => toggleColor(),
+              onSelected: toggleColor,
               constraints: BoxConstraints(
                 minWidth: constraints.maxWidth,
               ),
@@ -480,9 +476,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   }
 
   @protected
-  void toggleColor() {
+  void toggleColor(bool value) {
     var shape = widget.decoration.shape;
-    var color = shapeColor != _PrettyQrSettings.kDefaultQrDecorationBrush
+    var color = value
         ? _PrettyQrSettings.kDefaultQrDecorationBrush
         : PrettyQrBrush.gradient(
             gradient: LinearGradient(
@@ -490,9 +486,8 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               end: Alignment.bottomCenter,
               colors: [
                 Colors.teal[200]!,
-                Colors.blue,
-                Colors.red,
-                Colors.yellow
+                Colors.blue[200]!,
+                Colors.red[200]!,
               ],
             ),
           );
