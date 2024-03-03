@@ -87,6 +87,34 @@ See the `example` folder for more code samples of the various possibilities.
  );
  ```
 
+ ## Gradient brush
+
+ You can use [PrettyQrBrush](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrBrush) to fill code with gradient.
+
+ ```dart
+  @override
+  Widget build(BuildContext context) {
+    return PrettyQrView(
+      qrImage: qrImage,
+      decoration: PrettyQrDecoration(
+        shape: PrettyQrRoundedSymbol(
+          color: PrettyQrBrush.gradient(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.teal[200]!,
+                Colors.blue[200]!,
+                Colors.red[200]!,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+ ```
+
 ## Contributing
 
 Contributions are welcomed!
@@ -100,7 +128,7 @@ Here is a curated list of how you can help:
 ## TODO: 
 
 * Quiet Zone
-* Gradient filling 
+* ~~Gradient filling~~ 
 * ~~Export as image~~
 * ~~Error handling API~~
 * Gaps between modules
