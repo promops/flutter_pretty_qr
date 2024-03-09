@@ -11,18 +11,18 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
-A highly customizable Flutter widget that make it easy to rendering QR code.
+A highly customizable Flutter widget that makes it easy to render QR codes. Built on top of the [qr](https://pub.dev/packages/qr) package.
 
 ## Features
 
-* [Live Preview](https://promops.github.io/flutter_pretty_qr/)
-* Built on [qr](https://pub.dev/packages/qr) package.
-* Supports embedding images.
-* Support tween animation.
-* Support some options for images.
-* Export qr as image.
+* [**Live Preview**](https://promops.github.io/flutter_pretty_qr/)
+* **Shapes** - The widget provides functionality for rendering various built-in shapes, namely [smooth](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSmoothSymbol-class.html) and [rounded](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrRoundedSymbol-class.html), or you can even create your patterns using the package API.
+* **Themes** - Allows you easily switch between themes using the [material theme extension](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrTheme-class.html).
+* **Branding** - Configure the display of the embedded image and adjust its style to best fit your needs.
+* **Exporting** - Save the QR сode as an image for sharing, embedding, or anything else.
+* **Customization** - Customize the appearance by setting the shape color or filling with a [gradient](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrBrush-class.html).
 
-If you want to say thank you, star us on GitHub or like us on pub.dev
+If you want to say thank you, star us on GitHub or like us on pub.dev.
 
 ## Usage
 
@@ -66,54 +66,27 @@ Widget build(BuildContext context) {
 }
 ```
 
-**Note:** Do _not_ create `QrImage` inside `build` method, or you may otherwise have undesired jank in UI thread.
-
-See the `example` folder for more code samples of the various possibilities.
+**Note:** Do _not_ create `QrImage` inside the `build` method; otherwise, you may have an undesired jank in the UI thread.
 
 ## Save the symbol as an image
 
- You can save the QR code as an image using the [toImage](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImage.html) or [toImageAsBytes](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImageAsBytes.html) extension methods that apply to `QrImage`. Optionally, the `configuration` parameter may be used to set additional saving options, such as pixel ratio or text direction.
+You can save the QR code as an image using the [toImage](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImage.html) or [toImageAsBytes](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImageAsBytes.html) extension methods that apply to `QrImage`. Optionally, the `configuration` parameter may be used to set additional saving options, such as pixel ratio or text direction.
 
- ```dart
- final qrCode = QrCode.fromData(
-   data: 'lorem ipsum dolor sit amet',
-   errorCorrectLevel: QrErrorCorrectLevel.H,
- );
- final qrImage = QrImage(qrCode);
- final imageBytes = await qrImage.toImageAsBytes(
-   size: 512,
-   format: ImageByteFormat.png,
-   decoration: const PrettyQrDecoration(),
- );
- ```
+```dart
+final qrCode = QrCode.fromData(
+  data: 'lorem ipsum dolor sit amet',
+  errorCorrectLevel: QrErrorCorrectLevel.H,
+);
 
- ## Gradient brush
+final qrImage = QrImage(qrCode);
+final qrImageBytes = await qrImage.toImageAsBytes(
+  size: 512,
+  format: ImageByteFormat.png,
+  decoration: const PrettyQrDecoration(),
+);
+```
 
- You can use [PrettyQrBrush](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrBrush-class.html) to fill code with gradient.
-
- ```dart
-  @override
-  Widget build(BuildContext context) {
-    return PrettyQrView(
-      qrImage: qrImage,
-      decoration: PrettyQrDecoration(
-        shape: PrettyQrRoundedSymbol(
-          color: PrettyQrBrush.gradient(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.teal[200]!,
-                Colors.blue[200]!,
-                Colors.red[200]!,
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
- ```
+See the `example` folder for more code samples of the various possibilities.
 
 ## Contributing
 
@@ -125,13 +98,14 @@ Here is a curated list of how you can help:
 * Report parts of the documentation that are unclear
 * Report bugs and scenarios that are difficult to implement
 
-## TODO: 
+## Planned for future release(s):
 
 * Quiet Zone
-* ~~Gradient filling~~ 
+* ~~Gradient filling~~
+* Add more styles
 * ~~Export as image~~
 * ~~Error handling API~~
 * Gaps between modules
-* Background color for QR code
+* ~~Background color for QR code~~
 * Timing Patterns and Alignment Patterns
 * Automatic image scale limitation (embedded mode)
