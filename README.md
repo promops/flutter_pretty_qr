@@ -89,7 +89,7 @@ See the `example` folder for more code samples of the various possibilities.
 
  ## Gradient brush
 
- You can use [PrettyQrBrush](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrBrush) to fill code with gradient.
+ You can use [PrettyQrBrush](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrBrush-class.html) to fill code with gradient.
 
  ```dart
   @override
