@@ -1,7 +1,7 @@
 ## 3.3.0 
 
-* Added `PrettyQrBrush` gradient filling option. Thanks to [nxtSwitch  (#40)](https://github.com/promops/flutter_pretty_qr/pull/28).
-* Added `PrettyQrTheme` extension. Thanks to [nxtSwitch  (#37)](https://github.com/promops/flutter_pretty_qr/pull/37). 
+* Added `PrettyQrBrush` gradient filling option [#40](https://github.com/promops/flutter_pretty_qr/pull/28).
+* Added `PrettyQrTheme` extension [#37](https://github.com/promops/flutter_pretty_qr/pull/37). 
 * Fixed bug when image exporting was working incorrectly if platform does not support export.
 
 ## 3.2.1
