@@ -1,3 +1,9 @@
+## 3.3.0 
+
+* Added `PrettyQrBrush` gradient filling option [#40](https://github.com/promops/flutter_pretty_qr/pull/28).
+* Added `PrettyQrTheme` extension [#37](https://github.com/promops/flutter_pretty_qr/pull/37). 
+* Added assert when platform does not support export.
+
 ## 3.2.1
 
 * Fixed bug when errorBuilder was working incorrectly when data was changed.
