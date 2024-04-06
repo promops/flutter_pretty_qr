@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_brush_extensions.dart';
 
 /// A brush to use when filling the QR Code.
-@sealed
 @immutable
 abstract class PrettyQrBrush extends Color {
   /// Creates a QR Code brush.
@@ -40,7 +39,6 @@ abstract class PrettyQrBrush extends Color {
   /// Linearly interpolates between two [PrettyQrBrush]s.
   ///
   /// {@macro dart.ui.shadow.lerp}
-  @useResult
   static Color? lerp(
     final Color? a,
     final Color? b,
@@ -70,6 +68,17 @@ abstract class PrettyQrBrush extends Color {
 
     return PrettyQrBrush.gradient(gradient: a.gradient.lerpToColor(b, t));
   }
+
+  @override
+  int get hashCode {
+    return value.hashCode;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is PrettyQrBrush && other.value == value;
+  }
 }
 
 /// A single color QR Code brush.
@@ -79,6 +88,7 @@ class PrettyQrSolidBrush extends PrettyQrBrush {
   /// {@template pretty_qr_code.painting.PrettyQrSolidBrush}
   /// Creates a solid brush.
   /// {@endtemplate}
+  @literal
   const PrettyQrSolidBrush(final int value) : super._(value);
 
   @override
@@ -114,6 +124,7 @@ class PrettyQrGradientBrush extends PrettyQrBrush {
   /// {@template pretty_qr_code.painting.PrettyQrGradientBrush}
   /// Creates a brush from [gradient].
   /// {@endtemplate}
+  @literal
   const PrettyQrGradientBrush({
     required this.gradient,
   }) : super._(0x00000000);
