@@ -56,7 +56,9 @@ dart_code_metrics:
     prefer-moving-to-variable:
       exclude:
         - test/**
-    prefer-overriding-parent-equality: false
+    prefer-overriding-parent-equality:
+      exclude:
+        - test/**
 
   # warning (pubspec)
   pubspec-rules:
