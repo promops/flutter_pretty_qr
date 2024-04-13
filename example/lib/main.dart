@@ -276,6 +276,14 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     return false;
   }
 
+  @protected
+  void showExportPath(String? path) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(path == null ? 'Saved' : 'Saved to $path')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -397,12 +405,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             title: const Text('Export'),
             onTap: () async {
               final path = await widget.onExportPressed?.call(imageSize);
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(path == null ? 'Saved' : 'Saved to $path'),
-                ),
-              );
+              showExportPath(path);
             },
             trailing: Row(
               mainAxisSize: MainAxisSize.min,

@@ -297,7 +297,7 @@ void main() {
         expect(description.length, equals(1));
         expect(
           description,
-          equalsIgnoringHashCodes([
+          equals([
             'decoration: PrettyQrDecoration(shape: Instance of \'PrettyQrSmoothSymbol\')',
           ]),
         );

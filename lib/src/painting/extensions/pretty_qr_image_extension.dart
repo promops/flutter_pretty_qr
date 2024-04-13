@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
+// ignore: unnecessary_import, backward compatibility for flutter 3.0.
+import 'dart:typed_data';
 
 import 'package:qr/qr.dart';
 import 'package:flutter/rendering.dart';
@@ -24,7 +26,10 @@ extension PrettyQrImageExtension on QrImage {
   }) {
     PrettyQrDecoration safeDecoration = decoration;
     if (decoration.image != null && !_isNestedImagesSupported) {
-      safeDecoration = PrettyQrDecoration(shape: decoration.shape);
+      safeDecoration = PrettyQrDecoration(
+        shape: decoration.shape,
+        background: decoration.background,
+      );
     }
 
     final imageSize = Size.square(size.toDouble());
