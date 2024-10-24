@@ -2,8 +2,8 @@
 
 import 'package:meta/meta.dart';
 
-import 'package:pretty_qr_code/src/rendering/impeller/io_pretty_qr_impeller.dart'
-    if (dart.library.html) 'package:pretty_qr_code/src/rendering/impeller/web_pretty_qr_impeller.dart';
+import 'package:pretty_qr_code/src/rendering/impeller/web_pretty_qr_impeller.dart'
+    if (dart.library.io) 'package:pretty_qr_code/src/rendering/impeller/io_pretty_qr_impeller.dart';
 
 /// {@template pretty_qr_code.rendering.PrettyQrRenderExperiments}
 /// To enable experiments related to rendering QR codes, edit the desired flags.
