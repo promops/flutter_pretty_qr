@@ -10,9 +10,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
+
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
-import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
+
+import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_capabilities.dart';
 
 /// Extensions that apply to QR Image.
 extension PrettyQrImageExtension on QrImage {
@@ -112,9 +115,8 @@ extension PrettyQrImageExtension on QrImage {
   /// Checks if the current platform support `toImage` method.
   @protected
   bool get _isNestedImagesSupported {
-    const isCanvasKit = bool.fromEnvironment('FLUTTER_WEB_USE_SKIA');
     assert(() {
-      if (kIsWeb && !isCanvasKit) {
+      if (!PrettyQrRenderCapabilities.enableExportNestedImage) {
         FlutterError.reportError(
           FlutterErrorDetails(
             silent: true,
@@ -130,6 +132,6 @@ extension PrettyQrImageExtension on QrImage {
       }
       return true;
     }());
-    return !kIsWeb || isCanvasKit;
+    return PrettyQrRenderCapabilities.enableExportNestedImage;
   }
 }

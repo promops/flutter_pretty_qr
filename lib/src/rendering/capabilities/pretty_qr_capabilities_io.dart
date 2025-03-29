@@ -1,8 +1,24 @@
-// ignore_for_file: prefer-static-class, doesn't matter, it's for web support.
+// ignore_for_file: prefer-static-class
 
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+
+/// The dart:io implementation of [isSkwasm].
+///
+/// This bool shouldn't be used outside of web.
+@internal
+bool get isSkwasm {
+  throw UnimplementedError('isSkwasm is not implemented for dart:io.');
+}
+
+/// The dart:io implementation of [isCanvasKit].
+///
+/// This bool shouldn't be used outside of web.
+@internal
+bool get isCanvasKit {
+  throw UnimplementedError('isCanvasKit is not implemented for dart:io.');
+}
 
 /// Attempts to indirectly detect whether the `Impeller` rendering engine has
 /// fallback to no index buffer.
