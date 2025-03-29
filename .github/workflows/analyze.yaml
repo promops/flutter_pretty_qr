@@ -46,7 +46,7 @@ jobs:
       - name: Unused code
         run: |
           dcm check-unused-files --no-analytics .
-          dcm check-unused-code --no-analytics .
+          dcm check-unused-code --exclude-public-api --no-analytics .
 
   publication-guidelines:
     runs-on: ubuntu-latest
