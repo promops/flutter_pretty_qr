@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-referencing-subclasses, internal API.
+
 import 'dart:ui';
 
 import 'package:meta/meta.dart';

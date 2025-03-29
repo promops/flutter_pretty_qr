@@ -29,8 +29,8 @@ class PrettyQrDecorationImage extends DecorationImage {
 
   /// Creates an image to show into QR code.
   ///
-  /// Not recommended to use scale over `0.2`, see the
-  /// [qr code error correction feature](https://www.qrcode.com/en/about/error_correction.html).
+  /// Not recommended to use scale over `0.2`, see the QR code
+  /// [error correction](https://www.qrcode.com/en/about/error_correction.html) feature.
   @literal
   const PrettyQrDecorationImage({
     required super.image,

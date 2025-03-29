@@ -1,5 +1,5 @@
 name: pretty_qr_code
-description: Pretty QR code for Flutter. You can round the edges with parameter or use the standard view.
+description: A highly customizable Flutter widget that makes it easy to render QR codes.
 
 version: 3.3.0
 homepage: https://github.com/promops/flutter_pretty_qr
@@ -31,4 +31,4 @@ dev_dependencies:
 
   # lints
   flutter_lints: ^2.0.1
-  dart_code_metrics_presets: ^2.10.0
+  dart_code_metrics_presets: ^2.21.0

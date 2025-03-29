@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-referencing-subclasses, internal API.
+
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
 
@@ -8,7 +10,7 @@ import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_brush_extension
 abstract class PrettyQrBrush extends Color {
   /// Creates a QR Code brush.
   @literal
-  const PrettyQrBrush._(super.color);
+  const PrettyQrBrush(super.color);
 
   /// The completely invisible brush.
   static const transparent = PrettyQrBrush.solid(0x00000000);
@@ -68,17 +70,6 @@ abstract class PrettyQrBrush extends Color {
 
     return PrettyQrBrush.gradient(gradient: a.gradient.lerpToColor(b, t));
   }
-
-  @override
-  int get hashCode {
-    return value.hashCode;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is PrettyQrBrush && other.value == value;
-  }
 }
 
 /// A single color QR Code brush.
@@ -89,7 +80,7 @@ class PrettyQrSolidBrush extends PrettyQrBrush {
   /// Creates a solid brush.
   /// {@endtemplate}
   @literal
-  const PrettyQrSolidBrush(final int value) : super._(value);
+  const PrettyQrSolidBrush(super.value);
 
   @override
   Paint toPaint(Rect rect, {TextDirection? textDirection}) {
@@ -127,7 +118,7 @@ class PrettyQrGradientBrush extends PrettyQrBrush {
   @literal
   const PrettyQrGradientBrush({
     required this.gradient,
-  }) : super._(0x00000000);
+  }) : super(0x00000000);
 
   @override
   int get value {
