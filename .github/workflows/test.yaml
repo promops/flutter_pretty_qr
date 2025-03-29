@@ -25,7 +25,7 @@ jobs:
         run:  sudo apt-get -y install lcov
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: dart pub get
 
       - name: Test
         run: |
