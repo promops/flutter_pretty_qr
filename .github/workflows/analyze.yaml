@@ -37,7 +37,7 @@ jobs:
         run: |
           flutter analyze --fatal-infos --fatal-warnings .
           dcm analyze --no-analytics --reporter=github .
-          dcm check-unnecessary-nullable --no-analytics lib
+          dcm check-code-duplication --no-analytics .
 
       - name: Dependencies
         run: |
