@@ -28,6 +28,7 @@ extension PrettyQrImageExtension on QrImage {
     if (decoration.image != null && !_isNestedImagesSupported) {
       safeDecoration = PrettyQrDecoration(
         shape: decoration.shape,
+        quietZone: decoration.quietZone,
         background: decoration.background,
       );
     }

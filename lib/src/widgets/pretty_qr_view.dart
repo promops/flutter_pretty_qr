@@ -3,10 +3,12 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:pretty_qr_code/src/widgets/pretty_qr_theme.dart';
-import 'package:pretty_qr_code/src/widgets/pretty_qr_data_view.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_view.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
+
+import 'package:pretty_qr_code/src/widgets/pretty_qr_theme.dart';
+import 'package:pretty_qr_code/src/widgets/pretty_qr_data_view.dart';
+import 'package:pretty_qr_code/src/widgets/extensions/pretty_qr_decoration_theme_extension.dart';
 
 /// {@template pretty_qr_code.widgets.PrettyQrView}
 /// A widget that displays a QR code symbol.
@@ -26,6 +28,7 @@ import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart
 ///       image: AssetImage('images/flutter.png'),
 ///       position: PrettyQrDecorationImagePosition.embedded,
 ///     ),
+///     quietZone: PrettyQrQuietZone.modules(2),
 ///   ),
 /// )
 /// ```

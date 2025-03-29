@@ -6,21 +6,29 @@ import 'package:flutter/foundation.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_painter.dart';
+import 'package:pretty_qr_code/src/painting/pretty_qr_quiet_zone.dart';
 import 'package:pretty_qr_code/src/painting/shapes/pretty_qr_smooth_symbol.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_image.dart';
 
 /// {@template pretty_qr_code.painting.PrettyQrDecoration}
 /// An immutable description of how to paint a QR image.
 /// {@endtemplate}
+@sealed
 @immutable
 class PrettyQrDecoration with Diagnosticable {
+  /// The color or brush to fill in the background of the QR code.
+  @nonVirtual
+  final Color? background;
+
   /// The QR modules shape.
   @nonVirtual
   final PrettyQrShape shape;
 
-  /// The color or brush to fill in the background of the QR code.
+  /// {@macro pretty_qr_code.painting.PrettyQrQuietZone}
+  ///
+  /// {@macro pretty_qr_code.painting.PrettyQrQuietZone.standard}
   @nonVirtual
-  final Color? background;
+  final PrettyQrQuietZone? quietZone;
 
   /// The image will be embed to the center of the QR code.
   @nonVirtual
@@ -38,10 +46,11 @@ class PrettyQrDecoration with Diagnosticable {
   /// Creates a QR image decoration.
   @literal
   const PrettyQrDecoration({
+    this.image,
+    this.quietZone,
+    this.background,
     // ignore: deprecated_member_use_from_same_package, backward compatibility.
     this.shape = kDefaultDecorationShape,
-    this.background,
-    this.image,
   });
 
   @override
@@ -54,14 +63,16 @@ class PrettyQrDecoration with Diagnosticable {
   @factory
   @useResult
   PrettyQrDecoration copyWith({
-    final PrettyQrShape? shape,
-    final Color? background,
     final PrettyQrDecorationImage? image,
+    final PrettyQrQuietZone? quietZone,
+    final Color? background,
+    final PrettyQrShape? shape,
   }) {
     return PrettyQrDecoration(
-      shape: shape ?? this.shape,
-      background: background ?? this.background,
       image: image ?? this.image,
+      quietZone: quietZone ?? this.quietZone,
+      background: background ?? this.background,
+      shape: shape ?? this.shape,
     );
   }
 
@@ -90,9 +101,10 @@ class PrettyQrDecoration with Diagnosticable {
     }
 
     return PrettyQrDecoration(
-      shape: PrettyQrShape.lerp(a?.shape, b?.shape, t)!,
-      background: PrettyQrBrush.lerp(a?.background, b?.background, t),
       image: PrettyQrDecorationImage.lerp(a?.image, b?.image, t),
+      quietZone: PrettyQrQuietZone.lerp(a?.quietZone, b?.quietZone, t),
+      background: PrettyQrBrush.lerp(a?.background, b?.background, t),
+      shape: PrettyQrShape.lerp(a?.shape, b?.shape, t)!,
     );
   }
 
@@ -100,24 +112,27 @@ class PrettyQrDecoration with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('shape', shape))
+      ..add(DiagnosticsProperty('image', image, defaultValue: null))
+      ..add(DiagnosticsProperty('quietZone', quietZone, defaultValue: null))
       ..add(DiagnosticsProperty('background', background, defaultValue: null))
-      ..add(DiagnosticsProperty('image', image, defaultValue: null));
+      ..add(DiagnosticsProperty('shape', shape));
   }
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, shape, background, image);
+    return Object.hash(image, background, shape, quietZone);
   }
 
   @override
   bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other.runtimeType != runtimeType) return false;
+    if (identical(other, this)) {
+      return true;
+    }
 
     return other is PrettyQrDecoration &&
-        other.shape == shape &&
+        other.image == image &&
+        other.quietZone == quietZone &&
         other.background == background &&
-        other.image == image;
+        other.shape == shape;
   }
 }
