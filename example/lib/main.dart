@@ -63,6 +63,8 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
         color: _PrettyQrSettings.kDefaultQrDecorationBrush,
       ),
       image: _PrettyQrSettings.kDefaultQrDecorationImage,
+      background: Colors.transparent,
+      quietZone: PrettyQrQuietZone.zero,
     );
   }
 
@@ -288,6 +290,13 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SwitchListTile.adaptive(
+          value: widget.decoration.quietZone != PrettyQrQuietZone.zero,
+          onChanged: (value) => toggleQuietZone(),
+          secondary: const Icon(Icons.border_outer),
+          title: const Text('Quiet Zone'),
+        ),
+        const Divider(),
         LayoutBuilder(
           builder: (context, constraints) {
             return PopupMenuButton(
@@ -354,6 +363,12 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               ),
             );
           },
+        ),
+        SwitchListTile.adaptive(
+          value: widget.decoration.background != Colors.transparent,
+          onChanged: (value) => toggleBackground(),
+          secondary: const Icon(Icons.format_color_fill),
+          title: const Text('Background'),
         ),
         SwitchListTile.adaptive(
           value: isRoundedBorders,
@@ -508,6 +523,28 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     }
 
     widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
+  }
+
+  @protected
+  void toggleQuietZone() {
+    widget.onChanged?.call(
+      widget.decoration.copyWith(
+        quietZone: widget.decoration.quietZone != PrettyQrQuietZone.zero
+            ? PrettyQrQuietZone.zero
+            : PrettyQrQuietZone.standart,
+      ),
+    );
+  }
+
+  @protected
+  void toggleBackground() {
+    widget.onChanged?.call(
+      widget.decoration.copyWith(
+        background: widget.decoration.background != Colors.transparent
+            ? Colors.transparent
+            : _PrettyQrSettings.kDefaultQrDecorationBrush.withOpacity(0.1),
+      ),
+    );
   }
 
   @protected
