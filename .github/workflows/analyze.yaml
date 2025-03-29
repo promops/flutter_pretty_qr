@@ -25,7 +25,7 @@ jobs:
         uses: CQLabs/setup-dcm@v2
         with:
           version: '1.27.1'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         run: flutter pub get
@@ -58,6 +58,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.0.0'
 
       - name: Install Dependencies
         run: |

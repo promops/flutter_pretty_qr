@@ -30,4 +30,4 @@ jobs:
       - name: Test
         run: |
           flutter test --no-pub --test-randomize-ordering-seed random --coverage
-          lcov -r coverage/lcov.info "*.*.dart" -o coverage/lcov.info
+          lcov -r coverage/lcov.info -o coverage/lcov.info
