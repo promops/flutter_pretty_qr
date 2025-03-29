@@ -35,6 +35,7 @@ PrettyQrView.data(
     image: PrettyQrDecorationImage(
       image: AssetImage('images/flutter.png'),
     ),
+    quietZone: PrettyQrQuietZone.standart,
   ),
 )
 ```
@@ -100,7 +101,7 @@ Here is a curated list of how you can help:
 
 ## Planned for future release(s):
 
-* Quiet Zone
+* ~~Quiet Zone~~
 * ~~Gradient filling~~
 * Add more styles
 * ~~Export as image~~

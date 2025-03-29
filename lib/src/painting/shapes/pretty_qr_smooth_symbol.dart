@@ -9,7 +9,7 @@ import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
-import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_neighbour_direction_extensions.dart';
+import 'package:pretty_qr_code/src/base/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
 /// A rectangular modules with smoothed flow.
 @sealed
@@ -48,10 +48,10 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
       if (module.isDark) {
         modulePath = Path();
         modulePath
-          ..addRRect(_transformDarkModuleRect(moduleRect, moduleNeighbours))
+          ..addRRect(transformDarkModuleRect(moduleRect, moduleNeighbours))
           ..close();
       } else {
-        modulePath = _transformWhiteModuleRect(moduleRect, moduleNeighbours);
+        modulePath = transformWhiteModuleRect(moduleRect, moduleNeighbours);
       }
 
       if (PrettyQrRenderExperiments.needsAvoidComplexPaths) {
@@ -66,7 +66,8 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   }
 
   @protected
-  RRect _transformDarkModuleRect(
+  @pragma('vm:prefer-inline')
+  RRect transformDarkModuleRect(
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
@@ -88,7 +89,8 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   }
 
   @protected
-  Path _transformWhiteModuleRect(
+  @pragma('vm:prefer-inline')
+  Path transformWhiteModuleRect(
     final Rect moduleRect,
     final Set<PrettyQrNeighbourDirection> neighbours,
   ) {
@@ -97,7 +99,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atTopAndLeft && neighbours.atToptLeft) {
       path.addPath(
-        _buildInnerCornerShape(
+        buildInnerCornerShape(
           moduleRect.topLeft.translate(0, padding),
           moduleRect.topLeft,
           moduleRect.topLeft.translate(padding, 0),
@@ -108,7 +110,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atTopAndRight && neighbours.atToptRight) {
       path.addPath(
-        _buildInnerCornerShape(
+        buildInnerCornerShape(
           moduleRect.topRight.translate(-padding, 0),
           moduleRect.topRight,
           moduleRect.topRight.translate(0, padding),
@@ -119,7 +121,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atBottomAndLeft && neighbours.atBottomLeft) {
       path.addPath(
-        _buildInnerCornerShape(
+        buildInnerCornerShape(
           moduleRect.bottomLeft.translate(0, -padding),
           moduleRect.bottomLeft,
           moduleRect.bottomLeft.translate(padding, 0),
@@ -130,7 +132,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
 
     if (neighbours.atBottomAndRight && neighbours.atBottomRight) {
       path.addPath(
-        _buildInnerCornerShape(
+        buildInnerCornerShape(
           moduleRect.bottomRight.translate(-padding, 0),
           moduleRect.bottomRight,
           moduleRect.bottomRight.translate(0, -padding),
@@ -143,12 +145,22 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   }
 
   @protected
-  Path _buildInnerCornerShape(Offset p1, Offset p2, Offset p3) {
+  @pragma('vm:prefer-inline')
+  Path buildInnerCornerShape(
+    Offset firstPoint,
+    Offset centerPoint,
+    Offset lastPoint,
+  ) {
     return Path()
-      ..moveTo(p1.dx, p1.dy)
-      ..quadraticBezierTo(p2.dx, p2.dy, p3.dx, p3.dy)
-      ..lineTo(p2.dx, p2.dy)
-      ..lineTo(p1.dx, p1.dy)
+      ..moveTo(firstPoint.dx, firstPoint.dy)
+      ..quadraticBezierTo(
+        centerPoint.dx,
+        centerPoint.dy,
+        lastPoint.dx,
+        lastPoint.dy,
+      )
+      ..lineTo(centerPoint.dx, centerPoint.dy)
+      ..lineTo(firstPoint.dx, firstPoint.dy)
       ..close();
   }
 

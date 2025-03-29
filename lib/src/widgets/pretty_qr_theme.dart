@@ -49,8 +49,8 @@ class PrettyQrTheme extends ThemeExtension<PrettyQrTheme> with Diagnosticable {
   factory PrettyQrTheme.of(
     final BuildContext context,
   ) {
-    // See issue: https://github.com/flutter/flutter/issues/103313.
     final themeExtension = Theme.of(context).extensions[PrettyQrTheme];
+    // ignore: avoid-type-casts, see issue: https://github.com/flutter/flutter/issues/103313.
     return themeExtension as PrettyQrTheme? ?? const PrettyQrTheme.fallback();
   }
 
@@ -99,24 +99,5 @@ class PrettyQrTheme extends ThemeExtension<PrettyQrTheme> with Diagnosticable {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     return other is PrettyQrTheme && other.decoration == decoration;
-  }
-}
-
-/// Extensions that apply to QR code decoration.
-extension PrettyQrDecorationThemeExtension on PrettyQrDecoration? {
-  /// Creates a new QR code decoration that is a combination of this decoration
-  /// and the given [theme] values.
-  ///
-  /// Only null valued properties from this [PrettyQrDecoration] are replaced
-  /// by the corresponding values from [theme].
-  PrettyQrDecoration applyDefaults(PrettyQrTheme theme) {
-    final decoration = this;
-    if (decoration == null) return theme.decoration;
-
-    return theme.decoration.copyWith(
-      shape: decoration.shape,
-      image: decoration.image,
-      background: decoration.background,
-    );
   }
 }

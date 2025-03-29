@@ -32,4 +32,14 @@ class PrettyQrPaintingContext {
     required this.matrix,
     this.textDirection,
   });
+
+  /// Returns QR code bounds dimension.
+  @pragma('vm:prefer-inline')
+  double get boundsDimension {
+    assert(
+      estimatedBounds.width == estimatedBounds.height,
+      'The estimated bounds should be a square.',
+    );
+    return estimatedBounds.width;
+  }
 }

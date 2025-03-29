@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-unnecessary-local-late
+
 import 'dart:async';
 import 'dart:ui' as ui;
 // ignore: unnecessary_import, backward compatibility for flutter 3.0.
@@ -28,6 +30,7 @@ extension PrettyQrImageExtension on QrImage {
     if (decoration.image != null && !_isNestedImagesSupported) {
       safeDecoration = PrettyQrDecoration(
         shape: decoration.shape,
+        quietZone: decoration.quietZone,
         background: decoration.background,
       );
     }

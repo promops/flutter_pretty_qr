@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -30,4 +30,4 @@ jobs:
       - name: Test
         run: |
           flutter test --no-pub --test-randomize-ordering-seed random --coverage
-          lcov -r coverage/lcov.info "*.*.dart" -o coverage/lcov.info
+          lcov -r coverage/lcov.info -o coverage/lcov.info

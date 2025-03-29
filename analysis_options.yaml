@@ -7,7 +7,9 @@ dart_code_metrics:
   rules:
     # style
     arguments-ordering: false
+    avoid-adjacent-strings: false
     avoid-inferrable-type-arguments: false
+    avoid-returning-cascades: false
     avoid-similar-names:
       exclude:
         - test/**
@@ -15,14 +17,21 @@ dart_code_metrics:
     format-comment:
       only-doc-comments: true
     member-ordering: false
+    newline-before-case: false
     newline-before-return: false
     parameters-ordering: false
+    prefer-boolean-prefixes: false
     prefer-correct-callback-field-name: false
     prefer-correct-identifier-length:
-        exceptions: ['i', 'x', 'y']
+        exceptions: ['i', 'x', 'y', 'a', 'b', 't']
         min-identifier-length: 3
         max-identifier-length: 40
+    prefer-extracting-function-callbacks:
+      allowed-line-count: 5
+    prefer-named-parameters:
+      max-number: 3
     prefer-returning-conditional-expressions: false
+    prefer-single-declaration-per-file: false
     unnecessary-trailing-comma: false
 
     # style (flutter)
@@ -32,6 +41,7 @@ dart_code_metrics:
 
     # warning
     avoid-collection-mutating-methods: false
+    avoid-continue: false
     avoid-duplicate-collection-elements: false
     avoid-late-keyword: false
     avoid-long-files:
@@ -41,6 +51,7 @@ dart_code_metrics:
       exclude:
         - test/**
       ignored-names:
+        - paint
         - toImage
     avoid-non-null-assertion: false
     avoid-passing-default-values: false
@@ -51,7 +62,12 @@ dart_code_metrics:
       ignore-parameters: true
     no-equal-arguments: false
     no-magic-number: false
+    no-magic-string:
+      exclude:
+        - test/**
+      allow-only-once: true
     prefer-addition-subtraction-assignments: false
+    prefer-correct-throws: false
     prefer-match-file-name: false
     prefer-moving-to-variable:
       exclude:
@@ -59,6 +75,10 @@ dart_code_metrics:
     prefer-overriding-parent-equality:
       exclude:
         - test/**
+
+    # needs new dart features
+    prefer-class-destructuring: false
+    prefer-abstract-final-static-class: false
 
   # warning (pubspec)
   pubspec-rules:

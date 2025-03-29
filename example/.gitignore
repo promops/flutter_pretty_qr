@@ -34,9 +34,6 @@ migrate_working_dir/
 /coverage/
 untranslated_messages.txt
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Symbolication related
 app.*.symbols
 

@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// fallback to no index buffer.
 ///
 /// For more information, see impleller
-/// [issue #126212](https://github.com/flutter/flutter/issues/126212).
+/// [issue #126212](https://github.com/flutter/flutter/issues/126212) topic.
 @internal
 final isImpellerWithoutNoIndexBufferFallback = () {
   if (!Platform.isIOS) return false;
