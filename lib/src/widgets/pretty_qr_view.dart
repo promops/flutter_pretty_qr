@@ -53,7 +53,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
 
   /// Creates a widget that displays an QR symbol obtained from a [data].
   @factory
-  static PrettyQrDataView data({
+  static Widget data({
     required final String data,
     final Key? key,
     final PrettyQrDecoration? decoration,

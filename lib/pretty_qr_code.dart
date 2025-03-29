@@ -33,4 +33,5 @@ export 'src/painting/extensions/pretty_qr_image_extension.dart';
 export 'src/painting/extensions/pretty_qr_module_extensions.dart';
 
 // rendering
+export 'src/rendering/pretty_qr_painting_context.dart';
 export 'src/rendering/pretty_qr_render_experiments.dart';
