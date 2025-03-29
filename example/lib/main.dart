@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-import 'package:pretty_qr_code_example/features/web_save_image.dart'
-    if (dart.library.io) 'package:pretty_qr_code_example/features/io_save_image.dart';
+import 'package:pretty_qr_code_example/features/save_image_io.dart'
+    if (dart.library.js_interop) 'package:pretty_qr_code_example/features/save_image_web.dart';
 
 void main() {
   runApp(const PrettyQrExampleApp());
@@ -459,10 +459,10 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                         filled: true,
                         counterText: '',
                         contentPadding: EdgeInsets.zero,
-                        fillColor: Theme.of(context).colorScheme.background,
+                        fillColor: Theme.of(context).colorScheme.surface,
                         disabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ),

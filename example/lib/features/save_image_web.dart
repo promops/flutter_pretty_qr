@@ -1,4 +1,5 @@
-import 'dart:html' as html; // ignore: avoid_web_libraries_in_flutter
+import 'dart:js_interop';
+import 'package:web/web.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -15,21 +16,20 @@ extension PrettyQrImageExtension on QrImage {
       configuration: createLocalImageConfiguration(context),
     );
 
-    final imageUrl = html.Url.createObjectUrlFromBlob(
-      html.Blob([imageBytes]),
+    final imageUrl = URL.createObjectURL(
+      Blob([imageBytes!.buffer.toJS].toJS),
     );
 
-    final saveImageAnchor =
-        html.document.createElement('a') as html.AnchorElement
-          ..href = imageUrl
-          ..style.display = 'none'
-          ..download = 'qr-code.png';
+    final saveImageAnchor = HTMLAnchorElement()
+      ..href = imageUrl
+      ..style.display = 'none'
+      ..download = 'qr-code.png';
 
-    html.document.body?.children.add(saveImageAnchor);
+    document.body?.append(saveImageAnchor);
     saveImageAnchor.click();
+    saveImageAnchor.remove();
 
-    html.Url.revokeObjectUrl(imageUrl);
-    html.document.body?.children.remove(saveImageAnchor);
+    URL.revokeObjectURL(imageUrl);
 
     return null;
   }
