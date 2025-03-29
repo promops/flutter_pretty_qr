@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -22,8 +22,9 @@ jobs:
           flutter-version: '3.0.0'
 
       - name: Install DCM
-        uses: CQLabs/setup-dcm@v1
+        uses: CQLabs/setup-dcm@v2
         with:
+          version: '1.27.1'
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
@@ -51,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
