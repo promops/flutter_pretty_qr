@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
@@ -576,6 +578,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     widget.onChanged?.call(PrettyQrDecoration(
       image: image,
       shape: widget.decoration.shape,
+      quietZone: widget.decoration.quietZone,
       background: widget.decoration.background,
     ));
   }
