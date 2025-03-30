@@ -35,7 +35,7 @@ jobs:
 
       - name: Lints
         run: |
-          flutter analyze --fatal-infos --fatal-warnings lib
+          flutter analyze --fatal-infos --fatal-warnings .
           dcm analyze --no-analytics --reporter=github .
           dcm check-code-duplication --no-analytics .
 
