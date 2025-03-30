@@ -54,6 +54,7 @@ dart_code_metrics:
         - paint
         - toImage
     avoid-non-null-assertion: false
+    avoid-nullable-parameters-with-default-values: false # wrong rule
     avoid-passing-default-values: false
     avoid-self-compare:
       exclude:

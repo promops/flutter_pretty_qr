@@ -1,5 +1,5 @@
 // ignore_for_file: prefer-static-class, prefer-prefixed-global-constants
-// ignore_for_file: avoid_web_libraries_in_flutter, it's for web support.
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use, it's for web support.
 
 import 'dart:js';
 

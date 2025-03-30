@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, migrate to new Color API after Flutter version update.
+
 import 'dart:math';
 
 import 'package:meta/meta.dart';
