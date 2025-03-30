@@ -28,14 +28,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        run: dart pub get
+        run: flutter pub get
 
       - name: Format
         run: dart format --set-exit-if-changed .
 
       - name: Lints
         run: |
-          dart analyze --fatal-infos --fatal-warnings lib
+          flutter analyze --fatal-infos --fatal-warnings lib
           dcm analyze --no-analytics --reporter=github .
           dcm check-code-duplication --no-analytics .
 
@@ -62,8 +62,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          dart pub get
-          dart pub global activate pana
+          flutter pub get
+          flutter pub global activate pana
           sudo apt-get install webp
 
       - name: Verify Pub Score
