@@ -1,4 +1,5 @@
 // ignore_for_file: avoid-referencing-subclasses, internal API.
+// ignore_for_file: deprecated_member_use, TODO: migrate to new Color API after min flutter version upgrade.
 
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';

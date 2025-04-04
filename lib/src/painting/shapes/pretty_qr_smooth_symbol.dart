@@ -7,7 +7,7 @@ import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
 import 'package:pretty_qr_code/src/painting/pretty_qr_shape.dart';
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
-import 'package:pretty_qr_code/src/rendering/pretty_qr_render_experiments.dart';
+import 'package:pretty_qr_code/src/rendering/pretty_qr_render_capabilities.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 import 'package:pretty_qr_code/src/base/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
@@ -54,7 +54,7 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
         modulePath = transformWhiteModuleRect(moduleRect, moduleNeighbours);
       }
 
-      if (PrettyQrRenderExperiments.needsAvoidComplexPaths) {
+      if (PrettyQrRenderCapabilities.needsAvoidComplexPaths) {
         context.canvas.drawPath(modulePath, paint);
       } else {
         path.addPath(modulePath, Offset.zero);

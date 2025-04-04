@@ -101,12 +101,11 @@ Here is a curated list of how you can help:
 
 ## Planned for future release(s):
 
+* Add more styles
 * ~~Quiet Zone~~
 * ~~Gradient filling~~
-* Add more styles
 * ~~Export as image~~
 * ~~Error handling API~~
-* Gaps between modules
 * ~~Background color for QR code~~
 * Timing Patterns and Alignment Patterns
 * Automatic image scale limitation (embedded mode)
