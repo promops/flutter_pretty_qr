@@ -1,7 +1,8 @@
 ## 3.4.0
 
-*Added `PrettyQrQuietZone` support [#44](https://github.com/promops/flutter_pretty_qr/pull/56)
-*Updated web renderer detection [#55] (https://github.com/promops/flutter_pretty_qr/pull/57)
+* Added `PrettyQrQuietZone` support [#44](https://github.com/promops/flutter_pretty_qr/pull/56).
+* Updated web renderer detection [#55] (https://github.com/promops/flutter_pretty_qr/pull/57).
+* Added support compilation to WASM. Thanks to [s-philippov (#52)](https://github.com/promops/flutter_pretty_qr/pull/52).
 
 ## 3.3.0 
 
