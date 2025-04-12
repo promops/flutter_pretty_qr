@@ -69,12 +69,25 @@ class PrettyQrPainter {
         width: size.width * imageScale,
         height: size.height * imageScale,
       );
+      final imageRRect = image.borderRadius == null
+          ? RRect.fromRectXY(imageScaledRect, 0, 0)
+          : RRect.fromRectAndCorners(
+              imageScaledRect,
+              topLeft: image.borderRadius!.topLeft,
+              topRight: image.borderRadius!.topRight,
+              bottomLeft: image.borderRadius!.bottomLeft,
+              bottomRight: image.borderRadius!.bottomRight,
+            );
 
       // clear space for the embedded image
       if (image.position == PrettyQrDecorationImagePosition.embedded) {
         for (final module in context.matrix) {
           final moduleRect = module.resolveRect(context);
-          if (imageScaledRect.overlaps(moduleRect)) {
+          if (imageRRect.contains(Offset(moduleRect.left, moduleRect.top)) ||
+              imageRRect.contains(Offset(moduleRect.right, moduleRect.top)) ||
+              imageRRect.contains(Offset(moduleRect.left, moduleRect.bottom)) ||
+              imageRRect
+                  .contains(Offset(moduleRect.right, moduleRect.bottom))) {
             context.matrix.removeDarkAt(module.x, module.y);
           }
         }
