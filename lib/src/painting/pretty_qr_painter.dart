@@ -103,10 +103,13 @@ class PrettyQrPainter {
       final imageCroppedRect = imagePadding.deflateRect(imageScaledRect);
 
       _decorationImagePainter ??= image.createPainter(onChanged);
+      final clipPath = image.borderRadius == null ? null : Path()
+        ?..addRRect(imageRRect)
+        ..close();
       _decorationImagePainter?.paint(
         context.canvas,
         imageCroppedRect,
-        null,
+        clipPath,
         configuration.copyWith(size: imageCroppedRect.size),
       );
     }

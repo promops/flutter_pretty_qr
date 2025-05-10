@@ -27,10 +27,7 @@ class PrettyQrDecorationImage extends DecorationImage {
   /// {@macro pretty_qr_code.painting.PrettyQrDecorationImagePosition}
   final PrettyQrDecorationImagePosition position;
 
-  /// The border radius of the embedded image.
-  ///
-  /// When the position is [PrettyQrDecorationImagePosition.embedded],
-  /// this value will be used to round the corners of the image.
+  /// The border radius of the image.
   final BorderRadius? borderRadius;
 
   /// Creates an image to show into QR code.
