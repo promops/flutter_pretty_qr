@@ -27,6 +27,9 @@ class PrettyQrDecorationImage extends DecorationImage {
   /// {@macro pretty_qr_code.painting.PrettyQrDecorationImagePosition}
   final PrettyQrDecorationImagePosition position;
 
+  /// The border radius of the image.
+  final BorderRadius? borderRadius;
+
   /// Creates an image to show into QR code.
   ///
   /// Not recommended to use scale over `0.2`, see the QR code
@@ -46,6 +49,7 @@ class PrettyQrDecorationImage extends DecorationImage {
     super.isAntiAlias = false,
     this.padding = EdgeInsets.zero,
     this.position = PrettyQrDecorationImagePosition.embedded,
+    this.borderRadius,
   }) : assert(scale >= 0 && scale <= 1);
 
   /// Creates a copy of this [PrettyQrDecorationImage] but with the given fields
@@ -66,6 +70,7 @@ class PrettyQrDecorationImage extends DecorationImage {
     final bool? isAntiAlias,
     final EdgeInsetsGeometry? padding,
     final PrettyQrDecorationImagePosition? position,
+    final BorderRadius? borderRadius,
   }) {
     return PrettyQrDecorationImage(
       image: image ?? this.image,
@@ -81,6 +86,7 @@ class PrettyQrDecorationImage extends DecorationImage {
       isAntiAlias: isAntiAlias ?? this.isAntiAlias,
       padding: padding ?? this.padding,
       position: position ?? this.position,
+      borderRadius: borderRadius ?? this.borderRadius,
     );
   }
 
@@ -106,6 +112,7 @@ class PrettyQrDecorationImage extends DecorationImage {
         scale: b.scale * t,
         opacity: b.opacity * t,
         padding: EdgeInsetsGeometry.lerp(null, b.padding, t)!,
+        borderRadius: BorderRadius.lerp(null, b.borderRadius, t),
       );
     }
 
@@ -114,6 +121,7 @@ class PrettyQrDecorationImage extends DecorationImage {
         scale: a.scale * (1.0 - t),
         opacity: a.opacity * (1.0 - t),
         padding: EdgeInsetsGeometry.lerp(a.padding, null, t)!,
+        borderRadius: BorderRadius.lerp(a.borderRadius, null, t),
       );
     }
 
@@ -121,12 +129,13 @@ class PrettyQrDecorationImage extends DecorationImage {
       scale: lerpDouble(a.scale, b.scale, t)!,
       opacity: lerpDouble(a.opacity, b.opacity, t)!,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,
+      borderRadius: BorderRadius.lerp(a.borderRadius, b.borderRadius, t),
     );
   }
 
   @override
   int get hashCode {
-    return super.hashCode ^ Object.hash(runtimeType, padding);
+    return super.hashCode ^ Object.hash(runtimeType, padding, borderRadius);
   }
 
   @override
@@ -137,6 +146,7 @@ class PrettyQrDecorationImage extends DecorationImage {
     return other is PrettyQrDecorationImage &&
         super == other &&
         other.padding == padding &&
-        other.position == position;
+        other.position == position &&
+        other.borderRadius == borderRadius;
   }
 }
