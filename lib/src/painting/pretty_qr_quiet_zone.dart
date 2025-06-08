@@ -51,7 +51,7 @@ abstract class PrettyQrQuietZone {
   /// A [PrettyQrQuietZone] with width corresponds to 4 module sizes.
   ///
   /// {@macro pretty_qr_code.painting.PrettyQrQuietZone.standard}
-  static const standart = PrettyQrQuietZone.modules(4);
+  static const standard = PrettyQrQuietZone.modules(4);
 
   /// Linearly interpolates between two [PrettyQrQuietZone]s.
   ///
