@@ -37,7 +37,7 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
   @internal
   @experimental
   factory PrettyQrMatrix.masked(
-    PrettyQrMatrix matrix, {
+    PrettyQrMatrix parent, {
     Rectangle<int>? clip,
     Set<PrettyQrComponentType> exclude,
   }) = _PrettyQrMaskedMatrix;
@@ -192,6 +192,10 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
 @sealed
 @immutable
 class _PrettyQrMaskedMatrix extends PrettyQrMatrix {
+  /// The source matrix being wrapped.
+  @nonVirtual
+  final PrettyQrMatrix parent;
+
   /// Rectangle defining the clipping area.
   @nonVirtual
   final Rectangle<int>? clip;
@@ -202,10 +206,10 @@ class _PrettyQrMaskedMatrix extends PrettyQrMatrix {
 
   /// {@macro pretty_qr_code.base.PrettyQrMaskedMatrix}
   _PrettyQrMaskedMatrix(
-    PrettyQrMatrix matrix, {
+    this.parent, {
     this.clip,
     this.exclude = const {},
-  }) : super(version: matrix.version, modules: matrix.modules);
+  }) : super(version: parent.version, modules: parent.modules);
 
   @override
   Iterator<PrettyQrModule> get iterator {
@@ -214,7 +218,7 @@ class _PrettyQrMaskedMatrix extends PrettyQrMatrix {
 
   @override
   PrettyQrModule? getModuleAt(int x, int y) {
-    final module = super.getModuleAt(x, y);
+    final module = parent.getModuleAt(x, y);
     if (module == null) return module;
 
     late final exluded = exclude.contains(module.type);
@@ -225,7 +229,7 @@ class _PrettyQrMaskedMatrix extends PrettyQrMatrix {
 
   @override
   int get hashCode {
-    return Object.hash(super.hashCode, clip, exclude);
+    return Object.hash(parent, clip, exclude);
   }
 
   @override
@@ -238,6 +242,6 @@ class _PrettyQrMaskedMatrix extends PrettyQrMatrix {
       if (!exclude.contains(type)) return false;
     }
 
-    return super == other;
+    return parent == other;
   }
 }
