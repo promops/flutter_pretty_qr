@@ -16,7 +16,7 @@ abstract class PrettyQrBrush extends Color {
   /// The completely invisible brush.
   static const transparent = PrettyQrBrush.solid(0x00000000);
 
-  /// Create a brush from [color].
+  /// Creates a brush from [color].
   factory PrettyQrBrush.from(Color color) {
     if (color is PrettyQrBrush) {
       return color;

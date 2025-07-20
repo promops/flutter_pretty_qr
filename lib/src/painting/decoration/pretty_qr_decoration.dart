@@ -78,7 +78,6 @@ class PrettyQrDecoration with Diagnosticable {
 
   /// Returns a [PrettyQrPainter] that will paint QR code with this decoration.
   @nonVirtual
-  // ignore: prefer-static-method, DCM bug.
   PrettyQrPainter createPainter(VoidCallback onChanged) {
     return PrettyQrPainter(decoration: this, onChanged: onChanged);
   }
