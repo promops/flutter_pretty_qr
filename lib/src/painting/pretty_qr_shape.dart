@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-static-class, delete clampDouble after min flutter version upgrade.
+
 import 'package:meta/meta.dart';
 
 import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
@@ -45,6 +47,16 @@ abstract class PrettyQrShape {
 
   /// Paints the QR matrix on the canvas of the given painting context.
   void paint(PrettyQrPaintingContext context);
+
+  /// Same as [num.clamp] but optimized for a non-null [double].
+  @protected
+  static double clampDouble(double x, double min, double max) {
+    assert(min <= max && !max.isNaN && !min.isNaN);
+    if (x < min) return min;
+    if (x > max) return max;
+    if (x.isNaN) return max;
+    return x;
+  }
 
   /// Linearly interpolates between two [PrettyQrShape]s.
   ///
@@ -224,4 +236,14 @@ class PrettyQrCustomShape extends PrettyQrShape {
         other.timingPatterns == timingPatterns &&
         other.alignmentPatterns == alignmentPatterns;
   }
+}
+
+/// Same as [num.clamp] but optimized for a non-null [double].
+@internal
+double clampDouble(double x, double min, double max) {
+  assert(min <= max && !max.isNaN && !min.isNaN);
+  if (x < min) return min;
+  if (x > max) return max;
+  if (x.isNaN) return max;
+  return x;
 }
