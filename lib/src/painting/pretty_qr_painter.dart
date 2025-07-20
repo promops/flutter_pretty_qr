@@ -103,11 +103,15 @@ class PrettyQrPainter {
         final moduleSize = context.boundsDimension / context.matrix.dimension;
         final clippedMatrix = PrettyQrMatrix.masked(
           context.matrix,
-          clip: Rectangle(
-            (imageCroppedRect.left / moduleSize).truncate(),
-            (imageCroppedRect.top / moduleSize).truncate(),
-            (imageCroppedRect.width / moduleSize).ceil(),
-            (imageCroppedRect.height / moduleSize).ceil(),
+          clip: Rectangle.fromPoints(
+            Point(
+              imageCroppedRect.left / moduleSize ~/ 1,
+              imageCroppedRect.top / moduleSize ~/ 1,
+            ),
+            Point(
+              imageCroppedRect.right / moduleSize ~/ 1,
+              imageCroppedRect.bottom / moduleSize ~/ 1,
+            ),
           ),
         );
         decoration.shape.paint(context.copyWith(matrix: clippedMatrix));
