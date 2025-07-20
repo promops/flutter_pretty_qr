@@ -36,6 +36,10 @@ class PrettyQrRenderView extends RenderBox {
   @nonVirtual
   ImageConfiguration _configuration;
 
+  /// The QR code matrix cache.
+  @protected
+  PrettyQrMatrix? _cachedQrMatrix;
+
   /// The painter for a [PrettyQrPainter].
   @protected
   PrettyQrPainter? _decorationPainter;
@@ -59,7 +63,14 @@ class PrettyQrRenderView extends RenderBox {
     if (_qrImage == value) return;
 
     _qrImage = value;
+    _cachedQrMatrix = null;
+
     markNeedsPaint();
+  }
+
+  /// {@macro pretty_qr_code.PrettyQrMatrix}
+  PrettyQrMatrix get qrMatrix {
+    return _cachedQrMatrix ??= PrettyQrMatrix.fromQrImage(qrImage);
   }
 
   /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.decoration}
@@ -133,7 +144,7 @@ class PrettyQrRenderView extends RenderBox {
       final paintingContext = PrettyQrPaintingContext(
         context.canvas,
         Offset.zero & size,
-        matrix: PrettyQrMatrix.fromQrImage(qrImage),
+        matrix: qrMatrix,
         textDirection: configuration.textDirection,
       );
 
@@ -149,18 +160,14 @@ class PrettyQrRenderView extends RenderBox {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(
-        DiagnosticsProperty<ImageConfiguration>(
-          'configuration',
-          configuration,
-        ),
-      )
-      ..add(DiagnosticsProperty<QrImage>('qrImage', qrImage))
-      ..add(decoration.toDiagnosticsNode(name: 'decoration'));
+      ..add(DiagnosticsProperty('qrImage', qrImage))
+      ..add(decoration.toDiagnosticsNode(name: 'decoration'))
+      ..add(DiagnosticsProperty('configuration', configuration));
   }
 
   @override
   void dispose() {
+    _cachedQrMatrix = null;
     _decorationPainter?.dispose();
 
     super.dispose();
