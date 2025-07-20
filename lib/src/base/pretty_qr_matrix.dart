@@ -107,7 +107,6 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
 
   /// Returns `true` if a module at position [x], [y] has `isDark` value equals
   /// to `true`.
-  @useResult
   bool hasModuleAt(int x, int y) {
     final module = getModuleAt(x, y);
     return module != null && module.isDark;
@@ -118,7 +117,6 @@ class PrettyQrMatrix extends Iterable<PrettyQrModule> {
   /// coordinate is outside the matrix.
   /// {@endtemplate}
   @useResult
-  @mustBeOverridden
   PrettyQrModule? getModuleAt(int x, int y) {
     if (y < 0 || y >= version.dimension) return null;
     if (x < 0 || x >= version.dimension) return null;
