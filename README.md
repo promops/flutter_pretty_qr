@@ -16,7 +16,7 @@ A highly customizable Flutter widget that makes it easy to render QR codes. Buil
 ## Features
 
 * [**Live Preview**](https://promops.github.io/flutter_pretty_qr/)
-* **Shapes** - The widget provides functionality for rendering various built-in shapes, namely [smooth](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSmoothSymbol-class.html) and [rounded](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrRoundedSymbol-class.html), or you can even create your patterns using the package API.
+* **Shapes** - The widget provides functionality for rendering various built-in shapes, namely [smooth](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSmoothSymbol-class.html), [squares](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSquaresSymbol-class.html) and [dots](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrDotsSymbol-class.html), or you can even create your patterns using the package API.
 * **Themes** - Allows you easily switch between themes using the [material theme extension](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrTheme-class.html).
 * **Branding** - Configure the display of the embedded image and adjust its style to best fit your needs.
 * **Exporting** - Save the QR сode as an image for sharing, embedding, or anything else.
@@ -69,6 +69,23 @@ Widget build(BuildContext context) {
 
 **Note:** Do _not_ create `QrImage` inside the `build` method; otherwise, you may have an undesired jank in the UI thread.
 
+## Combine several styles
+
+To combine multiple styles in a single QR code, you can use [PrettyQrCustomShape](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrCustomShape-class.html), as shown in the example below:
+
+```dart
+PrettyQrView.data(
+  data: 'lorem ipsum dolor sit amet',
+  decoration: const PrettyQrDecoration(
+    shape: PrettyQrShape.custom(
+      PrettyQrSquaresSymbol(),
+      finderPattern: PrettyQrSmoothSymbol(),
+      alignmentPatterns: PrettyQrDotsSymbol(),
+    ),
+  ),
+)
+```
+
 ## Save the symbol as an image
 
 You can save the QR code as an image using the [toImage](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImage.html) or [toImageAsBytes](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrImageExtension/toImageAsBytes.html) extension methods that apply to `QrImage`. Optionally, the `configuration` parameter may be used to set additional saving options, such as pixel ratio or text direction.
@@ -99,13 +116,13 @@ Here is a curated list of how you can help:
 * Report parts of the documentation that are unclear
 * Report bugs and scenarios that are difficult to implement
 
-## Planned for future release(s):
+## Planned for future release(s)
 
-* Add more styles
 * ~~Quiet Zone~~
 * ~~Gradient filling~~
 * ~~Export as image~~
 * ~~Error handling API~~
 * ~~Background color for QR code~~
-* Timing Patterns and Alignment Patterns
-* Automatic image scale limitation (embedded mode)
+* ~~Timing Patterns and Alignment Patterns~~
+* Export as vector image ([#42](https://github.com/promops/flutter_pretty_qr/issues/42))
+* Support custom clippers for embedded images ([#38](https://github.com/promops/flutter_pretty_qr/issues/38))
