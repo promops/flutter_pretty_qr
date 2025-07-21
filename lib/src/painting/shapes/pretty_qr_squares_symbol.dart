@@ -35,18 +35,12 @@ class PrettyQrSquaresSymbol implements PrettyQrShape {
   @nonVirtual
   final bool unifiedFinderPattern;
 
-  /// The default value for [density].
-  static const kDefaultDensity = 0.86;
-
-  /// The default value for [moduleRounding].
-  static const kDefaultRounding = 0.5;
-
   /// Creates a QR Code shape in which the modules have rounded corners.
   @literal
   const PrettyQrSquaresSymbol({
     this.color = const Color(0xFF000000),
-    this.density = kDefaultDensity,
-    this.rounding = kDefaultRounding,
+    this.density = 1,
+    this.rounding = 0,
     this.unifiedFinderPattern = false,
   })  : assert(density >= 0.0 && density <= 1.0),
         assert(rounding >= 0.0 && rounding <= 1.0);
@@ -92,7 +86,7 @@ class PrettyQrSquaresSymbol implements PrettyQrShape {
 
       for (final pattern in matrix.positionDetectionPatterns) {
         final patternRect = pattern.resolveRect(context);
-        if (rounding <= 0.5) {
+        if (rounding > 0 && rounding <= 0.5) {
           final patterPath = detectionPatternBorder.getInnerPath(
             patternRect,
             textDirection: context.textDirection,

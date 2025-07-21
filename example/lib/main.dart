@@ -503,7 +503,11 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
         shape = PrettyQrSmoothSymbol(color: brush);
         break;
       case PrettyQrSquaresSymbol:
-        shape = PrettyQrSquaresSymbol(color: brush);
+        shape = PrettyQrSquaresSymbol(
+          color: brush,
+          density: 0.86,
+          rounding: 0.5,
+        );
         break;
       case PrettyQrCustomShape:
         shape = randomShape();
@@ -542,6 +546,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     } else if (shape is PrettyQrSquaresSymbol) {
       shape = PrettyQrSquaresSymbol(
         color: brush,
+        density: shape.density,
         rounding: shape.rounding,
       );
     }
@@ -581,10 +586,10 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
         roundFactor: isRoundedBorders! ? 0 : 1,
       );
     } else if (shape is PrettyQrSquaresSymbol) {
-      const rounding = PrettyQrSquaresSymbol.kDefaultRounding;
       shape = PrettyQrSquaresSymbol(
         color: shape.color,
-        rounding: isRoundedBorders! ? 0 : rounding,
+        density: shape.density,
+        rounding: isRoundedBorders! ? 0 : 0.5,
       );
     }
 
@@ -614,18 +619,28 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
 
   @protected
   PrettyQrShape randomShape() {
+    final random = Random(DateTime.now().microsecondsSinceEpoch);
     final types = [
-      (Color color) => PrettyQrDotsSymbol(color: color),
-      (Color color) => PrettyQrSmoothSymbol(color: color),
-      (Color color) => PrettyQrSquaresSymbol(color: color),
+      PrettyQrDotsSymbol(
+        color: brush,
+        unifiedFinderPattern: random.nextBool(),
+        unifiedAlignmentPatterns: random.nextBool(),
+      ),
+      PrettyQrSmoothSymbol(
+        color: brush,
+      ),
+      PrettyQrSquaresSymbol(
+        color: brush,
+        density: 0.86,
+        unifiedFinderPattern: random.nextBool(),
+      ),
     ];
 
-    final random = Random(DateTime.now().microsecondsSinceEpoch);
     return PrettyQrShape.custom(
-      types[random.nextInt(types.length)](brush),
-      finderPattern: types[random.nextInt(types.length)](brush),
-      alignmentPatterns: types[random.nextInt(types.length)](brush),
-      timingPatterns: types[random.nextInt(types.length)](brush),
+      types[random.nextInt(types.length)],
+      finderPattern: types[random.nextInt(types.length)],
+      alignmentPatterns: types[random.nextInt(types.length)],
+      timingPatterns: types[random.nextInt(types.length)],
     );
   }
 
