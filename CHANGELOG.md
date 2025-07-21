@@ -1,13 +1,19 @@
+## Unreleased
+
+* Added new patterns: [dots](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrDotsSymbol-class.html) and [squares](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSquaresSymbol-class.html).
+* Added support custom styles per QR components [#51](https://github.com/promops/flutter_pretty_qr/pull/62).
+* **DEPRECATED**: `PrettyQrRoundedSymbol` shape is now deprecated in favor of the `PrettyQrSquaresSymbol`.
+
 ## 3.4.0
 
-* Added `PrettyQrQuietZone` support [#44](https://github.com/promops/flutter_pretty_qr/pull/56).
-* Updated web renderer detection [#55] (https://github.com/promops/flutter_pretty_qr/pull/57).
+* Added quiet zone support [#44](https://github.com/promops/flutter_pretty_qr/pull/56).
+* Updated web renderer detection [#55](https://github.com/promops/flutter_pretty_qr/pull/57).
 * Added support compilation to WASM. Thanks to [s-philippov (#52)](https://github.com/promops/flutter_pretty_qr/pull/52).
 
-## 3.3.0 
+## 3.3.0
 
 * Added `PrettyQrBrush` gradient filling option [#40](https://github.com/promops/flutter_pretty_qr/pull/28).
-* Added `PrettyQrTheme` extension [#37](https://github.com/promops/flutter_pretty_qr/pull/37). 
+* Added `PrettyQrTheme` extension [#37](https://github.com/promops/flutter_pretty_qr/pull/37).
 * Added assert when platform does not support export.
 
 ## 3.2.1
@@ -29,29 +35,28 @@
 
 * Added `PrettyQrDecorationTween`.
 * Added more options for embedding images.
-  - `PrettyQrDecorationImagePosition.embedded`
-  - `PrettyQrDecorationImagePosition.background`
-  - `PrettyQrDecorationImagePosition.foreground`
+  * `PrettyQrDecorationImagePosition.embedded`
+  * `PrettyQrDecorationImagePosition.background`
+  * `PrettyQrDecorationImagePosition.foreground`
 * Added core interfaces and refactor internal organization.
 * Updated documentation and example to follow new naming conventions.
 * **BREAKING**: Package now requires `qr` package `>=3.0.1`.
-  - Upgraded Dart SDK constraints to `>=2.17.0 <4.0.0`.
-  - Upgraded Flutter SDK constraints to `>=3.0.0 <4.0.0`.
+  * Upgraded Dart SDK constraints to `>=2.17.0 <4.0.0`.
+  * Upgraded Flutter SDK constraints to `>=3.0.0 <4.0.0`.
 * **DEPRECATED**: `PrettyQr` widget is now deprecated in favor of the `PrettyQrView` widget.
 * Update example app.
 * Added some new patterns:
-  - Rounded (`PrettyQrRoundedSymbol`)
-  - Smooth (`PrettyQrSmoothSymbol`)
+  * Rounded (`PrettyQrRoundedSymbol`)
+  * Smooth (`PrettyQrSmoothSymbol`)
 * Fixed stripes between qr code modules, [#3](https://github.com/promops/flutter_pretty_qr/issues/3).
 * Fixed embedded image loading: [#15](https://github.com/promops/flutter_pretty_qr/issues/15).
-
 
 ## 2.0.3
 
 > Note: This release has breaking changes.
 
 * **BREAKING**: Package now requires `qr` package `>=3.0.0`. Thanks to [joj3000 (#11)](https://github.com/promops/flutter_pretty_qr/pull/11).
-  - Upgraded Dart SDK constraints to `>=2.13.0 <3.0.0`.
+  * Upgraded Dart SDK constraints to `>=2.13.0 <3.0.0`.
 
 ## 2.0.2
 
@@ -68,7 +73,7 @@
 
 * **BREAKING**: Package now requires `qr` package `>=2.0.0`.
 * **BREAKING**: Мigrate to null-safety:
-  - Upgraded Dart SDK constraints to `>=2.12.0 <3.0.0`.
+  * Upgraded Dart SDK constraints to `>=2.12.0 <3.0.0`.
 
 ## 1.0.2
 
@@ -105,11 +110,11 @@
 * Added rounding to the inner corners.
 * Added a `PrettyQr.typeNumber` property.
 
-## 0.0.3 
+## 0.0.3
 
 * Updated package description.
 
-## 0.0.2 
+## 0.0.2
 
 * Added screenshots and usage example.
 
