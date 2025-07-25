@@ -1,14 +1,15 @@
+import 'dart:math';
+
 import 'package:meta/meta.dart';
 import 'package:flutter/painting.dart';
+
+import 'package:pretty_qr_code/src/base/pretty_qr_matrix.dart';
 
 import 'package:pretty_qr_code/src/rendering/pretty_qr_painting_context.dart';
 
 import 'package:pretty_qr_code/src/painting/pretty_qr_brush.dart';
-
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration.dart';
 import 'package:pretty_qr_code/src/painting/decoration/pretty_qr_decoration_image.dart';
-
-import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensions.dart';
 import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_quiet_zone_extension.dart';
 
 /// A stateful class that can paint a QR code.
@@ -61,45 +62,59 @@ class PrettyQrPainter {
     }
 
     final image = decoration.image;
-    if (image != null) {
-      final size = context.estimatedBounds.size;
-      final imageScale = image.scale.clamp(0.0, 1.0);
-      final imageScaledRect = Rect.fromCenter(
-        center: size.center(Offset.zero),
-        width: size.width * imageScale,
-        height: size.height * imageScale,
-      );
+    final size = context.estimatedBounds.size;
 
-      // clear space for the embedded image
-      if (image.position == PrettyQrDecorationImagePosition.embedded) {
-        for (final module in context.matrix) {
-          final moduleRect = module.resolveRect(context);
-          if (imageScaledRect.overlaps(moduleRect)) {
-            context.matrix.removeDarkAt(module.x, module.y);
-          }
-        }
-      }
-
-      if (image.position == PrettyQrDecorationImagePosition.foreground) {
-        decoration.shape.paint(context);
-      }
-
-      final imagePadding = (image.padding * imageScale).resolve(
-        configuration.textDirection,
-      );
-      final imageCroppedRect = imagePadding.deflateRect(imageScaledRect);
-
-      _decorationImagePainter ??= image.createPainter(onChanged);
-      _decorationImagePainter?.paint(
-        context.canvas,
-        imageCroppedRect,
-        null,
-        configuration.copyWith(size: imageCroppedRect.size),
-      );
+    if (image == null) {
+      decoration.shape.paint(context);
+      return;
     }
 
-    if (image?.position != PrettyQrDecorationImagePosition.foreground) {
+    if (image.position == PrettyQrDecorationImagePosition.foreground) {
       decoration.shape.paint(context);
+    }
+
+    final imageScale = image.scale.clamp(0.0, 1.0);
+    final imageScaledRect = Rect.fromCenter(
+      center: size.center(Offset.zero),
+      width: size.width * imageScale,
+      height: size.height * imageScale,
+    );
+
+    final imagePadding = (image.padding * imageScale).resolve(
+      configuration.textDirection,
+    );
+    final imageCroppedRect = imagePadding.deflateRect(imageScaledRect);
+
+    _decorationImagePainter ??= image.createPainter(onChanged);
+    _decorationImagePainter?.paint(
+      context.canvas,
+      imageCroppedRect,
+      null,
+      configuration.copyWith(size: imageCroppedRect.size),
+    );
+
+    switch (image.position) {
+      case PrettyQrDecorationImagePosition.foreground:
+        break; // the QR code is already drawn
+      case PrettyQrDecorationImagePosition.background:
+        decoration.shape.paint(context);
+        return;
+      case PrettyQrDecorationImagePosition.embedded:
+        final moduleSize = context.boundsDimension / context.matrix.dimension;
+        final clippedMatrix = PrettyQrMatrix.masked(
+          context.matrix,
+          clip: Rectangle.fromPoints(
+            Point(
+              imageCroppedRect.left / moduleSize ~/ 1,
+              imageCroppedRect.top / moduleSize ~/ 1,
+            ),
+            Point(
+              imageCroppedRect.right / moduleSize ~/ 1,
+              imageCroppedRect.bottom / moduleSize ~/ 1,
+            ),
+          ),
+        );
+        decoration.shape.paint(context.copyWith(matrix: clippedMatrix));
     }
   }
 

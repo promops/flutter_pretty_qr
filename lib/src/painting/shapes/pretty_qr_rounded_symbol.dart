@@ -9,6 +9,10 @@ import 'package:pretty_qr_code/src/painting/extensions/pretty_qr_module_extensio
 
 /// A rectangular symbol with rounded corners.
 @sealed
+@Deprecated(
+  'Please use `PrettyQrSquaresSymbol` instead. '
+  'This feature was deprecated after v4.0.0.',
+)
 class PrettyQrRoundedSymbol extends PrettyQrShape {
   /// The color or brush to use when filling the QR code.
   @nonVirtual

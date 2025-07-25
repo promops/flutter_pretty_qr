@@ -42,4 +42,20 @@ class PrettyQrPaintingContext {
     );
     return estimatedBounds.width;
   }
+
+  /// Creates a copy of this [PrettyQrPaintingContext] but with the given fields
+  /// replaced with the new values.
+  @factory
+  @useResult
+  PrettyQrPaintingContext copyWith({
+    final PrettyQrMatrix? matrix,
+    final TextDirection? textDirection,
+  }) {
+    return PrettyQrPaintingContext(
+      canvas,
+      estimatedBounds,
+      matrix: matrix ?? this.matrix,
+      textDirection: textDirection ?? this.textDirection,
+    );
+  }
 }

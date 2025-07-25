@@ -78,7 +78,10 @@ dart_code_metrics:
         - test/**
 
     # needs new dart features
+    prefer-for-in: false
+    avoid-unnecessary-return: false
     prefer-class-destructuring: false
+    avoid-unsafe-collection-methods: false
     prefer-abstract-final-static-class: false
 
   # warning (pubspec)

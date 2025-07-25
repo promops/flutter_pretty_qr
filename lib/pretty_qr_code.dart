@@ -13,17 +13,18 @@ export 'src/widgets/extensions/pretty_qr_decoration_theme_extension.dart';
 // base
 export 'src/base/pretty_qr_matrix.dart';
 export 'src/base/pretty_qr_module.dart';
+export 'src/base/pretty_qr_version.dart';
 export 'src/base/pretty_qr_neighbour_direction.dart';
-
-export 'src/base/extensions/pretty_qr_neighbour_direction_extensions.dart';
 
 // painting
 export 'src/painting/pretty_qr_brush.dart';
-export 'src/painting/pretty_qr_shape.dart';
+export 'src/painting/pretty_qr_shape.dart' hide clampDouble;
 export 'src/painting/pretty_qr_quiet_zone.dart';
 
-export 'src/painting/shapes/pretty_qr_smooth_symbol.dart';
+export 'src/painting/shapes/pretty_qr_dots_symbol.dart';
 export 'src/painting/shapes/pretty_qr_rounded_symbol.dart';
+export 'src/painting/shapes/pretty_qr_smooth_symbol.dart';
+export 'src/painting/shapes/pretty_qr_squares_symbol.dart';
 
 export 'src/painting/decoration/pretty_qr_decoration.dart';
 export 'src/painting/decoration/pretty_qr_decoration_image.dart';

@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
@@ -244,6 +246,9 @@ class _PrettyQrSettings extends StatefulWidget {
 
 class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   @protected
+  Color brush = _PrettyQrSettings.kDefaultQrDecorationBrush;
+
+  @protected
   late final TextEditingController imageSizeEditingController;
 
   @override
@@ -262,20 +267,16 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   }
 
   @protected
-  Color get shapeColor {
+  bool? get isRoundedBorders {
     var shape = widget.decoration.shape;
-    if (shape is PrettyQrSmoothSymbol) return shape.color;
-    if (shape is PrettyQrRoundedSymbol) return shape.color;
-    return Colors.black;
-  }
-
-  @protected
-  bool get isRoundedBorders {
-    var shape = widget.decoration.shape;
-    if (shape is PrettyQrSmoothSymbol) {
+    if (shape is PrettyQrDotsSymbol) {
+      return null;
+    } else if (shape is PrettyQrCustomShape) {
+      return null;
+    } else if (shape is PrettyQrSmoothSymbol) {
       return shape.roundFactor > 0;
-    } else if (shape is PrettyQrRoundedSymbol) {
-      return shape.borderRadius != BorderRadius.zero;
+    } else if (shape is PrettyQrSquaresSymbol) {
+      return shape.rounding > 0;
     }
     return false;
   }
@@ -310,12 +311,20 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               itemBuilder: (context) {
                 return [
                   const PopupMenuItem(
+                    value: PrettyQrDotsSymbol,
+                    child: Text('Dots'),
+                  ),
+                  const PopupMenuItem(
                     value: PrettyQrSmoothSymbol,
                     child: Text('Smooth'),
                   ),
                   const PopupMenuItem(
-                    value: PrettyQrRoundedSymbol,
-                    child: Text('Rounded rectangle'),
+                    value: PrettyQrSquaresSymbol,
+                    child: Text('Squares'),
+                  ),
+                  const PopupMenuItem(
+                    value: PrettyQrCustomShape,
+                    child: Text('Custom'),
                   ),
                 ];
               },
@@ -323,9 +332,10 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                 leading: const Icon(Icons.format_paint_outlined),
                 title: const Text('Style'),
                 trailing: Text(
-                  widget.decoration.shape is PrettyQrSmoothSymbol
-                      ? 'Smooth'
-                      : 'Rounded rectangle',
+                  '${widget.decoration.shape.runtimeType}'
+                      .replaceFirst('Shape', '')
+                      .replaceFirst('Symbol', '')
+                      .replaceFirst('PrettyQr', ''),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -340,7 +350,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                 minWidth: constraints.maxWidth,
               ),
               initialValue:
-                  shapeColor == _PrettyQrSettings.kDefaultQrDecorationBrush,
+                  brush == _PrettyQrSettings.kDefaultQrDecorationBrush,
               itemBuilder: (context) {
                 return [
                   const PopupMenuItem(
@@ -357,9 +367,7 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
                 leading: const Icon(Icons.color_lens_outlined),
                 title: const Text('Brush'),
                 trailing: Text(
-                  shapeColor == _PrettyQrSettings.kDefaultQrDecorationBrush
-                      ? 'Color'
-                      : 'Gradient',
+                  brush is! PrettyQrGradientBrush ? 'Color' : 'Gradient',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -372,12 +380,15 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
           secondary: const Icon(Icons.format_color_fill),
           title: const Text('Background'),
         ),
-        SwitchListTile.adaptive(
-          value: isRoundedBorders,
-          onChanged: (value) => toggleRoundedCorners(),
-          secondary: const Icon(Icons.rounded_corner),
-          title: const Text('Rounded corners'),
-        ),
+        if (isRoundedBorders != null)
+          SwitchListTile.adaptive(
+            value: isRoundedBorders ?? true,
+            onChanged: isRoundedBorders == null
+                ? null
+                : (value) => toggleRoundedCorners(),
+            secondary: const Icon(Icons.rounded_corner),
+            title: const Text('Rounded corners'),
+          ),
         const Divider(),
         SwitchListTile.adaptive(
           value: widget.decoration.image != null,
@@ -484,21 +495,31 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     final Type type,
   ) {
     var shape = widget.decoration.shape;
-    if (shape.runtimeType == type) return;
-
-    if (shape is PrettyQrSmoothSymbol) {
-      shape = PrettyQrRoundedSymbol(color: shapeColor);
-    } else if (shape is PrettyQrRoundedSymbol) {
-      shape = PrettyQrSmoothSymbol(color: shapeColor);
+    switch (type) {
+      case PrettyQrDotsSymbol:
+        shape = PrettyQrDotsSymbol(color: brush);
+        break;
+      case PrettyQrSmoothSymbol:
+        shape = PrettyQrSmoothSymbol(color: brush);
+        break;
+      case PrettyQrSquaresSymbol:
+        shape = PrettyQrSquaresSymbol(
+          color: brush,
+          density: 0.86,
+          rounding: 0.5,
+        );
+        break;
+      case PrettyQrCustomShape:
+        shape = randomShape();
+        break;
+      default:
     }
-
     widget.onChanged?.call(widget.decoration.copyWith(shape: shape));
   }
 
   @protected
   void toggleColor(bool value) {
-    var shape = widget.decoration.shape;
-    var color = value
+    brush = value
         ? _PrettyQrSettings.kDefaultQrDecorationBrush
         : PrettyQrBrush.gradient(
             gradient: LinearGradient(
@@ -512,15 +533,21 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
             ),
           );
 
-    if (shape is PrettyQrSmoothSymbol) {
+    var shape = widget.decoration.shape;
+    if (shape is PrettyQrDotsSymbol) {
+      shape = PrettyQrDotsSymbol(
+        color: brush,
+      );
+    } else if (shape is PrettyQrSmoothSymbol) {
       shape = PrettyQrSmoothSymbol(
-        color: color,
+        color: brush,
         roundFactor: shape.roundFactor,
       );
-    } else if (shape is PrettyQrRoundedSymbol) {
-      shape = PrettyQrRoundedSymbol(
-        color: color,
-        borderRadius: shape.borderRadius,
+    } else if (shape is PrettyQrSquaresSymbol) {
+      shape = PrettyQrSquaresSymbol(
+        color: brush,
+        density: shape.density,
+        rounding: shape.rounding,
       );
     }
 
@@ -556,14 +583,13 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
     if (shape is PrettyQrSmoothSymbol) {
       shape = PrettyQrSmoothSymbol(
         color: shape.color,
-        roundFactor: isRoundedBorders ? 0 : 1,
+        roundFactor: isRoundedBorders! ? 0 : 1,
       );
-    } else if (shape is PrettyQrRoundedSymbol) {
-      shape = PrettyQrRoundedSymbol(
+    } else if (shape is PrettyQrSquaresSymbol) {
+      shape = PrettyQrSquaresSymbol(
         color: shape.color,
-        borderRadius: isRoundedBorders
-            ? BorderRadius.zero
-            : const BorderRadius.all(Radius.circular(10)),
+        density: shape.density,
+        rounding: isRoundedBorders! ? 0 : 0.5,
       );
     }
 
@@ -589,6 +615,33 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   ) {
     final image = widget.decoration.image?.copyWith(position: value);
     widget.onChanged?.call(widget.decoration.copyWith(image: image));
+  }
+
+  @protected
+  PrettyQrShape randomShape() {
+    final random = Random(DateTime.now().microsecondsSinceEpoch);
+    final types = [
+      PrettyQrDotsSymbol(
+        color: brush,
+        unifiedFinderPattern: random.nextBool(),
+        unifiedAlignmentPatterns: random.nextBool(),
+      ),
+      PrettyQrSmoothSymbol(
+        color: brush,
+      ),
+      PrettyQrSquaresSymbol(
+        color: brush,
+        density: 0.86,
+        unifiedFinderPattern: random.nextBool(),
+      ),
+    ];
+
+    return PrettyQrShape.custom(
+      types[random.nextInt(types.length)],
+      finderPattern: types[random.nextInt(types.length)],
+      alignmentPatterns: types[random.nextInt(types.length)],
+      timingPatterns: types[random.nextInt(types.length)],
+    );
   }
 
   @override
