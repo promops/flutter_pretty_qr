@@ -249,6 +249,9 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
   Color brush = _PrettyQrSettings.kDefaultQrDecorationBrush;
 
   @protected
+  final random = Random(DateTime.now().microsecondsSinceEpoch);
+
+  @protected
   late final TextEditingController imageSizeEditingController;
 
   @override
@@ -279,6 +282,21 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
       return shape.rounding > 0;
     }
     return false;
+  }
+
+  @protected
+  String get shapeName {
+    var shape = widget.decoration.shape;
+    if (shape is PrettyQrDotsSymbol) {
+      return 'Dots';
+    } else if (shape is PrettyQrCustomShape) {
+      return 'Custom';
+    } else if (shape is PrettyQrSmoothSymbol) {
+      return 'Smooth';
+    } else if (shape is PrettyQrSquaresSymbol) {
+      return 'Squares';
+    }
+    return '';
   }
 
   @protected
@@ -331,49 +349,66 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
               child: ListTile(
                 leading: const Icon(Icons.format_paint_outlined),
                 title: const Text('Style'),
-                trailing: Text(
-                  '${widget.decoration.shape.runtimeType}'
-                      .replaceFirst('Shape', '')
-                      .replaceFirst('Symbol', '')
-                      .replaceFirst('PrettyQr', ''),
-                  style: Theme.of(context).textTheme.titleSmall,
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (widget.decoration.shape is PrettyQrCustomShape) ...[
+                      OutlinedButton(
+                        onPressed: () {
+                          changeShape(PrettyQrCustomShape);
+                        },
+                        child: Row(
+                          children: [
+                            Text(shapeName),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.refresh),
+                          ],
+                        ),
+                      ),
+                    ] else
+                      Text(
+                        shapeName,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                  ],
                 ),
               ),
             );
           },
         ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return PopupMenuButton(
-              onSelected: toggleColor,
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth,
-              ),
-              initialValue:
-                  brush == _PrettyQrSettings.kDefaultQrDecorationBrush,
-              itemBuilder: (context) {
-                return [
-                  const PopupMenuItem(
-                    value: true,
-                    child: Text('Color'),
-                  ),
-                  const PopupMenuItem(
-                    value: false,
-                    child: Text('Gradient'),
-                  ),
-                ];
-              },
-              child: ListTile(
-                leading: const Icon(Icons.color_lens_outlined),
-                title: const Text('Brush'),
-                trailing: Text(
-                  brush is! PrettyQrGradientBrush ? 'Color' : 'Gradient',
-                  style: Theme.of(context).textTheme.titleSmall,
+        if (widget.decoration.shape is! PrettyQrCustomShape)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return PopupMenuButton(
+                onSelected: toggleColor,
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
                 ),
-              ),
-            );
-          },
-        ),
+                initialValue:
+                    brush == _PrettyQrSettings.kDefaultQrDecorationBrush,
+                itemBuilder: (context) {
+                  return [
+                    const PopupMenuItem(
+                      value: true,
+                      child: Text('Color'),
+                    ),
+                    const PopupMenuItem(
+                      value: false,
+                      child: Text('Gradient'),
+                    ),
+                  ];
+                },
+                child: ListTile(
+                  leading: const Icon(Icons.color_lens_outlined),
+                  title: const Text('Brush'),
+                  trailing: Text(
+                    brush is! PrettyQrGradientBrush ? 'Color' : 'Gradient',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+              );
+            },
+          ),
         SwitchListTile.adaptive(
           value: widget.decoration.background != Colors.transparent,
           onChanged: (value) => toggleBackground(),
@@ -619,18 +654,33 @@ class _PrettyQrSettingsState extends State<_PrettyQrSettings> {
 
   @protected
   PrettyQrShape randomShape() {
-    final random = Random(DateTime.now().microsecondsSinceEpoch);
+    const colors = [
+      Color(0xFF90CAF9),
+      Color(0xFFEF9A9A),
+      Color(0xFF8C9EFF),
+      Color(0xFFB39DDB),
+      Color(0xFF9FA8DA),
+      Color(0xFF80CBC4),
+      Color(0xFFF06292),
+      Color(0xFF4DB6AC),
+      PrettyQrBrush.gradient(
+        gradient: LinearGradient(
+          colors: [Color(0xFF90CAF9), Color(0xFF80CBC4)],
+        ),
+      ),
+    ];
+
     final types = [
       PrettyQrDotsSymbol(
-        color: brush,
+        color: colors[random.nextInt(colors.length)],
         unifiedFinderPattern: random.nextBool(),
         unifiedAlignmentPatterns: random.nextBool(),
       ),
       PrettyQrSmoothSymbol(
-        color: brush,
+        color: colors[random.nextInt(colors.length)],
       ),
       PrettyQrSquaresSymbol(
-        color: brush,
+        color: colors[random.nextInt(colors.length)],
         density: 0.86,
         unifiedFinderPattern: random.nextBool(),
       ),
