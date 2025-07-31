@@ -1,4 +1,4 @@
-## Unreleased
+## 3.5.0
 
 * Added new patterns: [dots](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrDotsSymbol-class.html) and [squares](https://pub.dev/documentation/pretty_qr_code/latest/pretty_qr_code/PrettyQrSquaresSymbol-class.html).
 * Added support custom styles per QR components [#51](https://github.com/promops/flutter_pretty_qr/pull/62).
