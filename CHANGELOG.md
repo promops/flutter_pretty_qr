@@ -1,4 +1,4 @@
-## Unreleased
+## 3.6.0
 
 * Add configurable bounds for QR code shapes.
 * Optimized QR code rendering for the simple shape variants.
