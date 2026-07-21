@@ -4,7 +4,6 @@ library pretty_qr_code;
 export 'package:qr/qr.dart';
 
 // widgets
-export 'src/widgets/pretty_qr.dart';
 export 'src/widgets/pretty_qr_view.dart';
 export 'src/widgets/pretty_qr_theme.dart';
 

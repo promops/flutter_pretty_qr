@@ -24,8 +24,7 @@ abstract class PrettyQrRenderCapabilities {
   /// Whether the QR code complex paths should be subdivided.
   ///
   /// Defaults to [capabilities.isImpellerWithoutNoIndexBufferFallback].
-  static bool needsAvoidComplexPaths =
-      capabilities.isImpellerWithoutNoIndexBufferFallback;
+  static bool needsAvoidComplexPaths = capabilities.isImpellerWithoutNoIndexBufferFallback;
 
   /// Whether to render nested images when exporting to an image.
   static bool enableExportNestedImage =

@@ -90,8 +90,7 @@ class PrettyQrFinderPattern implements PrettyQrFunctionPatternComponent {
 /// {@endtemplate}
 @sealed
 @immutable
-class PrettyQrAlignmentPattern extends Rectangle<int>
-    implements PrettyQrFunctionPatternComponent {
+class PrettyQrAlignmentPattern extends Rectangle<int> implements PrettyQrFunctionPatternComponent {
   /// The `Position Detection Pattern` dimension.
   static const dimension = 5;
 
@@ -153,8 +152,7 @@ class PrettyQrAlignmentPattern extends Rectangle<int>
 /// {@endtemplate}
 @sealed
 @immutable
-class PrettyQrTimingPattern extends Rectangle<int>
-    implements PrettyQrFunctionPatternComponent {
+class PrettyQrTimingPattern extends Rectangle<int> implements PrettyQrFunctionPatternComponent {
   /// The `Timing Pattern` offset.
   static const offset = PrettyQrPositionDetectionPattern.dimension - 1;
 

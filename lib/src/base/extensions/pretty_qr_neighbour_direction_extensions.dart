@@ -1,8 +1,7 @@
 import 'package:pretty_qr_code/src/base/pretty_qr_neighbour_direction.dart';
 
 /// Extensions that apply to [Set<PrettyQrNeighbourDirection>].
-extension PrettyQrNeighbourDirectionSetExtension
-    on Set<PrettyQrNeighbourDirection> {
+extension PrettyQrNeighbourDirectionSetExtension on Set<PrettyQrNeighbourDirection> {
   /// Returns `true` if the set containts `top` or `left` direction.
   @pragma('vm:prefer-inline')
   bool get atTopOrLeft => atTop || atLeft;

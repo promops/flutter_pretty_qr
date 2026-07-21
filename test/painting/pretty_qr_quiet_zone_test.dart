@@ -331,9 +331,11 @@ void main() {
         // assert
         expect(
           lerpedQuietZone,
-          equals(PrettyQrPixelsQuietZone(
-            source.value * (1.0 - offset) + destination.value * offset,
-          )),
+          equals(
+            PrettyQrPixelsQuietZone(
+              source.value * (1.0 - offset) + destination.value * offset,
+            ),
+          ),
         );
       },
     );
@@ -357,9 +359,11 @@ void main() {
         // assert
         expect(
           lerpedQuietZone,
-          equals(PrettyQrModulesQuietZone(
-            source.value * (1.0 - offset) + destination.value * offset,
-          )),
+          equals(
+            PrettyQrModulesQuietZone(
+              source.value * (1.0 - offset) + destination.value * offset,
+            ),
+          ),
         );
       },
     );

@@ -50,10 +50,10 @@ late QrImage qrImage;
 void initState() {
   super.initState();
 
-  final qrCode = QrCode(
-    8,
-    QrErrorCorrectLevel.H,
-  )..addData('lorem ipsum dolor sit amet');
+  qrCode = QrCode(
+    payload: QrPayload.fromString('https://pub.dev/packages/pretty_qr_code'),
+    errorCorrectLevel: QrErrorCorrectLevel.high,
+  );
 
   qrImage = QrImage(qrCode);
 }
@@ -93,7 +93,7 @@ You can save the QR code as an image using the [toImage](https://pub.dev/documen
 ```dart
 final qrCode = QrCode.fromData(
   data: 'lorem ipsum dolor sit amet',
-  errorCorrectLevel: QrErrorCorrectLevel.H,
+  errorCorrectLevel: QrErrorCorrectLevel.high,
 );
 
 final qrImage = QrImage(qrCode);

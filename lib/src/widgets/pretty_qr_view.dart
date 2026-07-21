@@ -21,7 +21,7 @@ import 'package:pretty_qr_code/src/widgets/extensions/pretty_qr_decoration_theme
 /// ```dart
 /// PrettyQrView.data(
 ///   data: '...',
-///   errorCorrectLevel: QrErrorCorrectLevel.H,
+///   errorCorrectLevel: QrErrorCorrectLevel.high,
 ///   decoration: const PrettyQrDecoration(
 ///     shape: PrettyQrSmoothSymbol(),
 ///     image: PrettyQrDecorationImage(
@@ -45,11 +45,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
 
   /// Creates a widget that displays an QR symbol obtained from a [qrImage].
   @literal
-  const PrettyQrView({
-    required this.qrImage,
-    super.key,
-    this.decoration,
-  });
+  const PrettyQrView({required this.qrImage, super.key, this.decoration});
 
   /// Creates a widget that displays an QR symbol obtained from a [data].
   @factory
@@ -58,7 +54,7 @@ class PrettyQrView extends LeafRenderObjectWidget {
     final Key? key,
     final PrettyQrDecoration? decoration,
     final ImageErrorWidgetBuilder? errorBuilder,
-    final int errorCorrectLevel = QrErrorCorrectLevel.L,
+    final QrErrorCorrectLevel errorCorrectLevel = QrErrorCorrectLevel.low,
   }) {
     return PrettyQrDataView(
       key: key,

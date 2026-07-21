@@ -43,8 +43,8 @@ class PrettyQrSquaresSymbol extends PrettyQrShape {
     this.density = 1,
     this.rounding = 0,
     this.unifiedFinderPattern = false,
-  })  : assert(density >= 0.0 && density <= 1.0),
-        assert(rounding >= 0.0 && rounding <= 1.0);
+  }) : assert(density >= 0.0 && density <= 1.0),
+       assert(rounding >= 0.0 && rounding <= 1.0);
 
   @override
   void paint(PrettyQrPaintingContext context) {
@@ -175,8 +175,7 @@ class PrettyQrSquaresSymbol extends PrettyQrShape {
       color: PrettyQrBrush.lerp(a.color, color, t)!,
       density: lerpDouble(a.density, density, t)!,
       rounding: lerpDouble(a.rounding, rounding, t)!,
-      unifiedFinderPattern:
-          t < 0.5 ? a.unifiedFinderPattern : unifiedFinderPattern,
+      unifiedFinderPattern: t < 0.5 ? a.unifiedFinderPattern : unifiedFinderPattern,
     );
   }
 
@@ -196,8 +195,7 @@ class PrettyQrSquaresSymbol extends PrettyQrShape {
       color: PrettyQrBrush.lerp(color, b.color, t)!,
       density: lerpDouble(density, b.density, t)!,
       rounding: lerpDouble(rounding, b.rounding, t)!,
-      unifiedFinderPattern:
-          t < 0.5 ? unifiedFinderPattern : b.unifiedFinderPattern,
+      unifiedFinderPattern: t < 0.5 ? unifiedFinderPattern : b.unifiedFinderPattern,
     );
   }
 

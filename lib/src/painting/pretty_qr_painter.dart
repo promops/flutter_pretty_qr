@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:meta/meta.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/foundation.dart';
 
@@ -93,13 +92,17 @@ class PrettyQrPainter {
 
     final imageClipPath = image.clipper.getClip(imageScaledRect.size);
     final imageClipTransform = Matrix4.identity()
-      ..translate(
+      ..translateByDouble(
         imageDeflatedRect.topLeft.dx,
         imageDeflatedRect.topLeft.dy,
+        0.0,
+        1.0,
       )
-      ..scale(
+      ..scaleByDouble(
         imageDeflatedRect.width / imageScaledRect.width,
         imageDeflatedRect.height / imageScaledRect.height,
+        1.0,
+        1.0,
       );
 
     _decorationImagePainter ??= image.createPainter(onChanged);

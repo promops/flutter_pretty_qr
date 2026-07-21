@@ -30,8 +30,8 @@ class PrettyQrSmoothSymbol extends PrettyQrShape {
   const PrettyQrSmoothSymbol({
     this.roundFactor = 1,
     this.color = const Color(0xFF000000),
-  })  : assert(roundFactor <= 1, 'roundFactor must be less than 1'),
-        assert(roundFactor >= 0, 'roundFactor must be greater than 0');
+  }) : assert(roundFactor <= 1, 'roundFactor must be less than 1'),
+       assert(roundFactor >= 0, 'roundFactor must be greater than 0');
 
   @override
   void paint(PrettyQrPaintingContext context) {

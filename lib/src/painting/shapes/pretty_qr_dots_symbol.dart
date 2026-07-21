@@ -114,10 +114,8 @@ class PrettyQrDotsSymbol extends PrettyQrShape {
     return PrettyQrDotsSymbol(
       color: PrettyQrBrush.lerp(a.color, color, t)!,
       density: lerpDouble(a.density, density, t)!,
-      unifiedFinderPattern:
-          t < 0.5 ? a.unifiedFinderPattern : unifiedFinderPattern,
-      unifiedAlignmentPatterns:
-          t < 0.5 ? a.unifiedAlignmentPatterns : unifiedAlignmentPatterns,
+      unifiedFinderPattern: t < 0.5 ? a.unifiedFinderPattern : unifiedFinderPattern,
+      unifiedAlignmentPatterns: t < 0.5 ? a.unifiedAlignmentPatterns : unifiedAlignmentPatterns,
     );
   }
 
@@ -136,10 +134,8 @@ class PrettyQrDotsSymbol extends PrettyQrShape {
     return PrettyQrDotsSymbol(
       color: PrettyQrBrush.lerp(color, b.color, t)!,
       density: lerpDouble(density, b.density, t)!,
-      unifiedFinderPattern:
-          t < 0.5 ? unifiedFinderPattern : b.unifiedFinderPattern,
-      unifiedAlignmentPatterns:
-          t < 0.5 ? unifiedAlignmentPatterns : b.unifiedAlignmentPatterns,
+      unifiedFinderPattern: t < 0.5 ? unifiedFinderPattern : b.unifiedFinderPattern,
+      unifiedAlignmentPatterns: t < 0.5 ? unifiedAlignmentPatterns : b.unifiedAlignmentPatterns,
     );
   }
 

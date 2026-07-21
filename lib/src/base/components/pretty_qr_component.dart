@@ -42,5 +42,5 @@ enum PrettyQrComponentType {
   /// representing error correction codewords, the format information and, where
   /// appropriate, the version information.
   /// {@endtemplate}
-  encodingRegion;
+  encodingRegion,
 }

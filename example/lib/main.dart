@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: experimental_member_use, deprecated_member_use
 
 import 'dart:math';
 
@@ -55,9 +55,9 @@ class _PrettyQrHomePageState extends State<PrettyQrHomePage> {
   void initState() {
     super.initState();
 
-    qrCode = QrCode.fromData(
-      data: 'https://pub.dev/packages/pretty_qr_code',
-      errorCorrectLevel: QrErrorCorrectLevel.H,
+    qrCode = QrCode(
+      payload: QrPayload.fromString('https://pub.dev/packages/pretty_qr_code'),
+      errorCorrectLevel: QrErrorCorrectLevel.high,
     );
 
     qrImage = QrImage(qrCode);

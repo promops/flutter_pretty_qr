@@ -125,17 +125,14 @@ enum PrettyQrVersion {
   version40(40, alignmentPatternsPlacement: {6, 30, 58, 86, 114, 142, 170});
 
   /// The raw value of the [PrettyQrVersion].
-  @nonVirtual
   final int value;
 
   /// {@template pretty_qr_code.base.PrettyQrVersion.dimension}
   /// The size (side length) of the QR Code matrix.
   /// {@endtemplate}
-  @nonVirtual
   final int dimension;
 
   /// The Alignment Pattern locations.
-  @nonVirtual
   final Set<int> alignmentPatternsPlacement;
 
   /// {@macro pretty_qr_code.base.PrettyQrVersion}
@@ -161,25 +158,21 @@ enum PrettyQrVersion {
   }
 
   /// Whether this version smaller than [other].
-  @nonVirtual
   bool operator <(PrettyQrVersion other) {
     return value < other.value;
   }
 
   /// Whether this version smaller than or equal to [other].
-  @nonVirtual
   bool operator <=(PrettyQrVersion other) {
     return value <= other.value;
   }
 
   /// Whether this version greater than [other].
-  @nonVirtual
   bool operator >(PrettyQrVersion other) {
     return value > other.value;
   }
 
   /// Whether this version greater than or equal to [other].
-  @nonVirtual
   bool operator >=(PrettyQrVersion other) {
     return value >= other.value;
   }

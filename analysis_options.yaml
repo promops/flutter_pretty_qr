@@ -89,3 +89,7 @@ dart_code_metrics:
   pubspec-rules:
     prefer-caret-version-syntax: false
     prefer-publish-to-none: false
+
+formatter:
+  page_width: 100
+  trailing_commas: preserve

@@ -29,11 +29,9 @@ enum PrettyQrNeighbourDirection {
   bottomRight(1, 1);
 
   /// The distance fraction in the horizontal direction.
-  @nonVirtual
   final int x;
 
   /// The distance fraction in the vertical direction.
-  @nonVirtual
   final int y;
 
   /// {@macro pretty_qr_code.base.PrettyQrNeighbourDirection}

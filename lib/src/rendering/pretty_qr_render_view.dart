@@ -49,9 +49,9 @@ class PrettyQrRenderView extends RenderBox {
     required QrImage qrImage,
     required PrettyQrDecoration decoration,
     final ImageConfiguration configuration = ImageConfiguration.empty,
-  })  : _qrImage = qrImage,
-        _decoration = decoration,
-        _configuration = configuration;
+  }) : _qrImage = qrImage,
+       _decoration = decoration,
+       _configuration = configuration;
 
   /// {@macro pretty_qr_code.rendering.PrettyQrRenderView.qrImage}
   QrImage get qrImage {
